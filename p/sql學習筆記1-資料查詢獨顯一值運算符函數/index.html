@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='主要練習基本語法SELECT、FROM、LIMIT、AS、ORDER BY 以及函數等等'><title>SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數'>
+<meta property='og:description' content='主要練習基本語法SELECT、FROM、LIMIT、AS、ORDER BY 以及函數等等'>
+<meta property='og:url' content='https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL學習筆記' /><meta property='article:tag' content='SQL' /><meta property='article:tag' content='SQLite' /><meta property='article:published_time' content='2022-01-10'/><meta property='article:modified_time' content='2022-01-10'/><meta property='og:image' content='https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/logo.jpeg' />
+<meta name="twitter:title" content="SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數">
+<meta name="twitter:description" content="主要練習基本語法SELECT、FROM、LIMIT、AS、ORDER BY 以及函數等等"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_800x0_resize_q75_box.jpeg"
+                        srcset="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_800x0_resize_q75_box.jpeg 800w, /p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="535" 
+                        loading="lazy"
+                        alt="Featured image of post SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                SQL學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/">SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        主要練習基本語法SELECT、FROM、LIMIT、AS、ORDER BY 以及函數等等
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-01-10</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="sql學習筆記1-資料查詢獨顯一值運算符函數">SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數</h1>
+<h2 id="前言">前言</h2>
+<p>本系列大多部分來自Hahow的課程－<a class="link" href="https://hahow.in/courses/5fd24f017687e53b086c7fe7/discussions"  target="_blank" rel="noopener"
+    >SQL的50道練習</a>，學習過程中得到的筆記，文章內容也有部份都是從教材擷取出來，如果有興趣可以去上課看看！</p>
+<p>那這張的基本語法其實網路上的網站<a class="link" href="https://www.fooish.com/sql/"  target="_blank" rel="noopener"
+    >fooish</a>都講得蠻完善的了，部分文章內容也會引用網站文章內容。</p>
+<h2 id="開發環境">開發環境</h2>
+<p>電腦系統：macOS（Big Sur）</p>
+<p>資料庫管理工具：DBeaver</p>
+<p>使用語言：SQLite</p>
+<h3 id="mysql--sqlite差異">MySQL &amp; SQLite差異</h3>
+<p>在語法中大多相同，所以SQLite對我的學習上是有幫助的，這兩者最大的差異主要是SQLite不支持網路訪問，
+沒有伺服器的特性，但他也跟他的名字一樣，在設定、管理上都更加的輕盈、快速，有興趣可以到這個<a class="link" href="https://medium.com/erens-tech-book/sqlite-%E8%88%87-mysql-%E7%9A%84%E5%B7%AE%E5%88%A5-a14926030ddd"  target="_blank" rel="noopener"
+    >網路文章</a>參考看看。</p>
+<h2 id="selectfrom">SELECT、FROM</h2>
+<p>SELECT 敘述句主要由兩部分構成，第一部分是要 &ldquo;拿什麼&rdquo; 資料 (若有多項用逗號隔開)；第二部分則為 &ldquo;從哪拿&rdquo;。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">table_column1</span><span class="p">,</span><span class="w"> </span><span class="n">table_column2</span><span class="p">,</span><span class="w"> </span><span class="n">table_column3</span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>這個應該不會有什麼問題！</p>
+<p>這裡table_column1, table_column2指的是要從資料表拿取col的名稱，table_name則是從哪一個資料表拿取。</p>
+<h2 id="limit">LIMIT</h2>
+<p>主要用來限制資料查詢的數量（number）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">table_column1</span><span class="p">,</span><span class="w"> </span><span class="n">table_column2</span><span class="p">...</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="nb">number</span><span class="p">;</span><span class="w">
+</span></code></pre></div><h3 id="範例">範例</h3>
+<p>在課程中，imdb.db的有一個名字叫movies的資料表（table）；</p>
+<p>如果想觀看資料表的全部可以搭配「＊」，「＊」意思是全選</p>
+<pre><code class="language-sqlite" data-lang="sqlite">SELECT ＊
+
+ FROM movies 
+</code></pre><p>結果；</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>title</th>
+<th>release_year</th>
+<th>rating</th>
+<th>director</th>
+<th>runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>The Shawshank Redemption</td>
+<td>1994</td>
+<td>9.3</td>
+<td>Frank Darabont</td>
+<td>142</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The Godfather</td>
+<td>1972</td>
+<td>9.2</td>
+<td>Francis Ford Coppola</td>
+<td>175</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The Godfather: Part II</td>
+<td>1974</td>
+<td>9.0</td>
+<td>Francis Ford Coppola</td>
+<td>202</td>
+</tr>
+<tr>
+<td>4</td>
+<td>The Dark Knight</td>
+<td>2008</td>
+<td>9.0</td>
+<td>Christopher Nolan</td>
+<td>152</td>
+</tr>
+<tr>
+<td>5</td>
+<td>12 Angry Men</td>
+<td>1957</td>
+<td>9.0</td>
+<td>Sidney Lumet</td>
+<td>96</td>
+</tr>
+</tbody>
+</table>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>title</th>
+<th>release_year</th>
+<th>rating</th>
+<th>director</th>
+<th>runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>248</td>
+<td>Tangerines</td>
+<td>2013</td>
+<td>8.2</td>
+<td>Zaza Urushadze</td>
+<td>87</td>
+</tr>
+<tr>
+<td>249</td>
+<td>Drishyam</td>
+<td>2015</td>
+<td>8.2</td>
+<td>Nishikant Kamat</td>
+<td>163</td>
+</tr>
+<tr>
+<td>250</td>
+<td>Swades</td>
+<td>2004</td>
+<td>8.2</td>
+<td>Ashutosh Gowariker</td>
+<td>189</td>
+</tr>
+</tbody>
+</table>
+<p>如果只想顯示前三筆資料的話：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="c1">--SELECT是選擇欄位
+</span><span class="c1"></span><span class="w">
+</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="c1">--FROM代表指定從哪一個資料表查詢
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">;</span><span class="c1">--LIMIT查詢結果顯示前幾列
+</span></code></pre></div><p>結果：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>title</th>
+<th>release_year</th>
+<th>rating</th>
+<th>director</th>
+<th>runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>The Shawshank Redemption</td>
+<td>1994</td>
+<td>9.3</td>
+<td>Frank Darabont</td>
+<td>142</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The Godfather</td>
+<td>1972</td>
+<td>9.2</td>
+<td>Francis Ford Coppola</td>
+<td>175</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The Godfather: Part II</td>
+<td>1974</td>
+<td>9.0</td>
+<td>Francis Ford Coppola</td>
+<td>202</td>
+</tr>
+</tbody>
+</table>
+<h2 id="as語法">AS語法</h2>
+<p>在 SQL 中我們可以替資料表或欄位名稱取一個別名 (Alias)，這可以使名稱複雜的 SQL 查詢語句更易讀且可以有更直觀的查詢結果。</p>
+<p>​	在下面，alias_name表示的就是要取的別名，</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">table_column1</span><span class="p">,</span><span class="w"> </span><span class="n">table_column2</span><span class="p">,</span><span class="w"> </span><span class="n">table_column3</span><span class="p">...</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">alias_name</span><span class="p">;</span><span class="w">
+</span></code></pre></div><h3 id="範例-1">範例</h3>
+<p>還沒使用AS：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">firstName</span><span class="w">
+</span><span class="w">
+</span><span class="w">			</span><span class="p">,</span><span class="n">lastName</span><span class="w">
+</span><span class="w">
+</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">players</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"></span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>結果：</p>
+<table>
+<thead>
+<tr>
+<th>firstName</th>
+<th>lastName</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LeBron</td>
+<td>James</td>
+</tr>
+<tr>
+<td>Carmelo</td>
+<td>Anthony</td>
+</tr>
+<tr>
+<td>Udonis</td>
+<td>Haslem</td>
+</tr>
+<tr>
+<td>Dwight</td>
+<td>Howard</td>
+</tr>
+<tr>
+<td>Andre</td>
+<td>Iguodala</td>
+</tr>
+</tbody>
+</table>
+<p>使用AS</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">firstName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">first_name</span><span class="p">,</span><span class="w">
+</span><span class="w">
+</span><span class="w">			</span><span class="p">,</span><span class="n">lastName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">last_name</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">players</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"></span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">
+</span></code></pre></div><table>
+<thead>
+<tr>
+<th>firstname</th>
+<th>lastname</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LeBron</td>
+<td>James</td>
+</tr>
+<tr>
+<td>Carmelo</td>
+<td>Anthony</td>
+</tr>
+<tr>
+<td>Udonis</td>
+<td>Haslem</td>
+</tr>
+<tr>
+<td>Dwight</td>
+<td>Howard</td>
+</tr>
+<tr>
+<td>Andre</td>
+<td>Iguodala</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到從查詢結果中col的名稱從firstName 改成了 first_name</p>
+<h2 id="distinct">DISTINCT</h2>
+<p>一個資料表的某欄位中可能會有多個紀錄都是相同值的情況，在 <a class="link" href="https://www.fooish.com/sql/select.html"  target="_blank" rel="noopener"
+    >SELECT</a> 查詢語句中我們可使用 DISTINCT 關鍵字過濾重複出現的紀錄值。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">table_column1</span><span class="p">,</span><span class="w"> </span><span class="n">table_column2</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="p">;</span><span class="w">
+</span></code></pre></div><h2 id="綜合select-fromasdistinct範例">綜合SELECT、 FROM、AS、DISTINCT範例</h2>
+<p>在練習題08中，答案程式碼：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w">
+</span><span class="w">
+</span><span class="w">	</span><span class="n">confName</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;, &#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">divName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">conf_div</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="n">teams</span><span class="w">
+</span></code></pre></div><p>這邊的解釋就是，從資料表teams中，查詢出一筆confName再加上用「, 」跟divName合併的資料，這筆資料的名稱叫做conf_div，並且過濾掉重複的內容。</p>
+<p>查詢結果：</p>
+<table>
+<thead>
+<tr>
+<th>conf_div</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>East, Southeast</td>
+</tr>
+<tr>
+<td>East, Atlantic</td>
+</tr>
+<tr>
+<td>East, Central</td>
+</tr>
+<tr>
+<td>West, Southwest</td>
+</tr>
+<tr>
+<td>West, Northwest</td>
+</tr>
+<tr>
+<td>West, Pacific</td>
+</tr>
+</tbody>
+</table>
+<h2 id="order-by">ORDER BY</h2>
+<p>ORDER BY的能依照欄位來做排序，由ASC（遞增）或DESC（遞減）來決定遞增或遞減，預設是ASC，當ORDER BY有多欄位的時候，表示依照這些欄位在程式中的順序來排序</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">table_column1</span><span class="p">,</span><span class="w"> </span><span class="n">table_column2</span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="w">
+</span><span class="w"></span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">column_name1</span><span class="w"> </span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">column_name2</span><span class="w"> </span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">...</span><span class="w">
+</span></code></pre></div><h4 id="範例-2">範例</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="nb">Date</span><span class="p">,</span><span class="w">
+</span><span class="w">
+</span><span class="w"> 			</span><span class="n">Country_Region</span><span class="w"> </span><span class="p">,</span><span class="w">
+</span><span class="w">
+</span><span class="w"> 			</span><span class="n">aily_Cases</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"> 	 </span><span class="k">FROM</span><span class="w"> </span><span class="n">time_series</span><span class="w"> </span><span class="c1">--從time_series取出三筆資料Date,Country_Region ,aily_Cases 
+</span><span class="c1"></span><span class="w">
+</span><span class="w">  </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">Daily_Cases</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="c1">--依照Daily_Cases按照遞減做排序
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="c1">--顯示前１０列
+</span></code></pre></div><h2 id="函數">函數</h2>
+<h3 id="函數可依照功能分為兩大類">函數可依照功能分為兩大類：</h3>
+<ul>
+<li>通用函數（Universal functions）
+<ul>
+<li>轉換資料類型。</li>
+<li>計算數值。</li>
+<li>操作文字。</li>
+<li>操作日期時間。</li>
+</ul>
+</li>
+<li>聚合函數（Aggregate functions）</li>
+</ul>
+<p>那其實如果要判斷是哪一種類型的函數的話，通用函數作用在「水平」方向的結果，聚合函數作用在「垂直」方向的結果。</p>
+<h2 id="通用函數">通用函數</h2>
+<h3 id="cast">CAST</h3>
+<p>使用 <code>CAST</code> 函數可以將查詢結果的資料類型轉換為指定資料類型</p>
+<p>data是要轉換的資料，data_type則是轉換的資料類型</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CAST</span><span class="p">(</span><span class="k">data</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">data_type</span><span class="p">)</span><span class="w">
+</span></code></pre></div><h4 id="cast常用知識">CAST常用知識：</h4>
+<p>在sql中，兩過整數相除的時後結果只會是整數，如果想要顯示小數點的話，在做除法的時候，可以將「分子或分母其中之一」轉成REAL就可以顯示小數點</p>
+<h3 id="coalesce">COALESCE</h3>
+<p>使用 <code>COALESCE</code> 函數可以將空值（或稱遺漏值）轉換為指定常數</p>
+<p>這邊，field_name可以是欄位名稱，也可以是函數計算的結果，如果為null的話將會取代成replacement</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">COALESCE</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span><span class="w"> </span><span class="n">replacement</span><span class="p">)</span><span class="w">
+</span></code></pre></div><h3 id="round">ROUND</h3>
+<p>使用 <code>ROUND</code> 函數可以調整查詢結果的小數點位數</p>
+<p>n_digits＝小數點第幾為</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">ROUND</span><span class="p">(</span><span class="nb">REAL</span><span class="p">,</span><span class="w"> </span><span class="n">n_digits</span><span class="p">)</span><span class="w">
+</span></code></pre></div><h3 id="length">LENGTH</h3>
+<p>使用 <code>LENGTH</code> 函數可以計算文字中有幾個字元，包含空格、標點符號</p>
+<p>TEXT裡面放TEXT的參數：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">LENGTH</span><span class="p">(</span><span class="nb">TEXT</span><span class="p">)</span><span class="w">
+</span></code></pre></div><h3 id="lower--upper">LOWER ＆ UPPER</h3>
+<p>使用 <code>LOWER</code> 與 <code>UPPER</code> 函數可以調整英文的大小寫</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">LOWER</span><span class="p">(</span><span class="nb">TEXT</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="k">UPPER</span><span class="p">(</span><span class="nb">TEXT</span><span class="p">)</span><span class="w">
+</span></code></pre></div><h3 id="strftime">STRFTIME</h3>
+<p>在這部分，sqLite跟mySql的差別較大，sql可以參考官方文件的格式參數來調整顯示的格式，但mysql則是靠函數來操作，</p>
+<h4 id="sqlite">SQLite</h4>
+<p>使用 <code>STRFTIME</code> 函數調整日期、時間或日期時間的顯示格式，</p>
+<p>format是要顯示的格式，DATE/TIME/DATETIME則是要顯示的來源，</p>
+<pre><code class="language-sqlite" data-lang="sqlite">STRFTIME(format, DATE/TIME/DATETIME)
+</code></pre><p><a class="link" href="https://www.1ju.org/sqlite/strftime"  target="_blank" rel="noopener"
+    >詳細用法參考網站</a></p>
+<p>常見的日期與日期時間格式參數</p>
+<ul>
+<li><code>%d</code>：二位數的日（01-31）</li>
+<li><code>%j</code>：一年中的第幾天（001-366）</li>
+<li><code>%m</code>：二位數的月（01-12）</li>
+<li><code>%w</code>：一星期中的第幾天（0-6）</li>
+<li><code>%W</code>：一年中的第幾週（00-53）</li>
+<li><code>%Y</code>：四位數的年（0000-9999）</li>
+</ul>
+<h4 id="mysql">MYSQL</h4>
+<p>日期操作相關的函數 (date functions)</p>
+<ul>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-now-function.html"  target="_blank" rel="noopener"
+    >NOW()</a> 取得現在的日期時間</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-curdate-function.html"  target="_blank" rel="noopener"
+    >CURDATE()</a> 取得現在的日期</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-curtime-function.html"  target="_blank" rel="noopener"
+    >CURTIME()</a> 取得現在的時間</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-date-function.html"  target="_blank" rel="noopener"
+    >DATE()</a> 取出日期時間中日期的部分</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-extract-function.html"  target="_blank" rel="noopener"
+    >EXTRACT()</a> 取出日期時間中特定的部分</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-date_add-function.html"  target="_blank" rel="noopener"
+    >DATE_ADD()</a> 給日期時間增加指定的間隔</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-date_sub-function.html"  target="_blank" rel="noopener"
+    >DATE_SUB()</a> 給日期時間減去指定的間隔</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-datediff-function.html"  target="_blank" rel="noopener"
+    >DATEDIFF()</a> 日期相減</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-timestampdiff-function.html"  target="_blank" rel="noopener"
+    >TIMESTAMPDIFF()</a> 日期時間相減</li>
+<li><a class="link" href="https://www.fooish.com/sql/mysql-date_format-function.html"  target="_blank" rel="noopener"
+    >DATE_FORMAT()</a> 格式化日期時間顯示</li>
+</ul>
+<p><a class="link" href="https://www.fooish.com/sql/date.html"  target="_blank" rel="noopener"
+    >來源</a></p>
+<h4 id="範例-3">範例</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">STRFTIME</span><span class="p">(</span><span class="s1">&#39;%Y-%m&#39;</span><span class="p">,</span><span class="nb">Date</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">distinct_year_month</span><span class="w">
+</span><span class="w">	</span><span class="k">FROM</span><span class="w"> </span><span class="n">time_series</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>從time_series資料表裡面選取<code>FROM time_series</code></p>
+<p>DATE欄位，並且只顯示年份還有月份<code>STRFTIME('%Y-%m',Date)</code></p>
+<p>並且不顯示重複的值 <code>DISTINCT</code></p>
+<p>別名為distinct_year_month <code>AS distinct_year_month</code></p>
+<p>功能：得知在time_series資料表裡面年份還有月份</p>
+<p>結果：</p>
+<table>
+<thead>
+<tr>
+<th>distinct_year_month</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2020-01</td>
+</tr>
+<tr>
+<td>2020-02</td>
+</tr>
+<tr>
+<td>2020-03</td>
+</tr>
+<tr>
+<td>2020-04</td>
+</tr>
+<tr>
+<td>2020-05</td>
+</tr>
+<tr>
+<td>2020-06</td>
+</tr>
+<tr>
+<td>2020-07</td>
+</tr>
+</tbody>
+</table>
+<p>．</p>
+<p>．</p>
+<p>．</p>
+<h2 id="聚合函數">聚合函數</h2>
+<h3 id="常見的聚合函數">常見的聚合函數</h3>
+<ul>
+<li><code>AVG(column_name)</code>：計算變數的平均數</li>
+<li><code>COUNT(column_name)</code>：計算變數的「非」遺漏值數</li>
+<li><code>COUNT(*)</code>：計算資料表的觀測值數</li>
+<li><code>MAX(column_name)</code>：計算變數的最大值</li>
+<li><code>MIN(column_name)</code>：計算變數的最小值</li>
+<li><code>SUM(column_name)</code>：計算變數的加總</li>
+</ul>
+<h2 id="github">GITHUB</h2>
+<p>詳細範例放在github，（之後補）</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">SQL學習筆記</a>
+        
+            <a href="/tags/sql/">SQL</a>
+        
+            <a href="/tags/sqlite/">SQLite</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/">
+        
+        
+            <div class="article-image">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/logo.16b089f4da300c95ef33e058383663c8_hue91c0a6a1fc261792a7714a8d89d8466_163197_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-FrCJ9NowDJXvM&#43;BYODZjyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL學習筆記(3)-水平合併(JOIN ON)與垂直合併(UNION)</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/">
+        
+        
+            <div class="article-image">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/logo.16b089f4da300c95ef33e058383663c8_hue91c0a6a1fc261792a7714a8d89d8466_163197_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-FrCJ9NowDJXvM&#43;BYODZjyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL學習筆記(2)-分組(GROUP BY)與聚合函數結果篩選、子查詢</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#開發環境">開發環境</a>
+      <ol>
+        <li><a href="#mysql--sqlite差異">MySQL &amp; SQLite差異</a></li>
+      </ol>
+    </li>
+    <li><a href="#selectfrom">SELECT、FROM</a></li>
+    <li><a href="#limit">LIMIT</a>
+      <ol>
+        <li><a href="#範例">範例</a></li>
+      </ol>
+    </li>
+    <li><a href="#as語法">AS語法</a>
+      <ol>
+        <li><a href="#範例-1">範例</a></li>
+      </ol>
+    </li>
+    <li><a href="#distinct">DISTINCT</a></li>
+    <li><a href="#綜合select-fromasdistinct範例">綜合SELECT、 FROM、AS、DISTINCT範例</a></li>
+    <li><a href="#order-by">ORDER BY</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#範例-2">範例</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#函數">函數</a>
+      <ol>
+        <li><a href="#函數可依照功能分為兩大類">函數可依照功能分為兩大類：</a></li>
+      </ol>
+    </li>
+    <li><a href="#通用函數">通用函數</a>
+      <ol>
+        <li><a href="#cast">CAST</a>
+          <ol>
+            <li><a href="#cast常用知識">CAST常用知識：</a></li>
+          </ol>
+        </li>
+        <li><a href="#coalesce">COALESCE</a></li>
+        <li><a href="#round">ROUND</a></li>
+        <li><a href="#length">LENGTH</a></li>
+        <li><a href="#lower--upper">LOWER ＆ UPPER</a></li>
+        <li><a href="#strftime">STRFTIME</a>
+          <ol>
+            <li><a href="#sqlite">SQLite</a></li>
+            <li><a href="#mysql">MYSQL</a></li>
+            <li><a href="#範例-3">範例</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#聚合函數">聚合函數</a>
+      <ol>
+        <li><a href="#常見的聚合函數">常見的聚合函數</a></li>
+      </ol>
+    </li>
+    <li><a href="#github">GITHUB</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

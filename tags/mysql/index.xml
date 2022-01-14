@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MYSQL on Yen&#39;s部落格</title>
+    <link>https://yen0304.github.io/tags/mysql/</link>
+    <description>Recent content in MYSQL on Yen&#39;s部落格</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Sat, 04 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Security(2)使用Spring Security自定義使用者帳密、使用JDBC串接資料庫</title>
+      <link>https://yen0304.github.io/p/spring-security2%E4%BD%BF%E7%94%A8spring-security%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E5%AF%86%E4%BD%BF%E7%94%A8jdbc%E4%B8%B2%E6%8E%A5%E8%B3%87%E6%96%99%E5%BA%AB/</link>
+      <pubDate>Sat, 04 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-security2%E4%BD%BF%E7%94%A8spring-security%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E5%AF%86%E4%BD%BF%E7%94%A8jdbc%E4%B8%B2%E6%8E%A5%E8%B3%87%E6%96%99%E5%BA%AB/</guid>
+      <description>繼上一章了解到了Spring Security基本的作用之後，本章節來繼續深入瞭解有關Spring Security中權限還有認證的相關設置，以及如何串接MySql資料庫數據來進行用戶認證 大概會用到的核心功能有JDBC Authentication、WebSecurityConfigurerAdapter、UserDetailsService
+自訂用戶、查詢資料庫中帳號密碼 在Spring Security中，自訂登入系統的帳號與密碼主要有二種方法兩種，第一種就是透過程式設定來在後臺上寫上固定的自定義帳號密碼，第二種則是
+添加依賴 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-security&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; 配置application.properties 語法如下，也是最簡單的方式，在resource下找到application.properties並輸入：
+spring.security.user.name=testad #自定義帳號 spring.security.user.password=abc123 #自定義密碼 透過繼承類別WebSecurityConfigurerAdapter 先新增一個類別SecurityConfig來繼承WebSecurityConfigurerAdapter，WebSecurityConfigurerAdapter是專門用來配置Spring Security的一個類別：
+@Configuration //小複習:當@Configuration加在class上，表示這是一個設定spring用的class（裡面寫的東西都是設定spring) public class SecurityConfig extends WebSecurityConfigurerAdapter { //... } 再來使用configure方法來設置我們的用戶設定，在IDEA中點擊右鍵-&amp;gt;Generate-&amp;gt;Override Methods選擇我們要覆寫的方法configure(AuthenticationManagerBuilder auth)（真是方便）
+會出現：
+@Override protected void configure(AuthenticationManagerBuilder auth) throws Exception { super.configure(auth); } 在這個方法中，主要透過auth來設置我們的用戶名以及密碼，但在下面得例子中，也使用了Spring Security提供了類別的BCryptPasswordEncoder來加密我們的密碼，在使用BCryptPasswordEncoder時，因為我們改變了password()的接受參數類型，所以也要記得使用@Bean來實作一個password類型
+@Bean PasswordEncoder password(){ return new BCryptPasswordEncoder(); } 再來就是Spring Security在進行安全驗證時，會收到輸入請求中的使用者名稱(username)，然後呼叫UserDetailsService，UserDetailsService是Spring Security用來載入使用者資訊的一個組件，他的功能就是可以提供UserDetailsService中的一個方法loadUserByUsername(String username)，來依據username回傳資料型別UserDetails的使用者資訊（參考文章：Spring Security UserDetailsService 用途)
+所以我們先
+實作UserDetailsService 在implements UserDetailsService的時候，只需要實作一個方法就好，那就是loadUserByUsername，在學習這裡時，稍微了解到了@Service以及＠Component的差別，就是除了閱讀讓人知道Service是處理業務邏輯之外，實際上功能其實都是一樣讓class變成Bean。
+//MyUsersDetailService完整程式碼：  @Service public class MyUsersDetailService implements UserDetailsService { @Override public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException { //權限(固定用法,role是還沒用到所以拿來暫時先隨便亂取）  List&amp;lt;GrantedAuthority&amp;gt; auths = AuthorityUtils.</description>
+    </item>
+    
+    <item>
+      <title>Spring Boot 管理會員資料（二）-CRUD之RUD操作</title>
+      <link>https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/</link>
+      <pubDate>Sat, 28 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/</guid>
+      <description>本文章涉及的知識  Springboot 、 Spring MVC HTTP method RESTful API JDBC mySQL語法 Html、css（小部分） Javascript 、Jquery、vue（小部分）  上一次的進度 [Spring Boot 管理會員資料（一）-會員創建](https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA/#%E8%B3%87%E6%96%99%E5%BA%AB%E9%80%A3%E7%B7%9A%E8%A8%AD%E5%AE%9A-%E4%BD%BF%E7%94%A8jdbc)
+上次的進度用到了CRUD操作中的Create,創建了會員資料，這次就做完剩下的Read、Update、Delete功能，所以HTTP method以及RESTful API的部分請參照上一章節
+為了閱讀方便，附上一些本章節會使用到的資訊
+Member Class:
+public class Member { Integer id; @NotBlank String name; @NotBlank String account; @NotBlank String password; //Getter&amp;amp;Setter  } 本章節Dao Interface、Service Dao＆Implement Dao public interface MemberDao { //返回值 依據名稱對應資料庫動作（參數類型 參數名稱）  String CreatMember(Member member); List&amp;lt;Member&amp;gt; ReadMember(); List&amp;lt;Member&amp;gt; ReadByAccount(String membersAccount); String UpdateByAccount(String membersAccount,Member member); String DeleteByAccount(String membersAccount); } Service public interface MemberService { String CreatMember(Member member); List&amp;lt;Member&amp;gt; ReadMember(); List&amp;lt;Member&amp;gt; ReadByAccount(String membersAccount); String DeleteByAccount(String membersAccount); String UpdateByAccount(String membersAccount,Member member); } ServiceImpl @Component public class MemberServiceImpl implements MemberService{ @Autowired//使用InterFace 發揮spring Ioc特性  private MemberDao memberDao; @Override public String CreatMember(Member member) { return memberDao.</description>
+    </item>
+    
+    <item>
+      <title>Spring Boot 管理會員資料（一）-會員創建 CRUD-Create</title>
+      <link>https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/</link>
+      <pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/</guid>
+      <description>本文章涉及的知識  Springboot 、 Spring MVC HTTP method RESTful API JDBC mySQL語法 Html、css（小部分） Javascript 、Jquery（小部分）  複習HTPP method-GET or POST 差別 GET 或 POST 的差別最大的差別在於傳遞的參數會被看見，因為參數會放在url裡面。
+POST的話參數會放在request body裡面，request body裡面通常會用Json格式來進行前後端的溝通
+在Spring Boot裡面，使用@RequestBody取得放在request body的參數
+練習設計RESTful API RESTful API三大原則： 1.使用http method表示動作
+   HTTP Method 對應資料動作     POST Create（新增）   GET Read（查詢）   PUT Update（修改）   DELETE Delete（刪除）    2.url路徑表示資源階層關係
+3.response body返回json或是xml格式
+設計本範例RESTful API 設計會員資料之class public class Member { Integer id; String name; String account; String password; //getter &amp;amp; setter }    Method Url 資料庫 意義     POST /members Create（新增） 創建會員   GET /members/abc123 Read（查詢） 查詢會員帳號為abc123的資料   PUT /members/abc123 Update（修改） 修改會員帳號為abc123的資料   DELETE /members/abc123 Delete（刪除） 刪除會員帳號為abc123的資料    驗證請求參數 @NotBlank 為了讓使用者的登入數值不能為空白，避免後端程式發生錯誤，可以用此方法提前一部將錯誤回報給前端。</description>
+    </item>
+    
+  </channel>
+</rss>

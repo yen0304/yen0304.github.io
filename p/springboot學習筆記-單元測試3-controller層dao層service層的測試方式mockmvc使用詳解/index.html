@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='使用了MockMvc來測試Controller層、Dao層、Service層，也實際撰寫了常見的寫法'><title>SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 </title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 '>
+<meta property='og:description' content='使用了MockMvc來測試Controller層、Dao層、Service層，也實際撰寫了常見的寫法'>
+<meta property='og:url' content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SpringBoot學習筆記' /><meta property='article:tag' content='Springboot' /><meta property='article:tag' content='SpringBoot單元測試' /><meta property='article:tag' content='JUnit5' /><meta property='article:tag' content='MockMvc' /><meta property='article:tag' content='JsonPath' /><meta property='article:published_time' content='2021-12-22'/><meta property='article:modified_time' content='2021-12-22'/><meta property='og:image' content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/logo.png' />
+<meta name="twitter:title" content="SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 ">
+<meta name="twitter:description" content="使用了MockMvc來測試Controller層、Dao層、Service層，也實際撰寫了常見的寫法"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/logo.png' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/logo_hud02855c89443ca066a520da3d79109c3_149566_800x0_resize_box_3.png"
+                        srcset="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/logo_hud02855c89443ca066a520da3d79109c3_149566_800x0_resize_box_3.png 800w, /p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/logo_hud02855c89443ca066a520da3d79109c3_149566_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="377" 
+                        loading="lazy"
+                        alt="Featured image of post SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 " />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/spring-boot%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6/" >
+                Spring Boot單元測試
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/">SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 </a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        使用了MockMvc來測試Controller層、Dao層、Service層，也實際撰寫了常見的寫法
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2021-12-22</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="springboot學習筆記-單元測試3-controller層dao層service層的測試方式mockmvc使用詳解">SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解</h1>
+<h2 id="dao層以及service層的測試方式">Dao層以及Service層的測試方式</h2>
+<h4 id="使用junit5測試springboot程式">使用JUnit5測試SpringBoot程式</h4>
+<h5 id="springboottest註解">@SpringBootTest註解</h5>
+<ul>
+<li>只要在測試用的class上面加上@SpringBootTest，就會在單元測試時啟動Spring容器，也會創建Bean出來</li>
+<li>這個@SpringBootTest的註解的功能非常完善，除了創建Bean之外，@Configuration或是攔截器Interceptor都會被生效，也就是等同於運行SpringBoot程式。</li>
+<li>通常會把測試用的class變成public，</li>
+</ul>
+<p>做好了準備之後可以運行看看成效以及顯示的結果為何：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@SpringBootTest</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StudentDaoImplTest</span> <span class="o">{</span>
+
+    <span class="c1">//注入bean
+</span><span class="c1"></span>    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">StudentDao</span> <span class="n">studentDao</span><span class="o">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">(){</span>
+        <span class="n">Student</span> <span class="n">student</span> <span class="o">=</span> <span class="n">studentDao</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
+        <span class="n">assertNotNull</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="s">&#34;Amy&#34;</span><span class="o">,</span><span class="n">student</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>運行成果：</p>
+<p><figure style="flex-grow: 118; flex-basis: 283px">
+		<a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/1.jpg" data-size="1854x1570"><img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/1.jpg"
+				srcset="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/1_hu72df88a8aba39a07db3f4ac660288948_1384907_480x0_resize_q75_box.jpg 480w, /p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/1_hu72df88a8aba39a07db3f4ac660288948_1384907_1024x0_resize_q75_box.jpg 1024w"
+				width="1854"
+				height="1570"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h5 id="transactional註解">@Transactional註解</h5>
+<p>假設今天我們透過@Test想測試deleteById的方法時，實際上是會去真實刪除資料庫裡面的數據的，所以如果先執行了測試deleteById，在執行測試getById，這時候如果Id是一樣的情況下，就會影響到測試結果，雖然可以透過測試不同的Id來避免此情況，但在越複雜的專案時此方法很不適合，所以我們可以透過加上@Transactional註解，在單元測試結束之後，SpringBoot會去rollback（回滾）這個單元測試裡面所有的資料庫操作。</p>
+<p>使用範例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Transactional</span>
+<span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteById</span><span class="o">(){</span>
+    <span class="n">studentDao</span><span class="o">.</span><span class="na">deleteById</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
+    <span class="n">Student</span> <span class="n">student</span> <span class="o">=</span><span class="n">studentDao</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
+    <span class="n">assertNull</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><h6 id="不同的transactional註解">不同的@Transactional註解</h6>
+<p>@Transactional在不同的資料夾下，有不同的差異，</p>
+<table>
+<thead>
+<tr>
+<th>資料夾</th>
+<th>@Transactional公用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>main資料夾</td>
+<td>程式運行中發生錯誤才進行rollback</td>
+</tr>
+<tr>
+<td>test資料夾</td>
+<td>單元測試結束之後，強制執行rollback</td>
+</tr>
+</tbody>
+</table>
+<h2 id="controller層的測試">Controller層的測試</h2>
+<p>Controller層的測試目的在於，要模擬前端呼叫真實API CAll的行為，看API是否能運行正確，並且不能透過注入Bean的方式來測試，意思就是模擬http request</p>
+<h4 id="mockmvc">MockMvc</h4>
+<p>MockMvc的用途在於模擬真實的API call，</p>
+<p>所以除了在測試用的class上面加上@SpringBootTest之外，要另外加上註解@AutoConfigureMockMvc這個註解，再注入MockMvc這項Bean。</p>
+<h4 id="mockmvc使用範例mockmvc使用詳解">MockMvc使用範例、MockMvc使用詳解</h4>
+<p>這邊附上Controller層程式碼：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StudentController</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">StudentService</span> <span class="n">studentService</span><span class="o">;</span>
+
+    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">&#34;/students&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span> <span class="nf">create</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="n">Student</span> <span class="n">student</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">Integer</span> <span class="n">studentId</span> <span class="o">=</span> <span class="n">studentService</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+
+        <span class="n">Student</span> <span class="n">newStudent</span> <span class="o">=</span> <span class="n">studentService</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">studentId</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">ResponseEntity</span><span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">CREATED</span><span class="o">).</span><span class="na">body</span><span class="o">(</span><span class="n">newStudent</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@PutMapping</span><span class="o">(</span><span class="s">&#34;/students/{studentId}&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;?&gt;</span> <span class="n">update</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">studentId</span><span class="o">,</span>
+                                    <span class="nd">@RequestBody</span> <span class="n">Student</span> <span class="n">student</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">student</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">studentId</span><span class="o">);</span>
+        <span class="n">studentService</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">ResponseEntity</span><span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">OK</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@DeleteMapping</span><span class="o">(</span><span class="s">&#34;/students/{studentId}&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;?&gt;</span> <span class="n">delete</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">studentId</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">studentService</span><span class="o">.</span><span class="na">deleteById</span><span class="o">(</span><span class="n">studentId</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">ResponseEntity</span><span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">NO_CONTENT</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/students/{studentId}&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span> <span class="nf">read</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">studentId</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">Student</span> <span class="n">student</span> <span class="o">=</span> <span class="n">studentService</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">studentId</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">ResponseEntity</span><span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">OK</span><span class="o">).</span><span class="na">body</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>再來是Test資料夾底下的StudentDaoImplTest程式碼</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="c1">//步驟一，把class變成public，並且創建相關的註解
+</span><span class="c1"></span><span class="nd">@SpringBootTest</span>
+<span class="nd">@AutoConfigureMockMvc</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StudentControllerTest</span> <span class="o">{</span>
+
+    <span class="c1">//步驟二，注入Bean
+</span><span class="c1"></span>    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">MockMvc</span> <span class="n">mockMvc</span><span class="o">;</span>
+
+    <span class="c1">//步驟三，建立測試單元
+</span><span class="c1"></span>    <span class="c1">//在建立MockMvc的時候，主要會分成三個部分
+</span><span class="c1"></span>
+    <span class="nd">@Test</span>
+    <span class="c1">//後面throws Exception是因為下面的perform會去噴出一個Exception，所以才需要在方法上thorw出來
+</span><span class="c1"></span>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+        <span class="cm">/*
+</span><span class="cm">        第一個部分就是會去創建一個requestBuilder，
+</span><span class="cm">        requestBuilder他會決定要發起的http requst，url路徑
+</span><span class="cm">        甚至header，他其實就是一個APItester的概念
+</span><span class="cm">         */</span>
+
+        <span class="c1">//RequestBuilder也使用了Builder設計模式
+</span><span class="c1"></span>        <span class="n">RequestBuilder</span> <span class="n">requestBuilder</span> <span class="o">=</span> <span class="n">MockMvcRequestBuilders</span>
+                <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;/students/3&#34;</span><span class="o">)</span>
+               <span class="c1">//等同於 .get(&#34;/students/{studentId}&#34;,3);
+</span><span class="c1"></span>                <span class="o">.</span><span class="na">header</span><span class="o">(</span><span class="s">&#34;headerName&#34;</span><span class="o">,</span><span class="s">&#34;headerValue&#34;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">queryParam</span><span class="o">(</span><span class="s">&#34;graduate&#34;</span><span class="o">,</span><span class="s">&#34;true&#34;</span><span class="o">);</span>
+
+        <span class="cm">/*
+</span><span class="cm">        第二個部分就是mockMvc.perform()程式，
+</span><span class="cm">        他的用途就是在執行上面的requestBuilder
+</span><span class="cm">        這個方法就等同於在APItester按下send
+</span><span class="cm">         */</span>
+        <span class="n">mockMvc</span><span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="n">requestBuilder</span><span class="o">)</span>
+                <span class="cm">/*
+</span><span class="cm">                第三個部分就是在perform後面的程式，
+</span><span class="cm">                andExpect這個方法就是用來驗證結果，
+</span><span class="cm">                很像assert的概念，主要有
+</span><span class="cm">                andDo()、andExpect、andReturn
+</span><span class="cm">                來輸出、驗證、取得結果
+</span><span class="cm">                 */</span>
+                <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">MockMvcResultMatchers</span><span class="o">.</span><span class="na">status</span><span class="o">().</span><span class="na">is</span><span class="o">(</span><span class="n">200</span><span class="o">));</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><p>執行後如果驗證正確的話，就會看到成功的畫面，也完成了透過MockMvc去完成測試</p>
+<h4 id="ｍockmvc常用寫法">ＭockMvc常用寫法</h4>
+<h6 id="設計者模式builder">設計者模式（Builder）</h6>
+<p>Perform方法寫法，以及所謂的Builder設計模式，這個模式的核心概念就是可以無限「.」下去</p>
+<p>範例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">mockMvc</span><span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="n">requestBuilder</span><span class="o">)</span>
+  	<span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">MockMvcResultMatchers</span><span class="o">.</span><span class="na">status</span><span class="o">().</span><span class="na">is</span><span class="o">(</span><span class="n">200</span><span class="o">))</span>
+  	<span class="o">.</span><span class="na">andExpect</span><span class="o">()</span>
+  	<span class="o">.</span><span class="na">andExpect</span><span class="o">()</span>
+</code></pre></div><h6 id="驗證json格式資料-jsonpath方法">驗證Json格式資料-jsonPath方法</h6>
+<p>如果要驗證Json格式資料的話，我們就需要用jsonPath方法，</p>
+<p>在jsonPath方法裡第一個參數就是想要取得json object的key，第二個則是要驗證的方式。</p>
+<p>其中特別的是第一個參數，他設計了使用者如果要使用的話，要用代表最外層json object的&quot;$&ldquo;符號，還有「.」符號來取的我們想要的數據。
+那對於jsonPath的這種方式，這邊提供了</p>
+<h6 id="jsonpath練習網站-jsonpath-online-evaluator">jsonpath練習網站-JSONPath Online Evaluator</h6>
+<p>來幫助我們練習，這個網站叫做<a class="link" href="https://jsonpath.com/"  target="_blank" rel="noopener"
+    >JSONPath Online Evaluator</a>，使用方式很簡單，如下圖：</p>
+<p><figure style="flex-grow: 166; flex-basis: 400px">
+		<a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/jsonpath.jpg" data-size="2254x1352"><img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/jsonpath.jpg"
+				srcset="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/jsonpath_huf45471e870c620d7ac7e4dc1ab36e33a_1104107_480x0_resize_q75_box.jpg 480w, /p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/jsonpath_huf45471e870c620d7ac7e4dc1ab36e33a_1104107_1024x0_resize_q75_box.jpg 1024w"
+				width="2254"
+				height="1352"
+				loading="lazy"
+				alt="jsonpath">
+		</a>
+		
+		<figcaption>jsonpath</figcaption>
+		
+	</figure></p>
+<h6 id="anddo">.andDo()</h6>
+<p>其實在撰寫jsonpath時，要一邊撰寫jsonpath時還要一邊查看json數據其實是有點麻煩的事情，因為在測時前要先去的json數據，所以我們可以透過.andDo先來輸出.perform的API執行結果當執行測試單元時，其中會長這樣：</p>
+<p>部分java程式碼：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+
+    <span class="n">RequestBuilder</span> <span class="n">requestBuilder</span> <span class="o">=</span> <span class="n">MockMvcRequestBuilders</span>
+            <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;/students/3&#34;</span><span class="o">);</span>
+    <span class="n">mockMvc</span><span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="n">requestBuilder</span><span class="o">)</span>
+            <span class="c1">//當在.perform下面使用.andDo的時候，就可以輸出這個API的執行結果
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">andDo</span><span class="o">(</span><span class="n">print</span><span class="o">())</span>
+            <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">status</span><span class="o">().</span><span class="na">is</span><span class="o">(</span><span class="n">200</span><span class="o">))</span>
+            <span class="cm">/*這邊的equal使用萬用鍵的方式import static method之後在選擇Machers.equalTo
+</span><span class="cm">            第一個就是想要取得json object的key,
+</span><span class="cm">            ＄的意思就是最外層的json object
+</span><span class="cm">            「.」就是所謂的&#34;的&#34;
+</span><span class="cm">            */</span>
+            <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">jsonPath</span><span class="o">(</span><span class="s">&#34;$.id&#34;</span><span class="o">,</span><span class="n">equalTo</span><span class="o">(</span><span class="n">3</span><span class="o">)))</span>
+            <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">jsonPath</span><span class="o">(</span><span class="s">&#34;$.name&#34;</span><span class="o">,</span><span class="n">notNullValue</span><span class="o">()));</span>
+<span class="o">}</span>
+</code></pre></div><p>部分console：</p>
+<p>在console裏面首先可看到MockHttpServletRequest寫著http request的資訊，</p>
+<p>再來下面的MockHttpServletResponse資訊裡，就是程式裡面運行的結果，
+也可以看到在Body裡面有返回的json格式結果，在撰寫json時效率就能稍微高一些些。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nl">MockHttpServletRequest:</span>
+      <span class="n">HTTP</span> <span class="n">Method</span> <span class="o">=</span> <span class="n">GET</span>
+      <span class="n">Request</span> <span class="n">URI</span> <span class="o">=</span> <span class="o">/</span><span class="n">students</span><span class="o">/</span><span class="n">3</span>
+       <span class="n">Parameters</span> <span class="o">=</span> <span class="o">{}</span>
+          <span class="n">Headers</span> <span class="o">=</span> <span class="o">[]</span>
+             <span class="n">Body</span> <span class="o">=</span> <span class="kc">null</span>
+    <span class="n">Session</span> <span class="n">Attrs</span> <span class="o">=</span> <span class="o">{}</span>
+<span class="nl">
+</span><span class="nl">Handler:</span>
+             <span class="n">Type</span> <span class="o">=</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">controller</span><span class="o">.</span><span class="na">StudentController</span>
+           <span class="n">Method</span> <span class="o">=</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">demo</span><span class="o">.</span><span class="na">controller</span><span class="o">.</span><span class="na">StudentController</span><span class="err">#</span><span class="n">read</span><span class="o">(</span><span class="n">Integer</span><span class="o">)</span>
+<span class="nl">
+</span><span class="nl">Async:</span>
+    <span class="n">Async</span> <span class="n">started</span> <span class="o">=</span> <span class="kc">false</span>
+     <span class="n">Async</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span>
+
+<span class="n">Resolved</span> <span class="n">Exception</span><span class="o">:</span>
+             <span class="n">Type</span> <span class="o">=</span> <span class="kc">null</span>
+<span class="nl">
+</span><span class="nl">ModelAndView:</span>
+        <span class="n">View</span> <span class="n">name</span> <span class="o">=</span> <span class="kc">null</span>
+             <span class="n">View</span> <span class="o">=</span> <span class="kc">null</span>
+            <span class="n">Model</span> <span class="o">=</span> <span class="kc">null</span>
+<span class="nl">
+</span><span class="nl">FlashMap:</span>
+       <span class="n">Attributes</span> <span class="o">=</span> <span class="kc">null</span>
+<span class="nl">
+</span><span class="nl">MockHttpServletResponse:</span>
+           <span class="n">Status</span> <span class="o">=</span> <span class="n">200</span>
+    <span class="n">Error</span> <span class="n">message</span> <span class="o">=</span> <span class="kc">null</span>
+          <span class="n">Headers</span> <span class="o">=</span> <span class="o">[</span><span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="o">:</span><span class="s">&#34;application/json&#34;</span><span class="o">]</span>
+     <span class="n">Content</span> <span class="n">type</span> <span class="o">=</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
+             <span class="n">Body</span> <span class="o">=</span> <span class="o">{</span><span class="s">&#34;id&#34;</span><span class="o">:</span><span class="n">3</span><span class="o">,</span><span class="s">&#34;name&#34;</span><span class="o">:</span><span class="s">&#34;Judy&#34;</span><span class="o">,</span><span class="s">&#34;score&#34;</span><span class="o">:</span><span class="n">100</span><span class="o">.</span><span class="na">0</span><span class="o">,</span><span class="s">&#34;graduate&#34;</span><span class="o">:</span><span class="kc">true</span><span class="o">,</span><span class="s">&#34;createDate&#34;</span><span class="o">:</span><span class="s">&#34;2021-09-05T04:19:48.000+00:00&#34;</span><span class="o">}</span>
+    <span class="n">Forwarded</span> <span class="n">URL</span> <span class="o">=</span> <span class="kc">null</span>
+   <span class="n">Redirected</span> <span class="n">URL</span> <span class="o">=</span> <span class="kc">null</span>
+          <span class="n">Cookies</span> <span class="o">=</span> <span class="o">[]</span>
+</code></pre></div><h6 id="andreturn">.andReturn</h6>
+<p>在上面.andDo()的程式裡面，還可以透過andReturn來驗證結果，但他只能加在最後一行，他的用途是取得完整的API執行結果出來，一般在比較複雜的test case才會使用，不然在except加上jsonpath就夠用了，所以我們將上面的程式碼改版後會變成這樣：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+
+    <span class="n">RequestBuilder</span> <span class="n">requestBuilder</span> <span class="o">=</span> <span class="n">MockMvcRequestBuilders</span>
+            <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;/students/3&#34;</span><span class="o">);</span>
+		<span class="c1">//下面這行有改變，使用了MvcResult，可以去對照andDo看看有什麼不同
+</span><span class="c1"></span>    <span class="n">MvcResult</span> <span class="n">mvcResult</span><span class="o">=</span><span class="n">mockMvc</span><span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="n">requestBuilder</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">andDo</span><span class="o">(</span><span class="n">print</span><span class="o">())</span>
+            <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">status</span><span class="o">().</span><span class="na">is</span><span class="o">(</span><span class="n">200</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">jsonPath</span><span class="o">(</span><span class="s">&#34;$.id&#34;</span><span class="o">,</span><span class="n">equalTo</span><span class="o">(</span><span class="n">3</span><span class="o">)))</span>
+            <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">jsonPath</span><span class="o">(</span><span class="s">&#34;$.name&#34;</span><span class="o">,</span><span class="n">notNullValue</span><span class="o">()))</span>
+            <span class="o">.</span><span class="na">andReturn</span><span class="o">();</span>
+
+    <span class="c1">//使用mvcResult取得responseBody資訊
+</span><span class="c1"></span>    <span class="n">String</span> <span class="n">body</span> <span class="o">=</span><span class="n">mvcResult</span><span class="o">.</span><span class="na">getResponse</span><span class="o">().</span><span class="na">getContentAsString</span><span class="o">();</span>
+    <span class="c1">//顯示
+</span><span class="c1"></span>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;返回的responseBody為：&#34;</span><span class="o">+</span> <span class="n">body</span><span class="o">);</span>
+
+<span class="o">}</span>
+</code></pre></div><h4 id="mockmvc-post方法">MockMvc POST方法</h4>
+<p>上面示範了使用MockMvc來寫出GET方法的http request，
+接下來要學習使用POST，用程式碼來解說</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">create</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+    <span class="n">RequestBuilder</span> <span class="n">requestBuilder</span> <span class="o">=</span> <span class="n">MockMvcRequestBuilders</span>
+            <span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="s">&#34;/students&#34;</span><span class="o">)</span>
+    <span class="c1">//到上面都跟get幾乎一樣
+</span><span class="c1"></span>    <span class="c1">//下面很重要，一定要加上下面這行才可以在requestBody才可以傳遞json參數
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">contentType</span><span class="o">(</span><span class="n">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON</span><span class="o">);</span>
+            <span class="c1">//想在request Body的json字串
+</span><span class="c1"></span>            <span class="c1">//.content(.....)
+</span><span class="c1"></span>    <span class="c1">//執行
+</span><span class="c1"></span>    <span class="n">mockMvc</span><span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="n">requestBuilder</span><span class="o">)</span>
+            <span class="c1">//查看創建的API的成功http狀態碼決定
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">status</span><span class="o">().</span><span class="na">is</span><span class="o">(</span><span class="n">201</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="github">Github</h2>
+<p><a class="link" href="https://github.com/yen0304/JUnit_pratice2-MockMvc"  target="_blank" rel="noopener"
+    >github</a></p>
+<p>本範例皆由hahow古老師的課程學習，範例也是，</p>
+<p><a class="link" href="https://hahow.in/courses/5fe22e7fe810e10fc483dd78/discussions"  target="_blank" rel="noopener"
+    >想要深入了解課程可參考</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">SpringBoot學習筆記</a>
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+            <a href="/tags/springboot%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6/">SpringBoot單元測試</a>
+        
+            <a href="/tags/junit5/">JUnit5</a>
+        
+            <a href="/tags/mockmvc/">MockMvc</a>
+        
+            <a href="/tags/jsonpath/">JsonPath</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(2)-JUnit5使用教學</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A61-%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A61-%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(1)-基礎介紹</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/">
+        
+        
+            <div class="article-image">
+                <img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Freemarker &#43; Spring Security 整合</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#dao層以及service層的測試方式">Dao層以及Service層的測試方式</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#使用junit5測試springboot程式">使用JUnit5測試SpringBoot程式</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#controller層的測試">Controller層的測試</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#mockmvc">MockMvc</a></li>
+            <li><a href="#mockmvc使用範例mockmvc使用詳解">MockMvc使用範例、MockMvc使用詳解</a></li>
+            <li><a href="#ｍockmvc常用寫法">ＭockMvc常用寫法</a></li>
+            <li><a href="#mockmvc-post方法">MockMvc POST方法</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#github">Github</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

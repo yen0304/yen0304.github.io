@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='spring boot連結前端引擎Freemarker,到測試成功的過程'><title>Spingboot&#43;Freemarker基本配置</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Spingboot&#43;Freemarker基本配置'>
+<meta property='og:description' content='spring boot連結前端引擎Freemarker,到測試成功的過程'>
+<meta property='og:url' content='https://yen0304.github.io/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Freemarker' /><meta property='article:tag' content='Springboot' /><meta property='article:tag' content='HTML' /><meta property='article:published_time' content='2021-08-08'/><meta property='article:modified_time' content='2021-08-08'/><meta property='og:image' content='https://yen0304.github.io/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/post.jpg' />
+<meta name="twitter:title" content="Spingboot&#43;Freemarker基本配置">
+<meta name="twitter:description" content="spring boot連結前端引擎Freemarker,到測試成功的過程"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/post.jpg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/">
+                <img src="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/post_hu3cf4b63e80cf49258a3cdf19be741597_1490134_800x0_resize_q75_box.jpg"
+                        srcset="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/post_hu3cf4b63e80cf49258a3cdf19be741597_1490134_800x0_resize_q75_box.jpg 800w, /p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/post_hu3cf4b63e80cf49258a3cdf19be741597_1490134_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="534" 
+                        loading="lazy"
+                        alt="Featured image of post Spingboot&#43;Freemarker基本配置" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                SpringBoot學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/">Spingboot&#43;Freemarker基本配置</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        spring boot連結前端引擎Freemarker,到測試成功的過程
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2021-08-08</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h2 id="前言">前言</h2>
+<h3 id="springboot--freemaker-基本設置">Springboot + Freemaker 基本設置</h3>
+<p>前端複習的差不多了，所以來試試如何將後端數據傳到前，在google的幫助下，瞭解了要用搜尋關鍵字Springboot + Freemaker，Freemaker 跟thymeleaf是差不多功能的東西，雖然Springboot官方是推薦使用thymeleaf，但網路上比較上是Freemaker勝出，且在設定上好像較容易，所以就使用Freemaker作為模板引擎了</p>
+<p>在網路上的資源很多，從官方到個人網站都有教學，大同小異，但是到了最後連結上還是出了小問題，幸好最終解決了，所以在這紀錄一下架設過程，希望大家需要時能按圖施工保證成功！！</p>
+<h2 id="環境介紹">環境介紹</h2>
+<p>開發平台：IntelliJ 2020.3</p>
+<p>Springboot版本：2.3.7.release</p>
+<p>前端：html、css、皆快速使用bootstrap</p>
+<h2 id="1maven添加freemaker">1.maven添加Freemaker</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-freemarker<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><h2 id="2檔案路徑freemaker環境配置">2.檔案路徑&amp;Freemaker環境配置</h2>
+<p><strong>接下來檔案路徑就很重要了</strong>，</p>
+<p>步驟1.</p>
+<p>將自己index.html檔案放在resources/templates裡面，步驟是將檔案拉進去resources/templates後，intellij會詢問檔案名稱，<strong>這時候把副檔名改成ftl</strong></p>
+<p>接著要修改模板預設參數，在application.properties裡打上以下程式碼</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="l">spring.freemarker.cache=false</span><span class="w">
+</span><span class="w"></span><span class="c"># 模版後綴名 默認為ftl</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.suffix=.ftl</span><span class="w">
+</span><span class="w"></span><span class="c"># 文件編碼</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.charset=UTF-8</span><span class="w">
+</span><span class="w"></span><span class="c"># 模版加載的目錄</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.template-loader-path=classpath:/templates/</span><span class="w">
+</span></code></pre></div><p>步驟2.</p>
+<p>css、js檔案放在resources/static底下，切記，**一定要在static下新增css以及js資料夾！**否則會無法成功取得（我就是在這邊卡很久）。</p>
+<h2 id="3測試用程式碼">3.測試用程式碼</h2>
+<p>接著新增controller,並使用getmapping</p>
+<p>如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Logincontroller</span> <span class="o">{</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/page&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">show</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">&#34;name&#34;</span><span class="o">,</span><span class="s">&#34;測試&#34;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">&#34;/index&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>這邊要注意的地方是，</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="k">return</span> <span class="s">&#34;/index&#34;</span><span class="o">;</span>
+</code></pre></div><p>return的值就是ftl的檔案名稱</p>
+<p>接著到index.ftl到隨便一個地方 加入 <code>${name}</code> 來測試</p>
+<p>我的長這樣：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">label</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;checkbox&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;remember-me&#34;</span><span class="p">/&gt;</span>
+  ${name}
+<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+</code></pre></div><h2 id="4檔案結構成果">4.檔案結構＆成果</h2>
+<p>這邊附上完整的檔案路徑配置</p>
+<p><figure style="flex-grow: 66; flex-basis: 160px">
+		<a href="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/filepath.jpg" data-size="606x908"><img src="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/filepath.jpg"
+				srcset="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/filepath_huc0760ca7ac0f6e11c422889e2e866239_115055_480x0_resize_q75_box.jpg 480w, /p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/filepath_huc0760ca7ac0f6e11c422889e2e866239_115055_1024x0_resize_q75_box.jpg 1024w"
+				width="606"
+				height="908"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>運行成果：</p>
+<p><figure style="flex-grow: 105; flex-basis: 252px">
+		<a href="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/result.jpg" data-size="760x722"><img src="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/result.jpg"
+				srcset="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/result_hudbae9f6d2dfa55ed14c0bcd0f62cd6f7_70459_480x0_resize_q75_box.jpg 480w, /p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/result_hudbae9f6d2dfa55ed14c0bcd0f62cd6f7_70459_1024x0_resize_q75_box.jpg 1024w"
+				width="760"
+				height="722"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/freemarker/">Freemarker</a>
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+            <a href="/tags/html/">HTML</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Boot 管理會員資料（二）-CRUD之RUD操作</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Boot 管理會員資料（一）-會員創建 CRUD-Create</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/logo.b16d6095dd15d52be011b6b6cfbff781_hu807666e0efc0d1033f1aa166a1ba5367_206258_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-sW1gld0V1SvgEba2z7/3gQ==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot電商平台實戰(1)，用戶註冊、用戶登入、修改資料</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/">
+        
+        
+            <div class="article-image">
+                <img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Freemarker &#43; Spring Security 整合</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a>
+      <ol>
+        <li><a href="#springboot--freemaker-基本設置">Springboot + Freemaker 基本設置</a></li>
+      </ol>
+    </li>
+    <li><a href="#環境介紹">環境介紹</a></li>
+    <li><a href="#1maven添加freemaker">1.maven添加Freemaker</a></li>
+    <li><a href="#2檔案路徑freemaker環境配置">2.檔案路徑&amp;Freemaker環境配置</a></li>
+    <li><a href="#3測試用程式碼">3.測試用程式碼</a></li>
+    <li><a href="#4檔案結構成果">4.檔案結構＆成果</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='使用Mockito來減少單元測試中的Bean依賴'><title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴'>
+<meta property='og:description' content='使用Mockito來減少單元測試中的Bean依賴'>
+<meta property='og:url' content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SpringBoot學習筆記' /><meta property='article:tag' content='Springboot' /><meta property='article:tag' content='SpringBoot單元測試' /><meta property='article:tag' content='Mockito' /><meta property='article:published_time' content='2021-12-22'/><meta property='article:modified_time' content='2021-12-22'/><meta property='og:image' content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo.png' />
+<meta name="twitter:title" content="SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴">
+<meta name="twitter:description" content="使用Mockito來減少單元測試中的Bean依賴"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo.png' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo_hud02855c89443ca066a520da3d79109c3_149566_800x0_resize_box_3.png"
+                        srcset="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo_hud02855c89443ca066a520da3d79109c3_149566_800x0_resize_box_3.png 800w, /p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo_hud02855c89443ca066a520da3d79109c3_149566_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="377" 
+                        loading="lazy"
+                        alt="Featured image of post SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/spring-boot%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6/" >
+                Spring Boot單元測試
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/">SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        使用Mockito來減少單元測試中的Bean依賴
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2021-12-22</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="springboot學習筆記-單元測試4-mockito">SpringBoot學習筆記-單元測試(4)-Mockito</h1>
+<h2 id="前言">前言</h2>
+<p>部分文章內容來自於古老師在<a class="link" href="https://hahow.in/courses/5fe22e7fe810e10fc483dd78/discussions"  target="_blank" rel="noopener"
+    >hahow的課程</a>，還有古老師的<a class="link" href="https://kucw.github.io/blog/2020/2/spring-unit-test-mockito/"  target="_blank" rel="noopener"
+    >部落格</a>，想要做筆記的原因是因為，邊記變做會比較容易記住，改天忘了也可以用自己的方式去理解。</p>
+<h2 id="mock測試目的與特性">Mock測試目的與特性</h2>
+<p>單元測試的特性為下：</p>
+<p>1.可以被自動化運行</p>
+<p>2.各個單元測試互相獨立，彼此之間不能有依賴關係</p>
+<p>3.測試結果穩定，不受外部服務影響</p>
+<p>在前面的筆記，如果要測試Service層的話，應該會這樣寫：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@SpringBootTest</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StudentServiceImplMockTest</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span> <span class="n">StudentService</span> <span class="n">studentService</span><span class="o">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">(){</span>
+        <span class="n">Student</span> <span class="n">student</span><span class="o">=</span><span class="n">studentService</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">3</span><span class="o">);</span>
+        <span class="n">assertNotNull</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="n">3</span><span class="o">,</span><span class="n">student</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="s">&#34;Judy&#34;</span><span class="o">,</span><span class="n">student</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><p>在上面的測試單元裡，StudentService其實用到了StudentDao這個Bean，</p>
+<p>並不符合地２點，Bean之前在上面是有依賴關係的，所以Mock測試的</p>
+<ul>
+<li>目的：避免測試某一個單元測試，而去建構整個bean的依賴。</li>
+<li>作法：創造一個假的bean，替換掉容器原有的bean。</li>
+</ul>
+<p>在程式裡面Mock的意思為「假的」的意思，而非英文單字模仿。</p>
+<h2 id="mockito">Mockito</h2>
+<p>Mockito是Spring Boot中，進行Mock測試的工具</p>
+<p>功能大致上分為：</p>
+<ul>
+<li>模擬方法的返回值</li>
+<li>模擬拋出Exception</li>
+<li>記錄方法的使用次數、順序</li>
+</ul>
+<h3 id="mockbean">@MockBean</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">(){</span>
+    <span class="c1">//第二步
+</span><span class="c1"></span>    <span class="n">Student</span> <span class="n">mockStudent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Student</span><span class="o">();</span>
+    <span class="n">mockStudent</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">100</span><span class="o">);</span>
+    <span class="n">mockStudent</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&#34;mockname&#34;</span><span class="o">);</span>
+
+  	<span class="c1">//這句話的意思就是，當有人使用studentDao.getById(3)時，固定return mockStudent這個object
+</span><span class="c1"></span>    <span class="n">Mockito</span><span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">studentDao</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">3</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">mockStudent</span><span class="o">);</span>
+
+    <span class="n">Student</span> <span class="n">student</span><span class="o">=</span><span class="n">studentService</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">3</span><span class="o">);</span>
+    <span class="n">assertNotNull</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="n">3</span><span class="o">,</span><span class="n">student</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="s">&#34;Judy&#34;</span><span class="o">,</span><span class="n">student</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div><p>執行結果：</p>
+<pre><code>org.opentest4j.AssertionFailedError: 
+Expected :3
+Actual   :100
+</code></pre><p>再把</p>
+<p><code>assertEquals(3,student.getId());</code>改成<code>assertEquals(3,student.getId());</code>就會顯示測試成功了</p>
+<h3 id="使用mockbean注意事項">使用MockBean注意事項</h3>
+<p>承上，如果把<code>Student student=studentService.getById(3)</code>改成了<code>Student student=studentService.getById(2)</code>下面的單元測試依然會運行錯誤，<strong>原因是因為在沒有定義返回值是多少的情況下，這個假的mockbean預設會傳NULL</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">(){</span>
+    <span class="n">Student</span> <span class="n">mockStudent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Student</span><span class="o">();</span>
+    <span class="n">mockStudent</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">100</span><span class="o">);</span>
+    <span class="n">mockStudent</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&#34;mockname&#34;</span><span class="o">);</span>
+		<span class="n">Mockito</span><span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">studentDao</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">3</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">mockStudent</span><span class="o">);</span>
+
+    <span class="n">Student</span> <span class="n">student</span><span class="o">=</span><span class="n">studentService</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">2</span><span class="o">);</span>
+    <span class="n">assertNotNull</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="n">3</span><span class="o">,</span><span class="n">student</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="s">&#34;Judy&#34;</span><span class="o">,</span><span class="n">student</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div><p>所以我們會利用</p>
+<h3 id="mockitoany">Mockito.any()</h3>
+<p>來固定返回mockStudent這個數值</p>
+<p>由<code>Mockito.when(studentDao.getById(3)).thenReturn(mockStudent);</code></p>
+<p>變成<code>Mockito.when(studentDao.getById(Mockito.any())).thenReturn(mockStudent);</code></p>
+<p>這樣不論參數是多少，都還是會固定返回mockStudent出來。</p>
+<h3 id="補充thenreturn-doreturn">補充thenReturn doReturn</h3>
+<p>其實只是寫法上的不同，下面的程式碼是等價的</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Mockito</span><span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">studentDao</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">())).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">mockStudent</span><span class="o">);</span>
+<span class="n">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="n">mockStudent</span><span class="o">).</span><span class="na">when</span><span class="o">(</span><span class="n">studentDao</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">()));</span>
+</code></pre></div><h3 id="throw-expection">Throw Expection</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Mockito</span><span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">studentDao</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="n">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">())).</span><span class="na">thenThrow</span><span class="o">(</span><span class="k">new</span> <span class="n">RuntimeException</span><span class="o">());</span>
+<span class="n">Mockito</span><span class="o">.</span><span class="na">doThrow</span><span class="o">(</span><span class="k">new</span> <span class="n">RuntimeException</span><span class="o">()).</span><span class="na">when</span><span class="o">(</span><span class="n">studentDao</span><span class="o">).</span><span class="na">deleteById</span><span class="o">(</span><span class="n">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">());</span>
+</code></pre></div><h3 id="verify">Verify</h3>
+<p>用來記錄方法的使用次數、順序（少用）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Mockito</span><span class="o">.</span><span class="na">doThrow</span><span class="o">(</span><span class="k">new</span> <span class="n">RuntimeException</span><span class="o">()).</span><span class="na">when</span><span class="o">(</span><span class="n">studentDao</span><span class="o">).</span><span class="na">deleteById</span><span class="o">(</span><span class="n">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">());</span>
+</code></pre></div><h3 id="mockito-的限制">Mockito 的限制</h3>
+<p>上述就是 Mockito 的 mock 對象使用方法，不過當使用 Mockito 在 mock 對象時，有一些限制需要遵守</p>
+<ul>
+<li>
+<p>不能 mock 靜態方法</p>
+</li>
+<li>
+<p>不能 mock private 方法</p>
+</li>
+<li>
+<p>不能 mock final class</p>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">SpringBoot學習筆記</a>
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+            <a href="/tags/springboot%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6/">SpringBoot單元測試</a>
+        
+            <a href="/tags/mockito/">Mockito</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 </h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(2)-JUnit5使用教學</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A61-%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A61-%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(1)-基礎介紹</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/">
+        
+        
+            <div class="article-image">
+                <img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Freemarker &#43; Spring Security 整合</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#mock測試目的與特性">Mock測試目的與特性</a></li>
+    <li><a href="#mockito">Mockito</a>
+      <ol>
+        <li><a href="#mockbean">@MockBean</a></li>
+        <li><a href="#使用mockbean注意事項">使用MockBean注意事項</a></li>
+        <li><a href="#mockitoany">Mockito.any()</a></li>
+        <li><a href="#補充thenreturn-doreturn">補充thenReturn doReturn</a></li>
+        <li><a href="#throw-expection">Throw Expection</a></li>
+        <li><a href="#verify">Verify</a></li>
+        <li><a href="#mockito-的限制">Mockito 的限制</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

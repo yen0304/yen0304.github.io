@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='了解GROUP BY搭配聚合函數使用、還有子查詢作用'><title>SQL學習筆記(2)-分組(GROUP BY)與聚合函數結果篩選、子查詢</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SQL學習筆記(2)-分組(GROUP BY)與聚合函數結果篩選、子查詢'>
+<meta property='og:description' content='了解GROUP BY搭配聚合函數使用、還有子查詢作用'>
+<meta property='og:url' content='https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL學習筆記' /><meta property='article:tag' content='SQL' /><meta property='article:tag' content='SQLite' /><meta property='article:published_time' content='2022-01-11'/><meta property='article:modified_time' content='2022-01-11'/><meta property='og:image' content='https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/logo.jpeg' />
+<meta name="twitter:title" content="SQL學習筆記(2)-分組(GROUP BY)與聚合函數結果篩選、子查詢">
+<meta name="twitter:description" content="了解GROUP BY搭配聚合函數使用、還有子查詢作用"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_800x0_resize_q75_box.jpeg"
+                        srcset="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_800x0_resize_q75_box.jpeg 800w, /p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="535" 
+                        loading="lazy"
+                        alt="Featured image of post SQL學習筆記(2)-分組(GROUP BY)與聚合函數結果篩選、子查詢" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                SQL學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/">SQL學習筆記(2)-分組(GROUP BY)與聚合函數結果篩選、子查詢</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        了解GROUP BY搭配聚合函數使用、還有子查詢作用
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-01-11</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="sql學習筆記2-分組與聚合結果篩選子查詢">SQL學習筆記(2)-分組與聚合結果篩選、子查詢</h1>
+<h2 id="前言">前言</h2>
+<p>本系列大多部分來自Hahow的課程－<a class="link" href="https://hahow.in/courses/5fd24f017687e53b086c7fe7/discussions"  target="_blank" rel="noopener"
+    >SQL的50道練習</a>，學習過程中得到的筆記，文章內容也有部份都是從教材擷取出來，如果有興趣可以去上課看看。</p>
+<p>那這章的基本語法其實網路上的網站<a class="link" href="https://www.fooish.com/sql/"  target="_blank" rel="noopener"
+    >fooish</a>都講得蠻完善的了，部分文章內容也會引用網站文章內容。</p>
+<p>但這次的文章比較多是自己做的圖片，或是個人見解，我希望把程式用白話的方式一一來理解，讓自己能真正的理解他。</p>
+<h2 id="開發環境">開發環境</h2>
+<p>電腦系統：macOS（Big Sur）</p>
+<p>資料庫管理工具：DBeaver</p>
+<p>使用語言：SQLite</p>
+<h2 id="group-by">GROUP BY</h2>
+<p>GROUP BY是一個很重要的敘述句，常常搭配聚合函數(aggregate_function)使用，</p>
+<p>下面的aggregate_function(column_name) ，代表使用的聚合函數以及要進行計算的column的名字</p>
+<p>WHERE條件篩選則是看場合使用，</p>
+<p>GROUP BY 後面如果放了多個column，代表將這些結果越分越細，同時他也具有ORDER BY的功能。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">column_name</span><span class="p">(</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="n">aggregate_function</span><span class="p">(</span><span class="k">column_name</span><span class="p">)</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"></span><span class="k">WHERE</span><span class="w"> </span><span class="k">column_name</span><span class="w"> </span><span class="k">operator</span><span class="w"> </span><span class="n">value</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">column_name1</span><span class="p">,</span><span class="w"> </span><span class="k">column_name</span><span class="p">.</span><span class="mi">2</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>詳細解說如下</p>
+<p><figure style="flex-grow: 491; flex-basis: 1178px">
+		<a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpby1.jpg" data-size="1974x402"><img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpby1.jpg"
+				srcset="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpby1_hu93661f60baa40e47ebdc9f3be18e66dc_170483_480x0_resize_q75_box.jpg 480w, /p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpby1_hu93661f60baa40e47ebdc9f3be18e66dc_170483_1024x0_resize_q75_box.jpg 1024w"
+				width="1974"
+				height="402"
+				loading="lazy"
+				alt="自己做的&gt;&lt;">
+		</a>
+		
+		<figcaption>自己做的&gt;&lt;</figcaption>
+		
+	</figure></p>
+<p>因為GROUP BY每一個群組會傳回一個資料列，所以自然而然就按照了預設的順序排出了第一筆資料。</p>
+<p>但其實這時候分組已經完成了，再看下一張圖：</p>
+<p><figure style="flex-grow: 226; flex-basis: 544px">
+		<a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpby2.jpg" data-size="1972x870"><img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpby2.jpg"
+				srcset="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpby2_hu97b76d352803919de6b42bd0a0fbf89d_340913_480x0_resize_q75_box.jpg 480w, /p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpby2_hu97b76d352803919de6b42bd0a0fbf89d_340913_1024x0_resize_q75_box.jpg 1024w"
+				width="1972"
+				height="870"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>GROUP BY可以想像成把指定的column合併分組之後，但實際上是有展開功能的，裡面的數據並不會消失，</p>
+<p>所以如果我們要計算每個組別的價錢總和，就使用GROUP BY 組別名稱 在使用聚合函數SUM(columm)，把價錢加總起來，如果在GROUP BY 之後加上的是GROUP BY column_name1, column_name.2，就可以假設在 column_name1之後還有column_name.2分組結果可以展開。</p>
+<h2 id="聚合函數count">聚合函數COUNT()</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">column_name</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>COUNT(column_name) 函數用來計算符合查詢條件的欄位紀錄總共有幾筆。</p>
+<p>這裡其實需要去理解一下，其實COUNT(column_name)返回的是在指定的column中，欄位值不為NULL的數量，</p>
+<p>所以換句話說，如果有NULL值的話並不會被算進去，所以一般不會把有NULL的值放進去做計算，但反觀，</p>
+<p>如果都不為NULL的話，就被大家拿來當作查看欄位值有幾筆的函數了，畢竟每個都有值的話，白話說就是數有幾筆數量，但如果在資料表觀測值都不為NULL的情況下，大家的筆數都會一樣，所以這時候就會變成我們常用的</p>
+<p>COUNT()或是COUNT(*)，意思都一樣。</p>
+<h2 id="當count遇上group-by">當COUNT遇上GROUP BY</h2>
+<p>這是個超常會碰到的用法，在資料皆不為null的情況下，</p>
+<p>COUNT的意思是「有幾筆資料」 ，</p>
+<p>GROUP的意思則是「分組」</p>
+<p>合起來用變成，「分組的組別有幾筆資料」。</p>
+<h3 id="範例">範例</h3>
+<p><figure style="flex-grow: 303; flex-basis: 729px">
+		<a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/movies.jpg" data-size="1434x472"><img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/movies.jpg"
+				srcset="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/movies_hu3dc17a8e941b084f2bcf380d1ac2fdc8_406557_480x0_resize_q75_box.jpg 480w, /p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/movies_hu3dc17a8e941b084f2bcf380d1ac2fdc8_406557_1024x0_resize_q75_box.jpg 1024w"
+				width="1434"
+				height="472"
+				loading="lazy"
+				alt="moives資料表（部分）">
+		</a>
+		
+		<figcaption>moives資料表（部分）</figcaption>
+		
+	</figure></p>
+<p><em>在50道練習當中，某一道題目如下</em></p>
+<p><em>從 imdb 資料庫的 movies 資料表計算每一年有幾部在 IMDb.com</em></p>
+<p><em>獲得高評等的經典電影，參考下列的預期查詢結果。</em></p>
+<p>從上面我們可以知道要如何解題</p>
+<ol>
+<li>首先寫上 <code>SELECT</code> <code>FROM movies</code>，先選好要顯示資料在哪一個資料表</li>
+<li>接著要計算「每一年」，所以我們把年進行分組<code>GROUP BY release_year</code></li>
+<li>再來使用<code>COUNT(*)</code>計算每一組的比數，意思就是在<code>GROUP BY release_year</code>以年分組後展開後有幾筆數量，也因為大家都不為NULL，所以這個數字也變成了有幾部電影的數量</li>
+<li>選擇其他要顯示<code>SELECT release_year,COUNT(*) AS number_of_movies</code></li>
+</ol>
+<p>合起來變成：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">release_year</span><span class="p">,</span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">number_of_movies</span><span class="w">
+</span><span class="w">
+</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> 
+</span><span class="w">
+</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">release_year</span><span class="w"> 
+</span></code></pre></div><p>結果如下：</p>
+<p><figure style="flex-grow: 70; flex-basis: 169px">
+		<a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpc1.jpg" data-size="664x940"><img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpc1.jpg"
+				srcset="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpc1_hua04aa0f48dcfcd2fdb5ca9d14c613cf3_290196_480x0_resize_q75_box.jpg 480w, /p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/gpc1_hua04aa0f48dcfcd2fdb5ca9d14c613cf3_290196_1024x0_resize_q75_box.jpg 1024w"
+				width="664"
+				height="940"
+				loading="lazy"
+				alt="gpc1">
+		</a>
+		
+		<figcaption>gpc1</figcaption>
+		
+	</figure></p>
+<h2 id="having">HAVING</h2>
+<p>HAVING跟WHERE一樣都是做條件篩選，但HAVING 後面可以放聚合函數，但WHERE不行，也因為這樣的特性</p>
+<p>我們可以把它想成</p>
+<p>HAVING是「先計算後篩選」,WHERE則是「先篩選後計算」</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">column_name</span><span class="p">(</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="n">aggregate_function</span><span class="p">(</span><span class="k">column_name</span><span class="p">)</span><span class="w"> 
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">column_name</span><span class="w"> </span><span class="k">operator</span><span class="w"> </span><span class="n">value</span><span class="w"> 
+</span><span class="w"></span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">column_name1</span><span class="p">,</span><span class="w"> </span><span class="n">column_name2</span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="k">HAVING</span><span class="w"> </span><span class="n">aggregate_function</span><span class="p">(</span><span class="k">column_name</span><span class="p">)</span><span class="w"> </span><span class="k">operator</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>範例：</p>
+<table>
+<thead>
+<tr>
+<th>O_Id</th>
+<th>Price</th>
+<th>Customer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+<td>張一</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2000</td>
+<td>王二</td>
+</tr>
+<tr>
+<td>3</td>
+<td>500</td>
+<td>李三</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1300</td>
+<td>張一</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1800</td>
+<td>王二</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">Customer</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">Price</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> 
+</span><span class="w"></span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">Customer</span><span class="w"> 
+</span><span class="w"></span><span class="k">HAVING</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">Price</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1000</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>在這邊，我們可以看到由<code>GROUP BY Costomer</code>以客人所進行的分組，以及<code>SUM(Price)</code>的加總，</p>
+<p>變成了計算每一個客人總共花了多少錢，但再加上<code>HAVING SUM(Price)&lt;1000</code>，篩選總金額小於1000的值，所以段程式碼的意思是「顯示price總和小於1000的顧客(Customer)」</p>
+<p>結果：</p>
+<table>
+<thead>
+<tr>
+<th>Customer</th>
+<th>SUM(Price)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>李三</td>
+<td>500</td>
+</tr>
+</tbody>
+</table>
+<p>但如果</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">Customer</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">Price</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> 
+</span><span class="w"></span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">Customer</span><span class="w"> 
+</span><span class="w"></span><span class="k">WHERE</span><span class="w"> </span><span class="n">Price</span><span class="o">&lt;</span><span class="mi">1000</span><span class="w">
+</span></code></pre></div><p>在<code>WHERE price</code>先進行條件篩選後，這時候連<code>SUM(Price)</code>也不會列入計算，</p>
+<p>變成了「計算顧客單筆花費不超過1000的總和」，</p>
+<p>結果</p>
+<table>
+<thead>
+<tr>
+<th>O_Id</th>
+<th>Price</th>
+<th>Customer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2300</td>
+<td>張一</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3800</td>
+<td>王二</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>李三</td>
+</tr>
+</tbody>
+</table>
+<h2 id="子查詢">子查詢</h2>
+<p>子查詢就是在一個Select指令內再放入一個Select查詢指令進行查詢，通常是位在Select的Where子句，可以透過子查詢取得查詢條件。</p>
+<p>簡單來說，如果我們想在WHERE後面的條件來自於資料表的值、查詢結果，所以通常這個子查詢SELECT後面的欄位只會一個(例如123)，因為我們不會在WHERE後面放 where a=（123,456 )這樣在語法上就錯誤了，</p>
+<h3 id="使用子查詢撰寫流程技巧">使用子查詢撰寫流程技巧</h3>
+<p><img src="/Users/yen/Desktop/exampleSite/content/post/sqlnote01%e6%8b%b7%e8%b2%9d/movies.jpg" alt=""  /></p>
+<p>假設我們今天要查詢最短的電影他的資料，</p>
+<p>我們要分兩次查詢來完成</p>
+<ul>
+<li>先查詢「最短」的片長是幾分鐘。</li>
+<li>再依據前一個查詢結果作為篩選條件。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">MIN</span><span class="p">(</span><span class="n">runtime</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">minimum_runtime</span><span class="w">  </span><span class="c1">-- 先查詢「最短」的片長是幾分鐘。
+</span><span class="c1"></span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>這時候，假設輸出是</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">minimum_runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">45</td>
+</tr>
+</tbody>
+</table>
+<p>所以第二次我們會使用</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w">
+</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w">
+</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">runtime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">45</span><span class="p">;</span><span class="w">  </span><span class="c1">-- 再依據前一個查詢結果作為篩選條件。
+</span></code></pre></div><p>得出結果：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">id</th>
+<th style="text-align:right">title</th>
+<th style="text-align:right">release_year</th>
+<th style="text-align:right">rating</th>
+<th style="text-align:right">director</th>
+<th style="text-align:right">runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">195</td>
+<td style="text-align:right">Sherlock Jr.</td>
+<td style="text-align:right">1924</td>
+<td style="text-align:right">8.2</td>
+<td style="text-align:right">Buster Keaton</td>
+<td style="text-align:right">45</td>
+</tr>
+</tbody>
+</table>
+<p>接著再把45的地方取代成「取出45的sql語句」，記得加括號</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w">
+</span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w">
+</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">runtime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">MIN</span><span class="p">(</span><span class="n">runtime</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">minimum_runtime</span><span class="w">  
+</span><span class="w">  									</span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="p">;)</span><span class="w">
+</span></code></pre></div><p>差不多就是這樣！</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">SQL學習筆記</a>
+        
+            <a href="/tags/sql/">SQL</a>
+        
+            <a href="/tags/sqlite/">SQLite</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/">
+        
+        
+            <div class="article-image">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/logo.16b089f4da300c95ef33e058383663c8_hue91c0a6a1fc261792a7714a8d89d8466_163197_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-FrCJ9NowDJXvM&#43;BYODZjyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL學習筆記(3)-水平合併(JOIN ON)與垂直合併(UNION)</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/logo.16b089f4da300c95ef33e058383663c8_hue91c0a6a1fc261792a7714a8d89d8466_163197_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-FrCJ9NowDJXvM&#43;BYODZjyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#開發環境">開發環境</a></li>
+    <li><a href="#group-by">GROUP BY</a></li>
+    <li><a href="#聚合函數count">聚合函數COUNT()</a></li>
+    <li><a href="#當count遇上group-by">當COUNT遇上GROUP BY</a>
+      <ol>
+        <li><a href="#範例">範例</a></li>
+      </ol>
+    </li>
+    <li><a href="#having">HAVING</a></li>
+    <li><a href="#子查詢">子查詢</a>
+      <ol>
+        <li><a href="#使用子查詢撰寫流程技巧">使用子查詢撰寫流程技巧</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

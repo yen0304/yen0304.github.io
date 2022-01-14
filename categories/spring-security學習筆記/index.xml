@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring Security學習筆記 on Yen&#39;s部落格</title>
+    <link>https://yen0304.github.io/categories/spring-security%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/</link>
+    <description>Recent content in Spring Security學習筆記 on Yen&#39;s部落格</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Sat, 18 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/categories/spring-security%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Security(4)訪問權限註解@Securitd、@PreAuthorize</title>
+      <link>https://yen0304.github.io/p/spring-security4%E8%A8%AA%E5%95%8F%E6%AC%8A%E9%99%90%E8%A8%BB%E8%A7%A3securitdpreauthorize/</link>
+      <pubDate>Sat, 18 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-security4%E8%A8%AA%E5%95%8F%E6%AC%8A%E9%99%90%E8%A8%BB%E8%A7%A3securitdpreauthorize/</guid>
+      <description>前置作業 前置作業方面，需要先在資料庫中新增使用者數據，並完成使用JDBC進行登入帳密的功能，可以參考
+Spring Security(2)使用Spring Security自定義使用者帳密、使用JDBC串接資料庫，然後先新增一筆使用者帳密，並權限設定為ROLE_USER
+@EnableGlobalMethodSecurity @EnableGlobalMethodSecurity這個註解是表示，我們要透過@Securitd， @PreAuthorize，@RolesAllowed這些註解，並透過用戶權限來訪問我們的方法
+第一種使用方式：
+@EnableGlobalMethodSecurity的用法就是加在配置類中就可以了，當然我們熟悉的@configuration是用來表示此類別是用來設定springboot用的，@EnableGlobalMethodSecurity已經包含了@configuration，所以我們直接在我們繼承WebSecurityConfigurerAdapter的類別上面加上@EnableGlobalMethodSecurity註解即可
+@EnableGlobalMethodSecurity public class SecurityConfig extends WebSecurityConfigurerAdapter { //... } 第二種是用方式：
+放在啟動類上面(Application)。
+@EnableGlobalMethodSecurity @SpringBootApplication public class DemoApplication { public static void main(String[] args) { SpringApplication.run(DemoApplication.class, args); } } 而如果要使用@Secured、@PreAuthorize、@PostAuthorize，的話都要先開啟註解功能，也就是在我們的@EnableGlobalMethodSecurity加上(Securitd=true)、(prePostEnabled = true)、
+舉例：
+開啟@Secured功能
+@EnableGlobalMethodSecurity(securedEnabled=true)
+開啟@PreAuthorize或是@PostAuthorize
+@EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true) 如果要同時使用的話，@EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)，就可以了
+四種加在方法上的註解 主要是@Securitd、@PreAuthorize最為常用，
+所以下面實作中會解釋兩者最大的差別
+   Security Annotation (註解) 使用時機     @Secured 用戶有某個角色，驗證後進行方法   @PreAuthorize 在方法執行之前進行驗證，並能將用戶的roles/premission參數傳入到方法中   @PostAuthorize 在方法執行之後，在進行驗證   @PostFilter 將方法的返回數值進行過濾   @PreFilter 將傳入方法的值進行過濾    實作 以下實作最常使用到的@Secured以及@PreAuthorize，可以發現@PreAuthorize在設定權限參數中，使用了hasAnyAuthority加入前綴，使權限在資料庫的名稱為ROLE_USER，hasAnyAuthority是spring EL表示式（Spring Expression Language）的一種，@Secured並沒有支援spring EL表示式，且也沒有像@PreAuthorize可以將驗證的參數傳入方法中，所以簡單來說@PreAuthorize就是@Secured的加強版</description>
+    </item>
+    
+    <item>
+      <title>Spring Security(3)自定義登入頁面、控制角色權限登入</title>
+      <link>https://yen0304.github.io/p/spring-security3%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%99%BB%E5%85%A5%E9%A0%81%E9%9D%A2%E6%8E%A7%E5%88%B6%E8%A7%92%E8%89%B2%E6%AC%8A%E9%99%90%E7%99%BB%E5%85%A5/</link>
+      <pubDate>Sun, 12 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-security3%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%99%BB%E5%85%A5%E9%A0%81%E9%9D%A2%E6%8E%A7%E5%88%B6%E8%A7%92%E8%89%B2%E6%AC%8A%E9%99%90%E7%99%BB%E5%85%A5/</guid>
+      <description>前言 在前一章Spring Security(2)使用Spring Security自定義使用者帳密、使用JDBC串接資料庫中，我們知道了如何透過Spring Security自定義的角色來訪問我們的頁面，接下來要做的是，如何設定哪些頁面不用登入跟可以訪問、哪些頁面有帳號密碼到才可以訪問，或是我們自定義的權限角色管理員、銷售員、就像賣場的賣家與用戶一樣，去控制這些頁面，也將訪問頁面設定成前端設計好的頁面，實現真正的前後端分離，減少溝通成本。
+自定義登入頁面 要自定義頁面時，一樣到專門設定Spring Security中的一個類別WebSecurityConfigurerAdapter，在前幾章中我們用了SecurityConfig去繼承他，在自定義頁面時，我們要先實作方法configure(HttpSecurity http)，一樣按右鍵-&amp;gt;Generate-&amp;gt;Override Methods，選擇configure(HttpSecurity http)。
+在使用之前，值得注意的事情是SecurityConfig的antMatchers順序是有關係的，在每一個url執行時，程式如果返回了True下面就不會執行了，例如，如果anyRequest().permitAll()設定在其他規則比較嚴格條件的前面的話，Spring Security判斷符合條件，就不會往下在走，意思是最鬆的規則應該在放在最後面，越是嚴格的規則要放在前面。
+下面範例提供了幾個較常用的功能，如下：
+@Override protected void configure(HttpSecurity http) throws Exception { http.formLogin() //自定義登入頁面  .loginPage(&amp;#34;/login.html&amp;#34;) .loginProcessingUrl(&amp;#34;/user/login&amp;#34;) //設定登入頁面的url  .usernameParameter(&amp;#34;uname&amp;#34;)///登入表單form中使用者名稱輸入框input的name名，不修改的話預設是username  .passwordParameter(&amp;#34;pword&amp;#34;)//form中密碼輸入框input的name名，不修改的話預設是password  .defaultSuccessUrl(&amp;#34;/home&amp;#34;) //成功登入之後導向  .and().authorizeRequests() //表示要定義哪些被保護(.authenticated())，哪些不需要保護（authorizeRequests()）  .antMatchers(&amp;#34;/&amp;#34;,&amp;#34;/hello&amp;#34;).permitAll() //設置不管有無登入都可以直接訪問(permitAll)  .anyRequest().authenticated() //這樣寫代表除了以上之外，其他都需要被保護  .and().csrf().disable(); //關閉csrf防護 } 選擇角色權限進行控制的四種方法 在Spring Security中，我們可以針對用戶的角色進行訪問頁面的權限控制，例如說，設定某些頁面管理員才能訪問，有些頁面大家都可以訪問，或是自定義的角色等等，針對各種不同的情況，共有四種方法，返回都是True or False
+四種方法比較表格    方法名稱 舉例 意思     hasAuthority(String authority) hasAuthority(&amp;ldquo;ADMIN&amp;rdquo;) ADMIN角色才可以訪問   hasAnyAuthority(String&amp;hellip; authorities) hasAnyAuthority(&amp;ldquo;ADMIN,MANAGER&amp;rdquo;) 有ADMIN或MANAGER其中一個符合就可以訪問   hasRole(String role) hasRole(&amp;ldquo;Sale&amp;rdquo;) 角色權限全名ROLE_Sale才可以訪問   hasAnyRole(String&amp;hellip; roles) hasAnyRole(&amp;ldquo;Sale,User&amp;rdquo;) 有角色權限全名ROLE_Sale或ROLE_User其中一者就可以訪問    hasAuthority()跟 hasRole()的雖然很像，其實都是設定角色是否可以訪問，但是如果查看一下hasRole()的來源碼，就可以知道差別</description>
+    </item>
+    
+    <item>
+      <title>Spring Security(2)使用Spring Security自定義使用者帳密、使用JDBC串接資料庫</title>
+      <link>https://yen0304.github.io/p/spring-security2%E4%BD%BF%E7%94%A8spring-security%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E5%AF%86%E4%BD%BF%E7%94%A8jdbc%E4%B8%B2%E6%8E%A5%E8%B3%87%E6%96%99%E5%BA%AB/</link>
+      <pubDate>Sat, 04 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-security2%E4%BD%BF%E7%94%A8spring-security%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E5%AF%86%E4%BD%BF%E7%94%A8jdbc%E4%B8%B2%E6%8E%A5%E8%B3%87%E6%96%99%E5%BA%AB/</guid>
+      <description>繼上一章了解到了Spring Security基本的作用之後，本章節來繼續深入瞭解有關Spring Security中權限還有認證的相關設置，以及如何串接MySql資料庫數據來進行用戶認證 大概會用到的核心功能有JDBC Authentication、WebSecurityConfigurerAdapter、UserDetailsService
+自訂用戶、查詢資料庫中帳號密碼 在Spring Security中，自訂登入系統的帳號與密碼主要有二種方法兩種，第一種就是透過程式設定來在後臺上寫上固定的自定義帳號密碼，第二種則是
+添加依賴 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-security&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; 配置application.properties 語法如下，也是最簡單的方式，在resource下找到application.properties並輸入：
+spring.security.user.name=testad #自定義帳號 spring.security.user.password=abc123 #自定義密碼 透過繼承類別WebSecurityConfigurerAdapter 先新增一個類別SecurityConfig來繼承WebSecurityConfigurerAdapter，WebSecurityConfigurerAdapter是專門用來配置Spring Security的一個類別：
+@Configuration //小複習:當@Configuration加在class上，表示這是一個設定spring用的class（裡面寫的東西都是設定spring) public class SecurityConfig extends WebSecurityConfigurerAdapter { //... } 再來使用configure方法來設置我們的用戶設定，在IDEA中點擊右鍵-&amp;gt;Generate-&amp;gt;Override Methods選擇我們要覆寫的方法configure(AuthenticationManagerBuilder auth)（真是方便）
+會出現：
+@Override protected void configure(AuthenticationManagerBuilder auth) throws Exception { super.configure(auth); } 在這個方法中，主要透過auth來設置我們的用戶名以及密碼，但在下面得例子中，也使用了Spring Security提供了類別的BCryptPasswordEncoder來加密我們的密碼，在使用BCryptPasswordEncoder時，因為我們改變了password()的接受參數類型，所以也要記得使用@Bean來實作一個password類型
+@Bean PasswordEncoder password(){ return new BCryptPasswordEncoder(); } 再來就是Spring Security在進行安全驗證時，會收到輸入請求中的使用者名稱(username)，然後呼叫UserDetailsService，UserDetailsService是Spring Security用來載入使用者資訊的一個組件，他的功能就是可以提供UserDetailsService中的一個方法loadUserByUsername(String username)，來依據username回傳資料型別UserDetails的使用者資訊（參考文章：Spring Security UserDetailsService 用途)
+所以我們先
+實作UserDetailsService 在implements UserDetailsService的時候，只需要實作一個方法就好，那就是loadUserByUsername，在學習這裡時，稍微了解到了@Service以及＠Component的差別，就是除了閱讀讓人知道Service是處理業務邏輯之外，實際上功能其實都是一樣讓class變成Bean。
+//MyUsersDetailService完整程式碼：  @Service public class MyUsersDetailService implements UserDetailsService { @Override public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException { //權限(固定用法,role是還沒用到所以拿來暫時先隨便亂取）  List&amp;lt;GrantedAuthority&amp;gt; auths = AuthorityUtils.</description>
+    </item>
+    
+    <item>
+      <title>Spring Security(1)認識Spring Security＆微演練</title>
+      <link>https://yen0304.github.io/p/spring-security1%E8%AA%8D%E8%AD%98spring-security%E5%BE%AE%E6%BC%94%E7%B7%B4/</link>
+      <pubDate>Thu, 02 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-security1%E8%AA%8D%E8%AD%98spring-security%E5%BE%AE%E6%BC%94%E7%B7%B4/</guid>
+      <description>什麼是Spring Security ？ Spring Security 是一個安全框架，
+在安全方面有兩個核心機制：驗證（authentication），大致上就是指系統去認證使用者是否能登入，授權（authorization）就是給予用戶權限去做某些特定的操作。
+簡單實作了解實際功用 下面示範Spring Security的實際作用，只需幾個步驟就可以解決！
+Maven設定 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-security&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; 設計Controller @RestController public class TestController { @RequestMapping(&amp;#34;/test123&amp;#34;) public String test() { return &amp;#34;安安123&amp;#34;; } 實際運行結果 這樣就可以執行了，但是一般來說，我們輸入localhost:8080/test123時，應該會出現方法的回傳訊息&amp;quot;安安123&amp;quot;，但當我們將網頁導向localhost:8080/test會出現下面這張照片：
+ 要求登入畫面 
+在Spring Security中，預設的帳號是user，密碼則是可以從後台的console看到
+ 密碼地方 
+所以帳號輸入：user 密碼則輸入程式運行時給的密碼，就能成功看到畫面：
+ 
+在這嘗試玩之後個人有使用APItester做get測試，結果會回傳401錯誤，如下圖：
+ 
+到這邊就差不多了解到了Spring Security 的作用之處了，期待日後的學習能更順利～！。</description>
+    </item>
+    
+  </channel>
+</rss>

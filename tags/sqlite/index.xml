@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SQLite on Yen&#39;s部落格</title>
+    <link>https://yen0304.github.io/tags/sqlite/</link>
+    <description>Recent content in SQLite on Yen&#39;s部落格</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Wed, 12 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/sqlite/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SQL學習筆記(3)-水平合併(JOIN ON)與垂直合併(UNION)</title>
+      <link>https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/</link>
+      <pubDate>Wed, 12 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/</guid>
+      <description>SQL學習筆記(3)-水平合併(JOIN ON)與垂直合併(UNION) 前言 本系列大多部分來自Hahow的課程－SQL的50道練習，學習過程中得到的筆記，文章內容也有部份都是從教材擷取出來，如果有興趣可以去上課看看。
+那這章的基本語法其實網路上的網站fooish都講得蠻完善的了，部分文章內容也會引用網站文章內容。
+網路上有人說程式會忘記是很正常的，也因為這次JOIN ON的用法很有趣，所以這次的文章比較多是自己做的圖片，或是個人見解，我希望把程式用白話的方式一一來理解，讓自己能真正的理解他。
+開發環境 電腦系統：macOS（Big Sur）
+資料庫管理工具：DBeaver
+使用語言：SQLite
+JOIN ON 水平合併 在JOIN功能中，SQLite分為LEFT JOIN ON以及JOIN ON，但其實差別不大，LEFT JOIN ON的意思是希望保留以左側觀測值為主的資料，但一般來說都會指定要顯示的資料來自於哪個資料表， 所以在SQL中就只有LEFT JOIN ON而沒有JOIN ON。
+格式 概念圖： 
+SELECTleft_table.column_names,right_table.column_namesFROMtable_nameASleft_tableLEFTJOINtable_nameASright_tableONleft_table.join_key=right_table.join_key;實際使用情境舉例 水平合併的作用在於，今天如果有兩個資料表，一個是
+以及學生個人資料表table1資料表，其中裡面存放學生的學號number以及姓名name
+學生的考試成績table2資料表，其中存放成績score以及學號number
+所以我們想要顯示學生的成績以及姓名時，就需要把兩個欄位一起合併再來顯示，
+概念大概是這樣：
+   number name  number score  number name score     1 A + 1 90 = 1 A 90   2 B + 2 100 = 2 B 100   3 C + 3 80 = 3 C 80    上面的例子來說，我們要合併的關鍵是兩個資料表所擁有一樣定義的值，這個值在資料庫的實體關係圖（ER Diagram, Entity Relationship Diagram）找到，這些值就是來自於元資料的定義，那在上面的例子中就是學生的學號，這時學號我們就會稱為他為結合鍵（Join Key），</description>
+    </item>
+    
+    <item>
+      <title>SQL學習筆記(2)-分組(GROUP BY)與聚合函數結果篩選、子查詢</title>
+      <link>https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/</link>
+      <pubDate>Tue, 11 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/</guid>
+      <description>SQL學習筆記(2)-分組與聚合結果篩選、子查詢 前言 本系列大多部分來自Hahow的課程－SQL的50道練習，學習過程中得到的筆記，文章內容也有部份都是從教材擷取出來，如果有興趣可以去上課看看。
+那這章的基本語法其實網路上的網站fooish都講得蠻完善的了，部分文章內容也會引用網站文章內容。
+但這次的文章比較多是自己做的圖片，或是個人見解，我希望把程式用白話的方式一一來理解，讓自己能真正的理解他。
+開發環境 電腦系統：macOS（Big Sur）
+資料庫管理工具：DBeaver
+使用語言：SQLite
+GROUP BY GROUP BY是一個很重要的敘述句，常常搭配聚合函數(aggregate_function)使用，
+下面的aggregate_function(column_name) ，代表使用的聚合函數以及要進行計算的column的名字
+WHERE條件篩選則是看場合使用，
+GROUP BY 後面如果放了多個column，代表將這些結果越分越細，同時他也具有ORDER BY的功能。
+SELECTcolumn_name(s),aggregate_function(column_name)FROMtable_nameWHEREcolumn_nameoperatorvalueGROUPBYcolumn_name1,column_name.2;詳細解說如下
+ 自己做的&amp;gt;&amp;lt; 
+因為GROUP BY每一個群組會傳回一個資料列，所以自然而然就按照了預設的順序排出了第一筆資料。
+但其實這時候分組已經完成了，再看下一張圖：
+ 
+GROUP BY可以想像成把指定的column合併分組之後，但實際上是有展開功能的，裡面的數據並不會消失，
+所以如果我們要計算每個組別的價錢總和，就使用GROUP BY 組別名稱 在使用聚合函數SUM(columm)，把價錢加總起來，如果在GROUP BY 之後加上的是GROUP BY column_name1, column_name.2，就可以假設在 column_name1之後還有column_name.2分組結果可以展開。
+聚合函數COUNT() SELECTCOUNT(column_name)FROMtable_name;COUNT(column_name) 函數用來計算符合查詢條件的欄位紀錄總共有幾筆。
+這裡其實需要去理解一下，其實COUNT(column_name)返回的是在指定的column中，欄位值不為NULL的數量，
+所以換句話說，如果有NULL值的話並不會被算進去，所以一般不會把有NULL的值放進去做計算，但反觀，
+如果都不為NULL的話，就被大家拿來當作查看欄位值有幾筆的函數了，畢竟每個都有值的話，白話說就是數有幾筆數量，但如果在資料表觀測值都不為NULL的情況下，大家的筆數都會一樣，所以這時候就會變成我們常用的
+COUNT()或是COUNT(*)，意思都一樣。
+當COUNT遇上GROUP BY 這是個超常會碰到的用法，在資料皆不為null的情況下，
+COUNT的意思是「有幾筆資料」 ，
+GROUP的意思則是「分組」
+合起來用變成，「分組的組別有幾筆資料」。
+範例  moives資料表（部分） 
+在50道練習當中，某一道題目如下
+從 imdb 資料庫的 movies 資料表計算每一年有幾部在 IMDb.com
+獲得高評等的經典電影，參考下列的預期查詢結果。
+從上面我們可以知道要如何解題
+ 首先寫上 SELECT FROM movies，先選好要顯示資料在哪一個資料表 接著要計算「每一年」，所以我們把年進行分組GROUP BY release_year 再來使用COUNT(*)計算每一組的比數，意思就是在GROUP BY release_year以年分組後展開後有幾筆數量，也因為大家都不為NULL，所以這個數字也變成了有幾部電影的數量 選擇其他要顯示SELECT release_year,COUNT(*) AS number_of_movies  合起來變成：</description>
+    </item>
+    
+    <item>
+      <title>SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數</title>
+      <link>https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/</link>
+      <pubDate>Mon, 10 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/</guid>
+      <description>SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數 前言 本系列大多部分來自Hahow的課程－SQL的50道練習，學習過程中得到的筆記，文章內容也有部份都是從教材擷取出來，如果有興趣可以去上課看看！
+那這張的基本語法其實網路上的網站fooish都講得蠻完善的了，部分文章內容也會引用網站文章內容。
+開發環境 電腦系統：macOS（Big Sur）
+資料庫管理工具：DBeaver
+使用語言：SQLite
+MySQL &amp;amp; SQLite差異 在語法中大多相同，所以SQLite對我的學習上是有幫助的，這兩者最大的差異主要是SQLite不支持網路訪問， 沒有伺服器的特性，但他也跟他的名字一樣，在設定、管理上都更加的輕盈、快速，有興趣可以到這個網路文章參考看看。
+SELECT、FROM SELECT 敘述句主要由兩部分構成，第一部分是要 &amp;ldquo;拿什麼&amp;rdquo; 資料 (若有多項用逗號隔開)；第二部分則為 &amp;ldquo;從哪拿&amp;rdquo;。
+SELECTtable_column1,table_column2,table_column3...FROMtable_name;這個應該不會有什麼問題！
+這裡table_column1, table_column2指的是要從資料表拿取col的名稱，table_name則是從哪一個資料表拿取。
+LIMIT 主要用來限制資料查詢的數量（number）
+SELECTtable_column1,table_column2...FROMtable_nameLIMITnumber;範例 在課程中，imdb.db的有一個名字叫movies的資料表（table）；
+如果想觀看資料表的全部可以搭配「＊」，「＊」意思是全選
+SELECT ＊ FROM movies 結果；
+   id title release_year rating director runtime     1 The Shawshank Redemption 1994 9.3 Frank Darabont 142   2 The Godfather 1972 9.2 Francis Ford Coppola 175   3 The Godfather: Part II 1974 9.</description>
+    </item>
+    
+  </channel>
+</rss>

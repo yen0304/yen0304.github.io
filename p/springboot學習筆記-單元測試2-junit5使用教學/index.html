@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='SpringBoot學習筆記-單元測試(2)，將介紹如何在Spring Boot中使用JUint的各種註解來幫我們完成單元測試。'><title>SpringBoot學習筆記-單元測試(2)-JUnit5使用教學</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SpringBoot學習筆記-單元測試(2)-JUnit5使用教學'>
+<meta property='og:description' content='SpringBoot學習筆記-單元測試(2)，將介紹如何在Spring Boot中使用JUint的各種註解來幫我們完成單元測試。'>
+<meta property='og:url' content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SpringBoot學習筆記' /><meta property='article:tag' content='Springboot' /><meta property='article:tag' content='SpringBoot單元測試' /><meta property='article:tag' content='JUnit5' /><meta property='article:published_time' content='2021-12-20'/><meta property='article:modified_time' content='2021-12-20'/><meta property='og:image' content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/logo.png' />
+<meta name="twitter:title" content="SpringBoot學習筆記-單元測試(2)-JUnit5使用教學">
+<meta name="twitter:description" content="SpringBoot學習筆記-單元測試(2)，將介紹如何在Spring Boot中使用JUint的各種註解來幫我們完成單元測試。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/logo.png' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/logo_hud02855c89443ca066a520da3d79109c3_149566_800x0_resize_box_3.png"
+                        srcset="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/logo_hud02855c89443ca066a520da3d79109c3_149566_800x0_resize_box_3.png 800w, /p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/logo_hud02855c89443ca066a520da3d79109c3_149566_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="377" 
+                        loading="lazy"
+                        alt="Featured image of post SpringBoot學習筆記-單元測試(2)-JUnit5使用教學" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/spring-boot%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6/" >
+                Spring Boot單元測試
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/">SpringBoot學習筆記-單元測試(2)-JUnit5使用教學</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        SpringBoot學習筆記-單元測試(2)，將介紹如何在Spring Boot中使用JUint的各種註解來幫我們完成單元測試。
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2021-12-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="springboot學習筆記-單元測試2-junit">SpringBoot學習筆記-單元測試(2)-JUnit</h1>
+<h2 id="junit介紹">JUnit介紹</h2>
+<h4 id="何謂junit">何謂JUnit?</h4>
+<ul>
+<li>jUnit是java單元測試的必備工具</li>
+<li>只要在方法上加入@Test，即可生成一個單元測試</li>
+</ul>
+<h4 id="junit與spring-boot的關係">JUnit與Spring Boot的關係</h4>
+<ul>
+<li>
+<p>Spring Boot &lt;=2.1</p>
+<p>只能使用JUnit4</p>
+</li>
+<li>
+<p>Spring Boot 2.2 2.3</p>
+<p>可以使用JUnit4、JUint5。</p>
+</li>
+<li>
+<p>Spring boot &gt;=2.4</p>
+<p>只能使用JUnit5</p>
+</li>
+</ul>
+<p>所以綜合上述，現階段會以Junit5作為主流，其中需要注意的是，Spring Boot如果在2.2以及2.3版本中，需要到pom.xml加上額外設定才能禁用JUint4。</p>
+<h4 id="在spring-boot-22版本或23版本禁用junit4">在Spring Boot 2.2版本或2.3版本禁用JUnit4</h4>
+<p>如果需要在Spring Boot 2.2版本或2.3版本禁用JUnit4在pom.xml中，我們的程式碼其中有關測試單元的大致上會長這樣：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><p>我們只需新增下面這幾段程式碼即可禁用JUnit4，上面那段程式碼會變成這樣：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;exclusions&gt;</span>
+        <span class="nt">&lt;exclusion&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.junit.vintage<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>junit-vintage-engine<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/exclusion&gt;</span>
+    <span class="nt">&lt;/exclusions&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><h2 id="junt5的用法">Junt5的用法</h2>
+<h4 id="junit5的用法">Junit5的用法</h4>
+<p>以圖片說明：</p>
+<p><figure style="flex-grow: 202; flex-basis: 485px">
+		<a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/explain1.jpg" data-size="1730x856"><img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/explain1.jpg"
+				srcset="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/explain1_huabb4eb91e1266c4d7849c076f07b6319_772386_480x0_resize_q75_box.jpg 480w, /p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/explain1_huabb4eb91e1266c4d7849c076f07b6319_772386_1024x0_resize_q75_box.jpg 1024w"
+				width="1730"
+				height="856"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>其中第三點看起來簡單，但正是最精華的所在處，因為如果要讓團隊或是別人看懂這個方法的作用，命名正是我們最重要的工作。</p>
+<h4 id="junit5-assert">JUnit5 Assert</h4>
+<p>下面用表格來說明Assert斷言用法的主要用途</p>
+<table>
+<thead>
+<tr>
+<th>Assert系列用法</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>assertNull(A)</td>
+<td>斷言A為Null</td>
+</tr>
+<tr>
+<td>assertNotNull(A)</td>
+<td>斷言A不為Null</td>
+</tr>
+<tr>
+<td>assertEquals(A,B)</td>
+<td>斷言A與B相等</td>
+</tr>
+<tr>
+<td>assertTure(A)</td>
+<td>斷言A為True</td>
+</tr>
+<tr>
+<td>assertFalse(A)</td>
+<td>斷言A為False</td>
+</tr>
+<tr>
+<td>assertThrows(exception,method)</td>
+<td>斷言執行method的時候，會噴出exception</td>
+</tr>
+</tbody>
+</table>
+<h4 id="junit其他常用註解">JUnit其他常用註解</h4>
+<h6 id="beforceeach">@BeforceEach</h6>
+<p>@BeforceEach：在每次@Test開始之前，「都會」執行一次</p>
+<h6 id="aftereach">@AfterEach</h6>
+<p>@AfterEach：在每次@Test結束之後，「都會」執行一次</p>
+<p>範例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">CalcultorTest</span>   <span class="o">{</span>
+
+    <span class="nd">@AfterEach</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">after</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行after&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@BeforeEach</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">beforce</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行beforce&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行test1&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test2</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行test2&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>執行結果：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="cm">/*-----------
+</span><span class="cm">執行beforce
+</span><span class="cm">執行test1
+</span><span class="cm">執行after
+</span><span class="cm">執行beforce
+</span><span class="cm">執行test2
+</span><span class="cm">執行after
+</span><span class="cm">------------*/</span>
+</code></pre></div><h6 id="beforceall">@BeforceAll</h6>
+<p>@BeforceAll：在所有@Test開始前執行一次</p>
+<h6 id="afterall">@AfterAll</h6>
+<p>@AfterAll：在所有@Test結束之後執行一次</p>
+<p>在使用@AfterAll還有@BeforceAll的時候，必須是static才行，</p>
+<p>也由於他們是static的原因，所以就不能去操做spring中的bean，所以比較少使用。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">CalcultorTest</span>   <span class="o">{</span>
+    <span class="nd">@AfterAll</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">afterall</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行@AfterAll&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nd">@BeforeAll</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">beforceall</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行@BeforceAll&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行test1&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test2</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行test2&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>執行結果：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="cm">/*-----------
+</span><span class="cm">執行@BeforceAll
+</span><span class="cm">執行test1
+</span><span class="cm">執行test2
+</span><span class="cm">執行@AfterAll
+</span><span class="cm">-------------*/</span>
+</code></pre></div><h6 id="disabled">＠Disabled</h6>
+<p>Disabled：忽略該@Test不執行</p>
+<h6 id="displayname">@DisplayName</h6>
+<p>DisplayName：自定義顯示名稱</p>
+<p>範例：</p>
+<p>這是沒有使用註解狀況下的程式碼以及運行結果</p>
+<p>程式碼：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行test1&#34;</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">test2</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行test2&#34;</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>運行結果：</p>
+<p><figure style="flex-grow: 58; flex-basis: 140px">
+		<a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/run1.jpg" data-size="482x826"><img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/run1.jpg"
+				srcset="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/run1_huaad8de2aaba161e23ef2dcb5cd33b894_200908_480x0_resize_q75_box.jpg 480w, /p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/run1_huaad8de2aaba161e23ef2dcb5cd33b894_200908_1024x0_resize_q75_box.jpg 1024w"
+				width="482"
+				height="826"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>程式碼：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@DisplayName</span><span class="o">(</span><span class="s">&#34;這個是自定義的test1名稱&#34;</span><span class="o">)</span>
+<span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行test1&#34;</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="nd">@Disabled</span>
+<span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">test2</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;執行test2&#34;</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>運行結果：</p>
+<p><figure style="flex-grow: 82; flex-basis: 198px">
+		<a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/run2.jpg" data-size="568x688"><img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/run2.jpg"
+				srcset="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/run2_hu239110f177f4895a2049cab791c9ec51_194034_480x0_resize_q75_box.jpg 480w, /p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/run2_hu239110f177f4895a2049cab791c9ec51_194034_1024x0_resize_q75_box.jpg 1024w"
+				width="568"
+				height="688"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h4 id="github連結">github連結：</h4>
+<p><a class="link" href="https://github.com/yen0304/JUnit_pratice1"  target="_blank" rel="noopener"
+    >github</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">SpringBoot學習筆記</a>
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+            <a href="/tags/springboot%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6/">SpringBoot單元測試</a>
+        
+            <a href="/tags/junit5/">JUnit5</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 </h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A61-%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A61-%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(1)-基礎介紹</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/">
+        
+        
+            <div class="article-image">
+                <img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Freemarker &#43; Spring Security 整合</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#junit介紹">JUnit介紹</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#何謂junit">何謂JUnit?</a></li>
+            <li><a href="#junit與spring-boot的關係">JUnit與Spring Boot的關係</a></li>
+            <li><a href="#在spring-boot-22版本或23版本禁用junit4">在Spring Boot 2.2版本或2.3版本禁用JUnit4</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#junt5的用法">Junt5的用法</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#junit5的用法">Junit5的用法</a></li>
+            <li><a href="#junit5-assert">JUnit5 Assert</a></li>
+            <li><a href="#junit其他常用註解">JUnit其他常用註解</a></li>
+            <li><a href="#github連結">github連結：</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

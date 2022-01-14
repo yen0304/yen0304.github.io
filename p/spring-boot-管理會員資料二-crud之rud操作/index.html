@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='練習使用Spring Boot 實現對資料庫之CRUD操作的練習'><title>Spring Boot 管理會員資料（二）-CRUD之RUD操作</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Spring Boot 管理會員資料（二）-CRUD之RUD操作'>
+<meta property='og:description' content='練習使用Spring Boot 實現對資料庫之CRUD操作的練習'>
+<meta property='og:url' content='https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Springboot' /><meta property='article:tag' content='MYSQL' /><meta property='article:tag' content='HTML' /><meta property='article:tag' content='Spring MVC' /><meta property='article:tag' content='Jquery' /><meta property='article:tag' content='Javascript' /><meta property='article:tag' content='JDBC' /><meta property='article:tag' content='Vue' /><meta property='article:tag' content='CRUD' /><meta property='article:published_time' content='2021-08-28'/><meta property='article:modified_time' content='2021-08-28'/><meta property='og:image' content='https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/cover.jpg' />
+<meta name="twitter:title" content="Spring Boot 管理會員資料（二）-CRUD之RUD操作">
+<meta name="twitter:description" content="練習使用Spring Boot 實現對資料庫之CRUD操作的練習"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/cover.jpg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/">
+                <img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_800x0_resize_q75_box.jpg"
+                        srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_800x0_resize_q75_box.jpg 800w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="531" 
+                        loading="lazy"
+                        alt="Featured image of post Spring Boot 管理會員資料（二）-CRUD之RUD操作" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                SpringBoot學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/">Spring Boot 管理會員資料（二）-CRUD之RUD操作</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        練習使用Spring Boot 實現對資料庫之CRUD操作的練習
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2021-08-28</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h2 id="本文章涉及的知識">本文章涉及的知識</h2>
+<ol>
+<li>Springboot  、 Spring MVC</li>
+<li>HTTP method</li>
+<li>RESTful API</li>
+<li>JDBC</li>
+<li>mySQL語法</li>
+<li>Html、css（小部分）</li>
+<li>Javascript 、Jquery、vue（小部分）</li>
+</ol>
+<h2 id="上一次的進度">上一次的進度</h2>
+<p>[<a class="link" href="https://yen0304.github.io/p/spring-boot-%e7%ae%a1%e7%90%86%e6%9c%83%e5%93%a1%e8%b3%87%e6%96%99%e4%b8%80-%e6%9c%83%e5%93%a1%e5%89%b5%e5%bb%ba/"  target="_blank" rel="noopener"
+    >Spring Boot 管理會員資料（一）-會員創建</a>](<a class="link" href="https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA/#%E8%B3%87%E6%96%99%E5%BA%AB%E9%80%A3%E7%B7%9A%E8%A8%AD%E5%AE%9A-%E4%BD%BF%E7%94%A8jdbc"  target="_blank" rel="noopener"
+    >https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA/#%E8%B3%87%E6%96%99%E5%BA%AB%E9%80%A3%E7%B7%9A%E8%A8%AD%E5%AE%9A-%E4%BD%BF%E7%94%A8jdbc</a>)</p>
+<p>上次的進度用到了CRUD操作中的Create,創建了會員資料，這次就做完剩下的Read、Update、Delete功能，所以HTTP method以及RESTful API的部分請參照上一章節</p>
+<p>為了閱讀方便，附上一些本章節會使用到的資訊</p>
+<p>Member  Class:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Member</span> <span class="o">{</span>
+
+    <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+
+    <span class="nd">@NotBlank</span>
+    <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="nd">@NotBlank</span>
+    <span class="n">String</span> <span class="n">account</span><span class="o">;</span>
+    <span class="nd">@NotBlank</span>
+    <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+    
+    <span class="c1">//Getter&amp;Setter
+</span><span class="c1"></span> <span class="o">}</span>
+</code></pre></div><h2 id="本章節dao-interfaceservice-daoimplement">本章節Dao Interface、Service Dao＆Implement</h2>
+<h4 id="dao">Dao</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MemberDao</span> <span class="o">{</span>
+
+    <span class="c1">//返回值 依據名稱對應資料庫動作（參數類型 參數名稱）
+</span><span class="c1"></span>    <span class="n">String</span> <span class="nf">CreatMember</span><span class="o">(</span><span class="n">Member</span> <span class="n">member</span><span class="o">);</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">ReadMember</span><span class="o">();</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">ReadByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">);</span>
+  	<span class="n">String</span> <span class="nf">UpdateByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">,</span><span class="n">Member</span> <span class="n">member</span><span class="o">);</span>
+    <span class="n">String</span> <span class="nf">DeleteByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="service">Service</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MemberService</span> <span class="o">{</span>
+
+    <span class="n">String</span> <span class="nf">CreatMember</span><span class="o">(</span><span class="n">Member</span> <span class="n">member</span><span class="o">);</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">ReadMember</span><span class="o">();</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">ReadByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">);</span>
+    <span class="n">String</span> <span class="nf">DeleteByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">);</span>
+    <span class="n">String</span> <span class="nf">UpdateByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">,</span><span class="n">Member</span> <span class="n">member</span><span class="o">);</span>
+
+    <span class="o">}</span>
+</code></pre></div><h4 id="serviceimpl">ServiceImpl</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberServiceImpl</span> <span class="kd">implements</span> <span class="n">MemberService</span><span class="o">{</span>
+
+    <span class="nd">@Autowired</span><span class="c1">//使用InterFace 發揮spring Ioc特性
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">MemberDao</span> <span class="n">memberDao</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">CreatMember</span><span class="o">(</span><span class="n">Member</span> <span class="n">member</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">CreatMember</span><span class="o">(</span><span class="n">member</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">ReadMember</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">ReadMember</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">ReadByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">ReadByAccount</span><span class="o">(</span><span class="n">membersAccount</span><span class="o">);</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">DeleteByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">DeleteByAccount</span><span class="o">(</span><span class="n">membersAccount</span><span class="o">);</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">UpdateByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">,</span><span class="n">Member</span> <span class="n">member</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">UpdateByAccount</span><span class="o">(</span><span class="n">membersAccount</span><span class="o">,</span><span class="n">member</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="crud--read">CRUD -Read</h2>
+<h4 id="read-所有會員資料">Read-所有會員資料</h4>
+<p>在進行Read操作時，在sql是使用SELECT語法，所以在JDBC裡面是使用Query，在query中，會用到RowMapper參數，這個RowMapper的功能就是將資料庫查詢出來的數據轉會成我們要的Java Object。</p>
+<h4 id="memberrowmapper設計">MemberRowMapper設計</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberRowMapper</span> <span class="kd">implements</span> <span class="n">RowMapper</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Member</span> <span class="nf">mapRow</span><span class="o">(</span><span class="n">ResultSet</span> <span class="n">resultSet</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+        <span class="c1">//ResultSet resultSet = 從資料庫中查詢出來的數據
+</span><span class="c1"></span>            <span class="n">Member</span> <span class="n">member</span><span class="o">=</span><span class="k">new</span> <span class="n">Member</span><span class="o">();</span>
+            <span class="n">member</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">&#34;id&#34;</span><span class="o">));</span>
+            <span class="n">member</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;name&#34;</span><span class="o">));</span>
+            <span class="n">member</span><span class="o">.</span><span class="na">setAccount</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;account&#34;</span><span class="o">));</span>
+            <span class="n">member</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;password&#34;</span><span class="o">));</span>
+
+        <span class="k">return</span> <span class="n">member</span><span class="o">;</span>
+      	<span class="c1">//返回值= 要轉換的Java Object
+</span><span class="c1"></span>    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="dao設計">Dao設計</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="c1">//重要！當方法返回類型為自定義class,spring boot再返回時會自動轉換為json格式
+</span><span class="c1"></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">ReadMember</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">//query(放要執行sql的語法,放spl語法裡面變數的值,將資料查詢出來的數據轉換成java object)
+</span><span class="c1"></span>    <span class="c1">//SELECT id, name...這邊是想要查詢的數據，不要用SELECT * FROM 查詢所有數據，很浪費流量
+</span><span class="c1"></span>    <span class="n">String</span> <span class="n">sql</span><span class="o">=</span><span class="s">&#34;SELECT id, name ,password ,account FROM member&#34;</span><span class="o">;</span>
+
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span><span class="n">map</span><span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span><span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">,</span><span class="k">new</span> <span class="n">MemberRowMapper</span><span class="o">());</span>
+
+    <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="controller">Controller</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/members&#34;</span><span class="o">)</span>  <span class="c1">//讀取所有會員資料
+</span><span class="c1"></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">read</span><span class="o">(){</span>
+
+    <span class="k">return</span> <span class="n">memberService</span><span class="o">.</span><span class="na">ReadMember</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="html--javascript">HTML &amp; Javascript</h4>
+<p>HTML方面就是創造一行表格，其他下面的資料交給Vue來自動產生</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span> <span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;UTF-8&#34;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>顯示會員資料<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#39;stylesheet&#39;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css&#39;</span><span class="p">&gt;&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/css/allmemberdatastyle.css&#34;</span><span class="p">&gt;</span>
+
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="c">&lt;!-- partial:index.partial.html --&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;memberlist&#34;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>會員資料<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">table</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;table table-striped table-info&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">thead</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">th</span> <span class="na">scope</span><span class="o">=</span><span class="s">&#34;col&#34;</span><span class="p">&gt;</span>id<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">th</span> <span class="na">scope</span><span class="o">=</span><span class="s">&#34;col&#34;</span><span class="p">&gt;</span>名稱<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">th</span> <span class="na">scope</span><span class="o">=</span><span class="s">&#34;col&#34;</span><span class="p">&gt;</span>帳號<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">th</span> <span class="na">scope</span><span class="o">=</span><span class="s">&#34;col&#34;</span><span class="p">&gt;</span>密碼<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;databody&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="c">&lt;!-- partial --&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;&lt;</span><span class="nt">script</span>  <span class="na">src</span><span class="o">=</span><span class="s">&#34;/js/allmemberdatascript.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div><p>Javascript</p>
+<p>這裡在定義自動生成的html時加上了各個資料的css class名稱，目的是為了在使用JQuery時能順利抓到資料。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">//新增物件
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">memberlist</span><span class="o">=</span><span class="p">{};</span> <span class="c1">//如果要測試的話這裡可以先填上Json資料
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">apiurl</span><span class="o">=</span><span class="s2">&#34;/members&#34;</span><span class="p">;</span>
+
+<span class="c1">//定義自動生成的html （資料）
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">list_html</span><span class="o">=</span><span class="s2">&#34;&lt;tr&gt;&lt;th class=&#39;id &#39;scope=&#39;col&#39;&gt;{{id}}&lt;/th&gt;&lt;th class=&#39;name &#39;scope=&#39;col&#39;&gt;{{name}}&lt;/th&gt;&lt;th class=&#39;account&#39; scope=&#39;col&#39;&gt;{{account}}&lt;/th&gt;&lt;th class=&#39;password &#39;scope=&#39;col&#39;&gt;{{password}}&lt;/th&gt;&lt;th scope=&#39;col&#39;&gt; &lt;button class=&#39;btn btn-primary edit&#39; type=&#39;button&#39;&gt;編輯&lt;/button&gt;&lt;button class=&#39;btn btn-danger remove&#39; type=&#39;button&#39;&gt;刪除&lt;/button&gt;&lt;/th&gt;&lt;/tr&gt;&#34;</span><span class="p">;</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="nx">url</span><span class="o">:</span> <span class="nx">apiurl</span><span class="p">,</span>
+  <span class="nx">dataType</span><span class="o">:</span><span class="s2">&#34;json&#34;</span><span class="p">,</span>
+  <span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">){</span>
+    <span class="nx">memberlist</span><span class="p">.</span><span class="nx">list</span><span class="o">=</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">memberlist</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">current_html</span><span class="o">=</span>
+          <span class="nx">list_html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&#34;{{id}}&#34;</span><span class="p">,</span><span class="nx">memberlist</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">id</span><span class="p">)</span>
+              <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&#34;{{name}}&#34;</span><span class="p">,</span><span class="nx">memberlist</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">)</span>
+              <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&#34;{{account}}&#34;</span><span class="p">,</span><span class="nx">memberlist</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">account</span><span class="p">)</span>
+              <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&#34;{{password}}&#34;</span><span class="p">,</span><span class="nx">memberlist</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">password</span><span class="p">);</span>
+			<span class="c1">//memberlist.list[i]代表後端回傳Json格式中的第i筆數據, .xxx代表資料名稱
+</span><span class="c1"></span>      <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#databody&#34;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">current_html</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div><p>結果：</p>
+<p><figure style="flex-grow: 184; flex-basis: 441px">
+		<a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/allmemberdata.png" data-size="1419x771"><img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/allmemberdata.png"
+				srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/allmemberdata_hu23ad119c33e56f4d38faa2b6b60c95bc_126559_480x0_resize_box_3.png 480w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/allmemberdata_hu23ad119c33e56f4d38faa2b6b60c95bc_126559_1024x0_resize_box_3.png 1024w"
+				width="1419"
+				height="771"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h4 id="read-依據帳號查詢">Read-依據帳號查詢</h4>
+<p>方法跟查詢所有資料幾乎一樣，用了一樣的RowMapper等等，唯一不同的就是SQL語法部分</p>
+<h4 id="dao-1">DAO</h4>
+<p>整理一下差別：</p>
+<p>查詢所有資料：</p>
+<p><code>String sql=&quot;SELECT id, name ,password ,account FROM member &quot;;</code></p>
+<p>依據帳號查詢：</p>
+<p><code>String sql=&quot;SELECT id, name ,password ,account FROM member WHERE account=:memberAccount&quot;;</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">ReadByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">sql</span><span class="o">=</span><span class="s">&#34;SELECT id, name ,password ,account FROM member WHERE account=:memberAccount&#34;</span><span class="o">;</span>
+
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span><span class="n">map</span><span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;memberAccount&#34;</span><span class="o">,</span><span class="n">membersAccount</span><span class="o">);</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span><span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">,</span><span class="k">new</span> <span class="n">MemberRowMapper</span><span class="o">());</span>
+
+    <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="controller-1">Controller</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;members/{membersAccount}&#34;</span><span class="o">)</span> <span class="c1">//根據帳號做查詢
+</span><span class="c1"></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">read</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">String</span> <span class="n">membersAccount</span><span class="o">){</span>
+
+    <span class="k">return</span> <span class="n">memberService</span><span class="o">.</span><span class="na">ReadByAccount</span><span class="o">(</span><span class="n">membersAccount</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p><figure style="flex-grow: 160; flex-basis: 386px">
+		<a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resultgetbyaccount.png" data-size="1070x665"><img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resultgetbyaccount.png"
+				srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resultgetbyaccount_huf912198a20555a47389ec7af505e3537_86982_480x0_resize_box_3.png 480w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resultgetbyaccount_huf912198a20555a47389ec7af505e3537_86982_1024x0_resize_box_3.png 1024w"
+				width="1070"
+				height="665"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h2 id="crud--update">CRUD -Update</h2>
+<p>這裡在實作的時候想了一下，傳遞的參數內容，先確認call api的時候果然put method有BODY可以放Json資料，所以設計上就是收到前端傳來的Json格式之後，再依據URL做帳號資料修改。</p>
+<p>DAO</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">UpdateByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">,</span><span class="n">Member</span> <span class="n">member</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span><span class="s">&#34;UPDATE member SET name=:memberName,password=:memberPassword WHERE account=:memberAccount&#34;</span><span class="o">;</span>
+
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span><span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="c1">//put(SQL變數,值）
+</span><span class="c1"></span>    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;memberName&#34;</span><span class="o">,</span><span class="n">member</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;memberAccount&#34;</span><span class="o">,</span><span class="n">membersAccount</span><span class="o">);</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;memberPassword&#34;</span><span class="o">,</span><span class="n">member</span><span class="o">.</span><span class="na">getPassword</span><span class="o">());</span>
+    <span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">);</span>
+    
+    <span class="k">return</span> <span class="s">&#34;修改成功&#34;</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><p>Controller</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@PutMapping</span><span class="o">(</span><span class="s">&#34;members/{membersAccount}&#34;</span><span class="o">)</span> <span class="c1">//根據帳號做修改
+</span><span class="c1"></span><span class="kd">public</span> <span class="n">String</span> <span class="nf">update</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">String</span> <span class="n">membersAccount</span><span class="o">,</span><span class="nd">@RequestBody</span> <span class="n">Member</span> <span class="n">member</span><span class="o">){</span> <span class="c1">//@Path用來取得url路徑的值
+</span><span class="c1"></span>
+    <span class="k">return</span> <span class="n">memberService</span><span class="o">.</span><span class="na">UpdateByAccount</span><span class="o">(</span><span class="n">membersAccount</span><span class="o">,</span><span class="n">member</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>結果：</p>
+<p><figure style="flex-grow: 144; flex-basis: 347px">
+		<a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resulupdatebyaccount.png" data-size="1053x727"><img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resulupdatebyaccount.png"
+				srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resulupdatebyaccount_hu3d9f8d6bb5e0edf33692df37a8370e4b_85526_480x0_resize_box_3.png 480w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resulupdatebyaccount_hu3d9f8d6bb5e0edf33692df37a8370e4b_85526_1024x0_resize_box_3.png 1024w"
+				width="1053"
+				height="727"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>資料庫數據成功修改：</p>
+<p><figure style="flex-grow: 1188; flex-basis: 2852px">
+		<a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resulupdatebyaccount2.png" data-size="1236x104"><img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resulupdatebyaccount2.png"
+				srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resulupdatebyaccount2_huba863bd3697c42f5bdcae3f82517d922_31500_480x0_resize_box_3.png 480w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/resulupdatebyaccount2_huba863bd3697c42f5bdcae3f82517d922_31500_1024x0_resize_box_3.png 1024w"
+				width="1236"
+				height="104"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h2 id="crud--delete">CRUD -Delete</h2>
+<p>會前面的這裡應該就沒什麼問題了</p>
+<h4 id="dao-2">Dao</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">DeleteByAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">membersAccount</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span><span class="s">&#34;DELETE FROM member WHERE account = :membersAccount&#34;</span><span class="o">;</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span><span class="n">map</span><span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;membersAccount&#34;</span><span class="o">,</span><span class="n">membersAccount</span><span class="o">);</span>
+    <span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">);</span>
+
+    <span class="k">return</span> <span class="s">&#34;刪除成功&#34;</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="controller-2">Controller</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@DeleteMapping</span><span class="o">(</span><span class="s">&#34;members/{membersAccount}&#34;</span><span class="o">)</span> <span class="c1">//根據帳號做刪除
+</span><span class="c1"></span><span class="kd">public</span> <span class="n">String</span> <span class="nf">delete</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">String</span> <span class="n">membersAccount</span><span class="o">){</span> <span class="c1">//@Path用來取得url路徑的值
+</span><span class="c1"></span>
+    <span class="k">return</span> <span class="n">memberService</span><span class="o">.</span><span class="na">DeleteByAccount</span><span class="o">(</span><span class="n">membersAccount</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="javascript">Javascript</h4>
+<p>html跟查詢所有帳號的一樣,所以js檔案是同一個，在產生清單資料時按鈕加上了.remove 定義了刪除的class，在使用document去監聽事件觸發</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&#34;click&#34;</span><span class="p">,</span><span class="s1">&#39;.remove&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s1">&#39;.account&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">());</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;DELETE&#39;</span><span class="p">,</span>
+    <span class="nx">url</span><span class="o">:</span><span class="nx">apiurl</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s1">&#39;.account&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">(),</span>
+    <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">().</span><span class="nx">remove</span><span class="p">();</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span><span class="c1">//刪除後重新整理視窗
+</span><span class="c1"></span>    <span class="p">}</span>
+  <span class="p">});</span>
+</code></pre></div><p>刪除結果就是資料不見了，應該就沒辦法展示了，哈。</p>
+<h2 id="github">GitHub</h2>
+<p>直接附上GitHub，希望對各位有幫助，一方面自己之後要用也不用怕丟失啦～</p>
+<p><a class="link" href="https://github.com/yen0304/memberpractice"  target="_blank" rel="noopener"
+    >檔案連結</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+            <a href="/tags/mysql/">MYSQL</a>
+        
+            <a href="/tags/html/">HTML</a>
+        
+            <a href="/tags/spring-mvc/">Spring MVC</a>
+        
+            <a href="/tags/jquery/">Jquery</a>
+        
+            <a href="/tags/javascript/">Javascript</a>
+        
+            <a href="/tags/jdbc/">JDBC</a>
+        
+            <a href="/tags/vue/">Vue</a>
+        
+            <a href="/tags/crud/">CRUD</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Boot 管理會員資料（一）-會員創建 CRUD-Create</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/post.a92ae3d1c6091a6261320251566d0fee_hu3cf4b63e80cf49258a3cdf19be741597_1490134_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-qSrj0cYJGmJhMgJRVm0P7g==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spingboot&#43;Freemarker基本配置</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/spring-security2%E4%BD%BF%E7%94%A8spring-security%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E5%AF%86%E4%BD%BF%E7%94%A8jdbc%E4%B8%B2%E6%8E%A5%E8%B3%87%E6%96%99%E5%BA%AB/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spring-security2%E4%BD%BF%E7%94%A8spring-security%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E5%AF%86%E4%BD%BF%E7%94%A8jdbc%E4%B8%B2%E6%8E%A5%E8%B3%87%E6%96%99%E5%BA%AB/logo.1822297e872c493d64bb61209de7e462_huf957eb7cc0803733802fcc4099cfd7cb_45239_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-GCIpfocsST1ku2EgnefkYg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Security(2)使用Spring Security自定義使用者帳密、使用JDBC串接資料庫</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#本文章涉及的知識">本文章涉及的知識</a></li>
+    <li><a href="#上一次的進度">上一次的進度</a></li>
+    <li><a href="#本章節dao-interfaceservice-daoimplement">本章節Dao Interface、Service Dao＆Implement</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#dao">Dao</a></li>
+            <li><a href="#service">Service</a></li>
+            <li><a href="#serviceimpl">ServiceImpl</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#crud--read">CRUD -Read</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#read-所有會員資料">Read-所有會員資料</a></li>
+            <li><a href="#memberrowmapper設計">MemberRowMapper設計</a></li>
+            <li><a href="#dao設計">Dao設計</a></li>
+            <li><a href="#controller">Controller</a></li>
+            <li><a href="#html--javascript">HTML &amp; Javascript</a></li>
+            <li><a href="#read-依據帳號查詢">Read-依據帳號查詢</a></li>
+            <li><a href="#dao-1">DAO</a></li>
+            <li><a href="#controller-1">Controller</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#crud--update">CRUD -Update</a></li>
+    <li><a href="#crud--delete">CRUD -Delete</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#dao-2">Dao</a></li>
+            <li><a href="#controller-2">Controller</a></li>
+            <li><a href="#javascript">Javascript</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#github">GitHub</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='在做專案時，遇到了Freemarker &#43; Spring Security 整合的問題，決定筆記下來'><title>Freemarker &#43; Spring Security 整合</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/freemarker-spring-security-%E6%95%B4%E5%90%88/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Freemarker &#43; Spring Security 整合'>
+<meta property='og:description' content='在做專案時，遇到了Freemarker &#43; Spring Security 整合的問題，決定筆記下來'>
+<meta property='og:url' content='https://yen0304.github.io/p/freemarker-spring-security-%E6%95%B4%E5%90%88/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SpringBoot學習筆記' /><meta property='article:tag' content='Springboot' /><meta property='article:tag' content='Freemarker' /><meta property='article:tag' content='Spring Security' /><meta property='article:published_time' content='2021-12-23'/><meta property='article:modified_time' content='2021-12-23'/><meta property='og:image' content='https://yen0304.github.io/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover.jpg' />
+<meta name="twitter:title" content="Freemarker &#43; Spring Security 整合">
+<meta name="twitter:description" content="在做專案時，遇到了Freemarker &#43; Spring Security 整合的問題，決定筆記下來"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover.jpg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/">
+                <img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_800x0_resize_q75_box.jpg"
+                        srcset="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_800x0_resize_q75_box.jpg 800w, /p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="531" 
+                        loading="lazy"
+                        alt="Featured image of post Freemarker &#43; Spring Security 整合" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                SpringBoot學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/">Freemarker &#43; Spring Security 整合</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        在做專案時，遇到了Freemarker &#43; Spring Security 整合的問題，決定筆記下來
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2021-12-23</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="freemarker--spring-security-整合">Freemarker + Spring Security 整合</h1>
+<p>由於方便往後的實戰學習，在學會了快速的在Spring Boot 使用Freemarker在localhost:8080上執行之後，也學會了用Spring Security 控制訪問權限，在整合他們途中，其實遇到了不少配置上的問題，但也成功解決了，所以決定記錄這些解決問題的過程，也更了解了Spring Security的認證寫法。</p>
+<h2 id="pomxml-maven配置">pom.xml maven配置</h2>
+<h3 id="spring-security">Spring Security</h3>
+<p>（先不要加上spring Security，因為加上去了所有為配置的默認都會受到全縣控管）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-security<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><h3 id="freemarker">Freemarker</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-freemarker<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><h2 id="applicationproperties配置">Application.properties配置</h2>
+<h3 id="freemaker設定">Freemaker設定</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c">#Freemaker設定</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.cache=false</span><span class="w">
+</span><span class="w"></span><span class="c"># 模版後綴名 默認為ftl</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.suffix=.ftl</span><span class="w">
+</span><span class="w"></span><span class="c"># 文件編碼</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.charset=UTF-8</span><span class="w">
+</span><span class="w"></span><span class="c"># 模版加載的目錄</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.template-loader-path=classpath:/templates/</span><span class="w">
+</span><span class="w"></span><span class="c"># 靜態資源訪問路徑</span><span class="w">
+</span><span class="w"></span><span class="l">spring.mvc.static-path-pattern=/static/**</span><span class="w">
+</span><span class="w"></span><span class="c"># 獲取根目錄路徑</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.request-context-attribute=request</span><span class="w">
+</span></code></pre></div><h2 id="開始撰寫程式部分">開始撰寫程式部分</h2>
+<p>這部分的先後順序很重要，因為如果Freemarker其中有錯誤，css或js會跑不出來，也同樣的Spring Security如果有錯誤，css或js也會因爲訪問權限而跑不出來，所以在撰寫時順序如下</p>
+<h3 id="撰寫順序">撰寫順序</h3>
+<ol>
+<li>確認Freemarker配置成功，包含get請求，以及靜態資源css js訪問成功</li>
+<li>使用Spring Security下，得知靜態支援有受到保護，並請把保護關閉。</li>
+<li>使用Spring security測試相關功能。</li>
+</ol>
+<h3 id="freemaker靜態配置至測試成功">Freemaker靜態配置至測試成功</h3>
+<h4 id="檔案存放位置">檔案存放位置</h4>
+<p>檔案存放位置很重要，也跟application.properties很相關，包含了靜態資源的訪問路徑，</p>
+<p>這次規劃了user_login.ftl、login.css、login.js為登入Spring Security角色頁面</p>
+<p>，login_success、login_success.css為登入成功登入之後跳轉的頁面</p>
+<p><figure style="flex-grow: 102; flex-basis: 247px">
+		<a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/filepath.png" data-size="564x548"><img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/filepath.png"
+				srcset="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/filepath_hu1182e9e51c1b794ed08dd13f0ad60791_49387_480x0_resize_box_3.png 480w, /p/freemarker-spring-security-%E6%95%B4%E5%90%88/filepath_hu1182e9e51c1b794ed08dd13f0ad60791_49387_1024x0_resize_box_3.png 1024w"
+				width="564"
+				height="548"
+				loading="lazy"
+				alt="ftl、css、js檔案存放配置">
+		</a>
+		
+		<figcaption>ftl、css、js檔案存放配置</figcaption>
+		
+	</figure></p>
+<h4 id="ftlhtml存取cssjs之重點">Ftl(html)存取css、js之重點</h4>
+<p>在login_success下，存取css、js的html語法為下</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/static/css/login.css&#34;</span><span class="p">&gt;</span>
+ 
+<span class="p">&lt;</span><span class="nt">script</span>  <span class="na">src</span><span class="o">=</span><span class="s">&#34;/static/js/login.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div><p>重點就是因為我們已經配置好了路徑，所以會因Freemarker會有不同的寫法</p>
+<h4 id="controller層">Controller層</h4>
+<p>應該沒什麼好解釋的</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Controller</span> <span class="o">{</span>
+
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/user_login&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">loginpage</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;/user_login&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/login_success&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">successpage</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;/login_success&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><h4 id="如何判斷測試成功">如何判斷測試成功</h4>
+<p>運行SpringBoot之後，以下圖解是我們看到的畫面，使用瀏覽器是chrome</p>
+<p><figure style="flex-grow: 175; flex-basis: 420px">
+		<a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/freemarker1.jpg" data-size="2280x1302"><img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/freemarker1.jpg"
+				srcset="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/freemarker1_hu2a8fe997a5f6ca803027b03769190acd_652038_480x0_resize_q75_box.jpg 480w, /p/freemarker-spring-security-%E6%95%B4%E5%90%88/freemarker1_hu2a8fe997a5f6ca803027b03769190acd_652038_1024x0_resize_q75_box.jpg 1024w"
+				width="2280"
+				height="1302"
+				loading="lazy"
+				alt="運行畫面">
+		</a>
+		
+		<figcaption>運行畫面</figcaption>
+		
+	</figure></p>
+<p>這時候大致上會有兩種情況就是Http Status 404跟200，404就代表是url路徑錯了，這時候就要去檢查Controller層的url是不是有寫錯，200的話就是測試成功。</p>
+<h3 id="spring-security部分">Spring Security部分</h3>
+<h4 id="檢查靜態檔案是否受保護">檢查靜態檔案是否受保護</h4>
+<p>Spring Security的方法都是用了建造者模式，</p>
+<p>我們如果想得知「有沒有把static資料夾底下的檔案皆不受保護」，</p>
+<p>關鍵程式碼就在於在<code>.authorizeRequests()</code>之後，使用加上 <code>.antMatchers(&quot;/static/**&quot;).permitAll()</code>來表示此方法裡面的URL皆不受保護，所以如果把這個方法取消掉，就代表static底下的CSS、JS檔案受到保護，所以當我們檢查chrome時，會出現下列圖片</p>
+<p>程式碼：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+<span class="n">http</span><span class="o">.</span><span class="na">formLogin</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">loginPage</span><span class="o">(</span><span class="s">&#34;/user_login&#34;</span><span class="o">).</span><span class="na">permitAll</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">and</span><span class="o">()</span>
+  			<span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">authenticated</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">and</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">rememberMe</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">and</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">csrf</span><span class="o">().</span><span class="na">disable</span><span class="o">();</span> 
+<span class="o">}</span>
+</code></pre></div><p>結果：</p>
+<p>![302 error](302 error.jpg)</p>
+<p>這樣就代表我們的ftl裡面配置的css、js路徑是正確的，
+但因為受到Spring Security的保護，所以就算訪問到了正確的路徑時，也會因受保護出現302的狀態碼，所以把保護關閉這樣寫就好：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+<span class="n">http</span><span class="o">.</span><span class="na">formLogin</span><span class="o">()</span>
+        <span class="c1">//自定義登入頁面的「url」,加上permitAll()任何使用者都不需認證就可以訪問
+</span><span class="c1"></span>        <span class="o">.</span><span class="na">loginPage</span><span class="o">(</span><span class="s">&#34;/user_login&#34;</span><span class="o">).</span><span class="na">permitAll</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">and</span><span class="o">()</span>
+  			<span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span> <span class="c1">//表示要定義哪些被保護，哪些不需要保護（不需要認證）
+</span><span class="c1"></span>        <span class="o">.</span><span class="na">antMatchers</span><span class="o">(</span><span class="s">&#34;/static/**&#34;</span><span class="o">).</span><span class="na">permitAll</span><span class="o">()</span> <span class="c1">//表示static底下資料夾都不需要認證
+</span><span class="c1"></span>        <span class="c1">//沒有被匹配到「URL」的都要透過認證
+</span><span class="c1"></span>        <span class="o">.</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">authenticated</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">and</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">rememberMe</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">and</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">csrf</span><span class="o">().</span><span class="na">disable</span><span class="o">();</span> <span class="c1">//關閉csrf防護
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><p>這邊一樣了附上部分重點程式碼，其他的可以到文章最後的github連結參考。</p>
+<h3 id="spring-security-補充">Spring Security 補充</h3>
+<h4 id="anyrequestauthenticated作用">.anyRequest().authenticated()作用</h4>
+<p>這次的練習也更認識到了.anyRequest().authenticated()的用法，如果上段程式碼沒有了.anyRequest().authenticated()之後，仍然會訪問成功，所以要加上anyRequest().authenticated()之後，任何網址才會因為加上這個方法後而受保護。</p>
+<p>加上.anyRequest().authenticated()後，
+可以看到下面圖片，確實是有訪問到login_success的，但也因為login_success，受到保護之後Spring Security就跳轉到了我們設置的登入URL</p>
+<p><figure style="flex-grow: 175; flex-basis: 420px">
+		<a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/jump.jpg" data-size="1070x610"><img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/jump.jpg"
+				srcset="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/jump_hu3391b40dd8d66aab02e4449ccb6039c1_283632_480x0_resize_q75_box.jpg 480w, /p/freemarker-spring-security-%E6%95%B4%E5%90%88/jump_hu3391b40dd8d66aab02e4449ccb6039c1_283632_1024x0_resize_q75_box.jpg 1024w"
+				width="1070"
+				height="610"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h2 id="github">GitHub</h2>
+<p><a class="link" href="https://github.com/yen0304/Electronic-business-platform"  target="_blank" rel="noopener"
+    >Github</a></p>
+<p>這個github是一個正在開發的專案，所以會有別的專案，</p>
+<p>Spring Security的配置類的Class名稱叫做SecurityConfig。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">SpringBoot學習筆記</a>
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+            <a href="/tags/freemarker/">Freemarker</a>
+        
+            <a href="/tags/spring-security/">Spring Security</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/logo.b16d6095dd15d52be011b6b6cfbff781_hu807666e0efc0d1033f1aa166a1ba5367_206258_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-sW1gld0V1SvgEba2z7/3gQ==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot電商平台實戰(1)，用戶註冊、用戶登入、修改資料</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 </h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A62-junit5%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(2)-JUnit5使用教學</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A61-%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A61-%E5%9F%BA%E7%A4%8E%E4%BB%8B%E7%B4%B9/logo.d05638f301f84f3d56660d4d63a59ac6_hud02855c89443ca066a520da3d79109c3_149566_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-0FY48wH4Tz1WZg1NY6Waxg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot學習筆記-單元測試(1)-基礎介紹</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#pomxml-maven配置">pom.xml maven配置</a>
+      <ol>
+        <li><a href="#spring-security">Spring Security</a></li>
+        <li><a href="#freemarker">Freemarker</a></li>
+      </ol>
+    </li>
+    <li><a href="#applicationproperties配置">Application.properties配置</a>
+      <ol>
+        <li><a href="#freemaker設定">Freemaker設定</a></li>
+      </ol>
+    </li>
+    <li><a href="#開始撰寫程式部分">開始撰寫程式部分</a>
+      <ol>
+        <li><a href="#撰寫順序">撰寫順序</a></li>
+        <li><a href="#freemaker靜態配置至測試成功">Freemaker靜態配置至測試成功</a>
+          <ol>
+            <li><a href="#檔案存放位置">檔案存放位置</a></li>
+            <li><a href="#ftlhtml存取cssjs之重點">Ftl(html)存取css、js之重點</a></li>
+            <li><a href="#controller層">Controller層</a></li>
+            <li><a href="#如何判斷測試成功">如何判斷測試成功</a></li>
+          </ol>
+        </li>
+        <li><a href="#spring-security部分">Spring Security部分</a>
+          <ol>
+            <li><a href="#檢查靜態檔案是否受保護">檢查靜態檔案是否受保護</a></li>
+          </ol>
+        </li>
+        <li><a href="#spring-security-補充">Spring Security 補充</a>
+          <ol>
+            <li><a href="#anyrequestauthenticated作用">.anyRequest().authenticated()作用</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#github">GitHub</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

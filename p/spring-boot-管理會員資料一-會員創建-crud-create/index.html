@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='練習使用Spring Boot 管理會員資料，從後端到前端取的api的詳細過程'><title>Spring Boot 管理會員資料（一）-會員創建 CRUD-Create</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Spring Boot 管理會員資料（一）-會員創建 CRUD-Create'>
+<meta property='og:description' content='練習使用Spring Boot 管理會員資料，從後端到前端取的api的詳細過程'>
+<meta property='og:url' content='https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Springboot' /><meta property='article:tag' content='MYSQL' /><meta property='article:tag' content='HTML' /><meta property='article:tag' content='Spring MVC' /><meta property='article:tag' content='Jquery' /><meta property='article:tag' content='Javascript' /><meta property='article:tag' content='JDBC' /><meta property='article:tag' content='CRUD' /><meta property='article:published_time' content='2021-08-20'/><meta property='article:modified_time' content='2021-08-20'/><meta property='og:image' content='https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/cover.jpg' />
+<meta name="twitter:title" content="Spring Boot 管理會員資料（一）-會員創建 CRUD-Create">
+<meta name="twitter:description" content="練習使用Spring Boot 管理會員資料，從後端到前端取的api的詳細過程"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/cover.jpg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/">
+                <img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_800x0_resize_q75_box.jpg"
+                        srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_800x0_resize_q75_box.jpg 800w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/cover_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="531" 
+                        loading="lazy"
+                        alt="Featured image of post Spring Boot 管理會員資料（一）-會員創建 CRUD-Create" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                SpringBoot學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/">Spring Boot 管理會員資料（一）-會員創建 CRUD-Create</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        練習使用Spring Boot 管理會員資料，從後端到前端取的api的詳細過程
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2021-08-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h2 id="本文章涉及的知識">本文章涉及的知識</h2>
+<ol>
+<li>Springboot  、 Spring MVC</li>
+<li>HTTP method</li>
+<li>RESTful API</li>
+<li>JDBC</li>
+<li>mySQL語法</li>
+<li>Html、css（小部分）</li>
+<li>Javascript 、Jquery（小部分）</li>
+</ol>
+<h2 id="複習htpp-method-get-or-post-差別">複習HTPP method-GET or POST 差別</h2>
+<p>GET 或 POST 的差別最大的差別在於傳遞的參數會被看見，因為參數會放在url裡面。</p>
+<p>POST的話參數會放在request body裡面，request body裡面通常會用Json格式來進行前後端的溝通</p>
+<p>在Spring Boot裡面，使用@RequestBody取得放在request body的參數</p>
+<h2 id="練習設計restful-api">練習設計RESTful API</h2>
+<h4 id="restful-api三大原則">RESTful API三大原則：</h4>
+<p>1.使用http method表示動作</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">HTTP Method</th>
+<th style="text-align:center">對應資料動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">POST</td>
+<td style="text-align:center">Create（新增）</td>
+</tr>
+<tr>
+<td style="text-align:center">GET</td>
+<td style="text-align:center">Read（查詢）</td>
+</tr>
+<tr>
+<td style="text-align:center">PUT</td>
+<td style="text-align:center">Update（修改）</td>
+</tr>
+<tr>
+<td style="text-align:center">DELETE</td>
+<td style="text-align:center">Delete（刪除）</td>
+</tr>
+</tbody>
+</table>
+<p>2.url路徑表示資源階層關係</p>
+<p>3.response body返回json或是xml格式</p>
+<h2 id="設計本範例restful-api">設計本範例RESTful API</h2>
+<h4 id="設計會員資料之class">設計會員資料之class</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Member</span> <span class="o">{</span>
+    <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">account</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+  
+  	<span class="c1">//getter &amp; setter
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Url</th>
+<th>資料庫</th>
+<th>意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td>/members</td>
+<td>Create（新增）</td>
+<td>創建會員</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/members/abc123</td>
+<td>Read（查詢）</td>
+<td>查詢會員帳號為abc123的資料</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>/members/abc123</td>
+<td>Update（修改）</td>
+<td>修改會員帳號為abc123的資料</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>/members/abc123</td>
+<td>Delete（刪除）</td>
+<td>刪除會員帳號為abc123的資料</td>
+</tr>
+</tbody>
+</table>
+<h2 id="驗證請求參數-notblank">驗證請求參數 @NotBlank</h2>
+<p>為了讓使用者的登入數值不能為空白，避免後端程式發生錯誤，可以用此方法提前一部將錯誤回報給前端。</p>
+<p>1.maven設定（2.3.X)版本之後才需要設定</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><p>2.用途</p>
+<p>在數值上加入＠NotBlank代表參數不能為空、且不能為空白字串，@NotBlank只能放在String類型參數上面，若需要用在Integer上面，可使用@NotEmpty或是@NotNull。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Member</span> <span class="o">{</span>
+
+    <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+
+    <span class="nd">@NotBlank</span>
+    <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="nd">@NotBlank</span>
+    <span class="n">String</span> <span class="n">account</span><span class="o">;</span>
+    <span class="nd">@NotBlank</span>
+  	<span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="c1">//getter&amp;setter
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><h2 id="資料庫連線設定-使用jdbc">資料庫連線設定 使用JDBC</h2>
+<p>1.maven設定</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-jdbc<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>mysql<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>mysql-connector-java<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>8.0.22<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><p>2.設定SpringBoot連線資訊（固定寫法），到application.properties</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="l">spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver</span><span class="w">
+</span><span class="w"></span><span class="l">spring.datasource.url=jdbc:mysql://localhost:3306/mytest?serverTimezone=Asia/Taipei&amp;characterEncoding=utf-8</span><span class="w">
+</span><span class="w"></span><span class="l">spring.datasource.username=root</span><span class="w">
+</span><span class="w"></span><span class="l">spring.datasource.password=********</span><span class="w">
+</span></code></pre></div><p>3.複習一下在JDBC中的語法：</p>
+<p>根據sql語法可分成兩類，分別為update()與query()，其中update可執行INSERT、UPDATE、SELETE語法，query則是執行SELECT語法</p>
+<h2 id="資料庫設定">資料庫設定</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">member</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="n">account</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="n">password</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w">
+</span></code></pre></div><h2 id="進入spring-mvc環節">進入spring MVC環節</h2>
+<h4 id="物件member">物件member</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Member</span> <span class="o">{</span>
+
+    <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">account</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+    
+    <span class="c1">//getter&amp;setter
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><h4 id="設計dao-負責與資料庫溝通">設計DAO-負責與資料庫溝通</h4>
+<p>介面：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MemberDao</span> <span class="o">{</span>
+    <span class="c1">//返回值 依據名稱對應資料庫動作（參數類型 參數名稱）
+</span><span class="c1"></span>    <span class="n">String</span> <span class="nf">CreatMember</span><span class="o">(</span><span class="n">Member</span> <span class="n">member</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>實作：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Component</span> <span class="c1">//將class交給Bean
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberDaoImpl</span> <span class="kd">implements</span> <span class="n">MemberDao</span><span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">NamedParameterJdbcTemplate</span> <span class="n">namedParameterJdbcTemplate</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">CreatMember</span><span class="o">(</span><span class="n">Member</span> <span class="n">member</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span><span class="s">&#34;INSERT INTO member(name,account,password)VALUE(:memberName,:memberAccount,:memberPassword)&#34;</span><span class="o">;</span><span class="c1">// 在SQL前面加上：表示變數
+</span><span class="c1"></span>        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span><span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;memberId&#34;</span><span class="o">,</span><span class="n">member</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>     <span class="c1">//put(SQL變數,值）
+</span><span class="c1"></span>        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;memberName&#34;</span><span class="o">,</span><span class="n">member</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;memberAccount&#34;</span><span class="o">,</span><span class="n">member</span><span class="o">.</span><span class="na">getAccount</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;memberPassword&#34;</span><span class="o">,</span><span class="n">member</span><span class="o">.</span><span class="na">getPassword</span><span class="o">());</span>
+
+        <span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">&#34;註冊成功&#34;</span><span class="o">;</span> <span class="c1">//return放將來要使用的html
+</span><span class="c1"></span>    <span class="o">}</span>
+</code></pre></div><h4 id="設計service-負責商業邏輯">設計Service-負責商業邏輯</h4>
+<p>介面：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MemberService</span> <span class="o">{</span>
+
+    <span class="n">String</span> <span class="nf">CreatMember</span><span class="o">(</span><span class="n">Member</span> <span class="n">member</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>實作：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberServiceImpl</span> <span class="kd">implements</span> <span class="n">MemberService</span><span class="o">{</span>
+
+
+    <span class="nd">@Autowired</span><span class="c1">//使用InterFace 發揮spring Ioc特性
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">MemberDao</span> <span class="n">memberDao</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">CreatMember</span><span class="o">(</span><span class="n">Member</span> <span class="n">member</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">CreatMember</span><span class="o">(</span><span class="n">member</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="設計controller">設計Controller</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberController</span> <span class="o">{</span>
+
+
+    <span class="nd">@Autowired</span> <span class="c1">//注入bean 使用jdbc執行 MySQL資料庫操作
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">NamedParameterJdbcTemplate</span> <span class="n">namedParameterJdbcTemplate</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">MemberService</span> <span class="n">memberService</span><span class="o">;</span>
+
+
+    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">&#34;/members&#34;</span><span class="o">)</span> <span class="c1">//設置url路徑對應到此方法上，並限制只能使用Post方法,
+</span><span class="c1"></span>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">create</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="n">Member</span> <span class="n">member</span><span class="o">){</span> <span class="c1">//使用@RequestBody取得前端requestBody資訊
+</span><span class="c1"></span>
+        <span class="k">return</span> <span class="n">memberService</span><span class="o">.</span><span class="na">CreatMember</span><span class="o">(</span><span class="n">member</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>其實在這邊遇到了不少難題，</p>
+<p>本來預計的流程是，想說使用@Postmapping後頁面自動跳轉到結果頁面（return值為ftl)，遇到了PostMapping回傳值為html頁面無法跳轉問題，發現＠ResponseBody＠RequestBody＠RestController要搞清楚之外，經由老師古古說指導後發現此方法無法將前後端完全分離，應該由後端傳回Json格式的檔案之後，在使用前端去顯示結果。</p>
+<p>＠Controller+＠ResponseBody=＠RestController：用於回傳Json檔案給前端使用</p>
+<p>＠RequestBody：用於接收前端的Json格式</p>
+<p>在途中嘗試了不少次，回傳數值必須不能為純String或是html，要用加上註解的＠RestController讓回傳值變成Json，這樣前端才能順利收到數值，並狀態碼為200，（之後再研究看看是為什麼）。</p>
+<h2 id="html--javascript">HTML &amp; Javascript</h2>
+<p>這邊用到了一點點的Jquery取得變數，以及$.post請求，不能用$.ajax，因為ajax不能挑轉頁面</p>
+<h4 id="html">HTML</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="c">&lt;!-- partial:index.partial.html --&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;main-form first&#34;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;main-form__title&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Sign-up<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;main-form__body&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;name&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;main-form__input&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text&#34;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Username&#34;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;account&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;main-form__input&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;email&#34;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Email Address&#34;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;password&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;main-form__input&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;password&#34;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Password&#34;</span><span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;main-form__input&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;password&#34;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Repeat Password&#34;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;btn&#34;</span><span class="p">&gt;</span>Clear<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;enter&#34;</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;btn&#34;</span><span class="p">&gt;</span>Register<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="c">&lt;!-- partial --&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0/js/bootstrap.min.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span>  <span class="na">src</span><span class="o">=</span><span class="s">&#34;/js/script.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</code></pre></div><h4 id="javascript">Javascript</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">apiurl</span><span class="o">=</span><span class="p">{</span>
+    <span class="nx">registerdata</span><span class="o">:</span><span class="s2">&#34;/members&#34;</span><span class="p">,</span>
+    <span class="nx">successregister</span><span class="o">:</span><span class="s2">&#34;/display.html&#34;</span>
+<span class="p">}</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#enter&#34;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#name&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">account</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#account&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">password</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#password&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span>
+        <span class="nx">url</span><span class="o">:</span><span class="nx">apiurl</span><span class="p">.</span><span class="nx">registerdata</span><span class="p">,</span>
+        <span class="nx">contentType</span><span class="o">:</span><span class="s2">&#34;application/json;charset=UTF-8&#34;</span><span class="p">,</span>
+        <span class="nx">data</span><span class="o">:</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="s2">&#34;name&#34;</span><span class="o">:</span><span class="nx">name</span><span class="p">,</span><span class="s2">&#34;account&#34;</span><span class="o">:</span><span class="nx">account</span><span class="p">,</span><span class="s2">&#34;password&#34;</span><span class="o">:</span><span class="nx">password</span><span class="p">}),</span>
+        <span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">apiurl</span><span class="p">.</span><span class="nx">successregister</span><span class="p">;</span><span class="c1">//正確登入後頁面跳轉
+</span><span class="c1"></span>        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div><h2 id="檔案路徑配置">檔案路徑配置</h2>
+<p>將首頁放在templates裡面，並取名為index，其餘分頁靜態的放static底下就好</p>
+<p><figure style="flex-grow: 54; flex-basis: 130px">
+		<a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/pathconfiguration.png" data-size="369x680"><img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/pathconfiguration.png"
+				srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/pathconfiguration_hua5bddaf6db68be21798b839d649ad6d5_56097_480x0_resize_box_3.png 480w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/pathconfiguration_hua5bddaf6db68be21798b839d649ad6d5_56097_1024x0_resize_box_3.png 1024w"
+				width="369"
+				height="680"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h2 id="結果">結果</h2>
+<p>1.上網找的前端頁面（自己懶得寫ＸＤ）</p>
+<p><figure style="flex-grow: 194; flex-basis: 466px">
+		<a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/indexpc.png" data-size="2844x1464"><img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/indexpc.png"
+				srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/indexpc_hueba88c0953e805830325dc00672646ca_183169_480x0_resize_box_3.png 480w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/indexpc_hueba88c0953e805830325dc00672646ca_183169_1024x0_resize_box_3.png 1024w"
+				width="2844"
+				height="1464"
+				loading="lazy"
+				alt="index.html">
+		</a>
+		
+		<figcaption>index.html</figcaption>
+		
+	</figure></p>
+<p>2.完成後跳到display頁面，</p>
+<p><figure style="flex-grow: 262; flex-basis: 629px">
+		<a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/result.png" data-size="2844x1084"><img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/result.png"
+				srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/result_hubf057842c19d7c908e20b899ab8338ad_137670_480x0_resize_box_3.png 480w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/result_hubf057842c19d7c908e20b899ab8338ad_137670_1024x0_resize_box_3.png 1024w"
+				width="2844"
+				height="1084"
+				loading="lazy"
+				alt="結果畫面">
+		</a>
+		
+		<figcaption>結果畫面</figcaption>
+		
+	</figure></p>
+<p>3.資料庫數據：</p>
+<p><figure style="flex-grow: 656; flex-basis: 1575px">
+		<a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/sql.png" data-size="630x96"><img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/sql.png"
+				srcset="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/sql_hu1e6f6fa65ee0608572da238a83bb57e1_12268_480x0_resize_box_3.png 480w, /p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/sql_hu1e6f6fa65ee0608572da238a83bb57e1_12268_1024x0_resize_box_3.png 1024w"
+				width="630"
+				height="96"
+				loading="lazy"
+				alt="資料庫數據（intelij)">
+		</a>
+		
+		<figcaption>資料庫數據（intelij)</figcaption>
+		
+	</figure></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+            <a href="/tags/mysql/">MYSQL</a>
+        
+            <a href="/tags/html/">HTML</a>
+        
+            <a href="/tags/spring-mvc/">Spring MVC</a>
+        
+            <a href="/tags/jquery/">Jquery</a>
+        
+            <a href="/tags/javascript/">Javascript</a>
+        
+            <a href="/tags/jdbc/">JDBC</a>
+        
+            <a href="/tags/crud/">CRUD</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Boot 管理會員資料（二）-CRUD之RUD操作</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/post.a92ae3d1c6091a6261320251566d0fee_hu3cf4b63e80cf49258a3cdf19be741597_1490134_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-qSrj0cYJGmJhMgJRVm0P7g==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spingboot&#43;Freemarker基本配置</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/spring-security2%E4%BD%BF%E7%94%A8spring-security%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E5%AF%86%E4%BD%BF%E7%94%A8jdbc%E4%B8%B2%E6%8E%A5%E8%B3%87%E6%96%99%E5%BA%AB/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spring-security2%E4%BD%BF%E7%94%A8spring-security%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E5%AF%86%E4%BD%BF%E7%94%A8jdbc%E4%B8%B2%E6%8E%A5%E8%B3%87%E6%96%99%E5%BA%AB/logo.1822297e872c493d64bb61209de7e462_huf957eb7cc0803733802fcc4099cfd7cb_45239_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-GCIpfocsST1ku2EgnefkYg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Security(2)使用Spring Security自定義使用者帳密、使用JDBC串接資料庫</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#本文章涉及的知識">本文章涉及的知識</a></li>
+    <li><a href="#複習htpp-method-get-or-post-差別">複習HTPP method-GET or POST 差別</a></li>
+    <li><a href="#練習設計restful-api">練習設計RESTful API</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#restful-api三大原則">RESTful API三大原則：</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#設計本範例restful-api">設計本範例RESTful API</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#設計會員資料之class">設計會員資料之class</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#驗證請求參數-notblank">驗證請求參數 @NotBlank</a></li>
+    <li><a href="#資料庫連線設定-使用jdbc">資料庫連線設定 使用JDBC</a></li>
+    <li><a href="#資料庫設定">資料庫設定</a></li>
+    <li><a href="#進入spring-mvc環節">進入spring MVC環節</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#物件member">物件member</a></li>
+            <li><a href="#設計dao-負責與資料庫溝通">設計DAO-負責與資料庫溝通</a></li>
+            <li><a href="#設計service-負責商業邏輯">設計Service-負責商業邏輯</a></li>
+            <li><a href="#設計controller">設計Controller</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#html--javascript">HTML &amp; Javascript</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#html">HTML</a></li>
+            <li><a href="#javascript">Javascript</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#檔案路徑配置">檔案路徑配置</a></li>
+    <li><a href="#結果">結果</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring MVC on Yen&#39;s部落格</title>
+    <link>https://yen0304.github.io/tags/spring-mvc/</link>
+    <description>Recent content in Spring MVC on Yen&#39;s部落格</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Sat, 28 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/spring-mvc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Boot 管理會員資料（二）-CRUD之RUD操作</title>
+      <link>https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/</link>
+      <pubDate>Sat, 28 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%BA%8C-crud%E4%B9%8Brud%E6%93%8D%E4%BD%9C/</guid>
+      <description>本文章涉及的知識  Springboot 、 Spring MVC HTTP method RESTful API JDBC mySQL語法 Html、css（小部分） Javascript 、Jquery、vue（小部分）  上一次的進度 [Spring Boot 管理會員資料（一）-會員創建](https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA/#%E8%B3%87%E6%96%99%E5%BA%AB%E9%80%A3%E7%B7%9A%E8%A8%AD%E5%AE%9A-%E4%BD%BF%E7%94%A8jdbc)
+上次的進度用到了CRUD操作中的Create,創建了會員資料，這次就做完剩下的Read、Update、Delete功能，所以HTTP method以及RESTful API的部分請參照上一章節
+為了閱讀方便，附上一些本章節會使用到的資訊
+Member Class:
+public class Member { Integer id; @NotBlank String name; @NotBlank String account; @NotBlank String password; //Getter&amp;amp;Setter  } 本章節Dao Interface、Service Dao＆Implement Dao public interface MemberDao { //返回值 依據名稱對應資料庫動作（參數類型 參數名稱）  String CreatMember(Member member); List&amp;lt;Member&amp;gt; ReadMember(); List&amp;lt;Member&amp;gt; ReadByAccount(String membersAccount); String UpdateByAccount(String membersAccount,Member member); String DeleteByAccount(String membersAccount); } Service public interface MemberService { String CreatMember(Member member); List&amp;lt;Member&amp;gt; ReadMember(); List&amp;lt;Member&amp;gt; ReadByAccount(String membersAccount); String DeleteByAccount(String membersAccount); String UpdateByAccount(String membersAccount,Member member); } ServiceImpl @Component public class MemberServiceImpl implements MemberService{ @Autowired//使用InterFace 發揮spring Ioc特性  private MemberDao memberDao; @Override public String CreatMember(Member member) { return memberDao.</description>
+    </item>
+    
+    <item>
+      <title>Spring Boot 管理會員資料（一）-會員創建 CRUD-Create</title>
+      <link>https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/</link>
+      <pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/spring-boot-%E7%AE%A1%E7%90%86%E6%9C%83%E5%93%A1%E8%B3%87%E6%96%99%E4%B8%80-%E6%9C%83%E5%93%A1%E5%89%B5%E5%BB%BA-crud-create/</guid>
+      <description>本文章涉及的知識  Springboot 、 Spring MVC HTTP method RESTful API JDBC mySQL語法 Html、css（小部分） Javascript 、Jquery（小部分）  複習HTPP method-GET or POST 差別 GET 或 POST 的差別最大的差別在於傳遞的參數會被看見，因為參數會放在url裡面。
+POST的話參數會放在request body裡面，request body裡面通常會用Json格式來進行前後端的溝通
+在Spring Boot裡面，使用@RequestBody取得放在request body的參數
+練習設計RESTful API RESTful API三大原則： 1.使用http method表示動作
+   HTTP Method 對應資料動作     POST Create（新增）   GET Read（查詢）   PUT Update（修改）   DELETE Delete（刪除）    2.url路徑表示資源階層關係
+3.response body返回json或是xml格式
+設計本範例RESTful API 設計會員資料之class public class Member { Integer id; String name; String account; String password; //getter &amp;amp; setter }    Method Url 資料庫 意義     POST /members Create（新增） 創建會員   GET /members/abc123 Read（查詢） 查詢會員帳號為abc123的資料   PUT /members/abc123 Update（修改） 修改會員帳號為abc123的資料   DELETE /members/abc123 Delete（刪除） 刪除會員帳號為abc123的資料    驗證請求參數 @NotBlank 為了讓使用者的登入數值不能為空白，避免後端程式發生錯誤，可以用此方法提前一部將錯誤回報給前端。</description>
+    </item>
+    
+  </channel>
+</rss>

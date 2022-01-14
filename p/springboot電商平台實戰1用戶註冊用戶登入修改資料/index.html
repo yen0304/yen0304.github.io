@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='SpringBoot電商平台實作(1)，用戶註冊、用戶登入、修改資料'><title>SpringBoot電商平台實戰(1)，用戶註冊、用戶登入、修改資料</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SpringBoot電商平台實戰(1)，用戶註冊、用戶登入、修改資料'>
+<meta property='og:description' content='SpringBoot電商平台實作(1)，用戶註冊、用戶登入、修改資料'>
+<meta property='og:url' content='https://yen0304.github.io/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SpringBoot電商平台實戰' /><meta property='article:tag' content='Springboot' /><meta property='article:tag' content='Freemarker' /><meta property='article:tag' content='@ControllerAdvice統一處理異常' /><meta property='article:tag' content='Spring AOP' /><meta property='article:published_time' content='2022-01-08'/><meta property='article:modified_time' content='2022-01-08'/><meta property='og:image' content='https://yen0304.github.io/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/logo.jpeg' />
+<meta name="twitter:title" content="SpringBoot電商平台實戰(1)，用戶註冊、用戶登入、修改資料">
+<meta name="twitter:description" content="SpringBoot電商平台實作(1)，用戶註冊、用戶登入、修改資料"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/">
+                <img src="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/logo_hu807666e0efc0d1033f1aa166a1ba5367_206258_800x0_resize_q75_box.jpeg"
+                        srcset="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/logo_hu807666e0efc0d1033f1aa166a1ba5367_206258_800x0_resize_q75_box.jpeg 800w, /p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/logo_hu807666e0efc0d1033f1aa166a1ba5367_206258_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="534" 
+                        loading="lazy"
+                        alt="Featured image of post SpringBoot電商平台實戰(1)，用戶註冊、用戶登入、修改資料" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/springboot%E5%AF%A6%E6%88%B0/" >
+                SpringBoot實戰
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/">SpringBoot電商平台實戰(1)，用戶註冊、用戶登入、修改資料</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        SpringBoot電商平台實作(1)，用戶註冊、用戶登入、修改資料
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-01-08</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="springboot電商平台實戰1-前言">SpringBoot電商平台實戰(1) 前言</h1>
+<p>在練習的差不多之後，決定實作一個完整的電商平台「SpringBoot電商平台實戰」，也參考了不少網路上的資源，主要是參考CSDN上的雨醉東風（由於不知能不能引用所以有興趣可以自行查詢）來撰寫api，參考架構，差別最大的是該教學是使用MyBatis做資料庫操作，而我是使用JDBC，預計將來會再嘗試Redis、SpringSecurity、再加上前端完成一個完整的網站。</p>
+<p>本來在2021年的10月初已經做好了，但遇到需要實作記住持續登入的功能，雖然SpringSecurity做得到，但部分功能都涉及到session，還有登入時候的POST方法驗證登入，變成了SpringSecurity + 自己做的POST一起登入的問題，還有持續保持登入狀態等問題，將來會再更熟悉SpringSecurity再把他做整合。</p>
+<h2 id="本例相關工具環境語言配置">本例相關工具、環境、語言、配置</h2>
+<p>開發環境：</p>
+<ul>
+<li>Java 11</li>
+<li>IntelliJ IDEA 2020.3.2</li>
+<li>Spring Boot 2.3.7 RELEASE</li>
+</ul>
+<p>工具：</p>
+<p>Lombok（<a class="link" href="https://kucw.github.io/blog/2020/3/java-lombok/"  target="_blank" rel="noopener"
+    >使用教學</a>）用途：提高開發效率，自動產生getter以及setter等等。</p>
+<p>資料庫：MySql 8.0.22</p>
+<p>操作資料庫方法：JDBC</p>
+<p>前端模板引擎：Freemarker</p>
+<p>其他：</p>
+<p>前端：html、css、javascript、jquery、ajax</p>
+<p>學習到的新知識：</p>
+<p>密碼加密、統一異常處例、AOP、MVC、Spring Session</p>
+<p>如果以上有東西不熟悉的話，可以參考本網站個文章來做參考。</p>
+<h2 id="applicationproperties配置"><strong>application.properties</strong>配置</h2>
+<pre><code class="language-xml-dtd" data-lang="xml-dtd">#DB Configuration
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/db_store?serverTimezone=Asia/Taipei&amp;characterEncoding=utf-8
+spring.datasource.username=root
+spring.datasource.password=springboot
+
+#Spring Session
+## Session 存儲方式
+spring.session.store-type=redis
+## Session 過期時間，默認單位為 s
+server.servlet.session.timeout=600
+## Session 存儲到 Redis 鍵的前綴
+spring.session.redis.namespace=test:spring:session
+
+
+#Freemaker設定
+spring.freemarker.cache=false
+# 模版後綴名 默認為ftl
+spring.freemarker.suffix=.ftl
+# 文件編碼
+spring.freemarker.charset=UTF-8
+# 模版加載的目錄
+spring.freemarker.template-loader-path=classpath:/templates/
+# 靜態資源訪問路徑
+spring.mvc.static-path-pattern=/static/**
+# 獲取根目錄路徑
+spring.freemarker.request-context-attribute=request
+</code></pre><h2 id="maven設定">maven設定</h2>
+<p>本例子先使用了Lombok、jdbc、mysql、跨域註解的commons-codec、Freemarker</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;parent&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>2.3.7.RELEASE<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;relativePath/&gt;</span> <span class="c">&lt;!-- lookup parent from repository --&gt;</span>
+    <span class="nt">&lt;/parent&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.example<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>demo<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>demo<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;java.version&gt;</span>11<span class="nt">&lt;/java.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.session<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-session-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.projectlombok<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>lombok<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;optional&gt;</span>true<span class="nt">&lt;/optional&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-freemarker<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-jdbc<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>commons-codec<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>commons-codec<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.11<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="c">&lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>mysql<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>mysql-connector-java<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>8.0.22<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;excludes&gt;</span>
+                        <span class="nt">&lt;exclude&gt;</span>
+                            <span class="nt">&lt;groupId&gt;</span>org.projectlombok<span class="nt">&lt;/groupId&gt;</span>
+                            <span class="nt">&lt;artifactId&gt;</span>lombok<span class="nt">&lt;/artifactId&gt;</span>
+                        <span class="nt">&lt;/exclude&gt;</span>
+                    <span class="nt">&lt;/excludes&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+
+<span class="nt">&lt;/project&gt;</span>
+
+</code></pre></div><h2 id="規劃資料庫中的用戶數據">規劃資料庫中的用戶數據</h2>
+<p>首先，先創一個名為db_store的資料庫</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">db_store</span><span class="w">
+</span><span class="w"></span><span class="k">USE</span><span class="w"> </span><span class="n">db_store</span><span class="w">
+</span></code></pre></div><p>再來資料表創建相關數據，這邊學到了一個東西，就是鹽值，是將原密碼透過某種加密方式而產生的新密碼名稱，詳細介紹下面會解釋。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="nf">t_user</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">uid</span><span class="w"> </span><span class="kt">INT</span><span class="w"> </span><span class="kp">AUTO_INCREMENT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">username</span><span class="w"> </span><span class="kt">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="no">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">password</span><span class="w"> </span><span class="kt">CHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="no">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">salt</span><span class="w"> </span><span class="kt">CHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span><span class="w"> </span><span class="n">COMMENT</span><span class="s1">&#39;鹽值&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">gender</span><span class="w"> </span><span class="kt">INT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">COMMENT</span><span class="w"> </span><span class="s1">&#39;性别:0-女,1-男&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">phone</span><span class="w"> </span><span class="kt">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="n">email</span><span class="w"> </span><span class="kt">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="n">avatar</span><span class="w"> </span><span class="kt">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="n">COMMENT</span><span class="s1">&#39;頭像&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">is_delete</span><span class="w"> </span><span class="kt">INT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">COMMENT</span><span class="w"> </span><span class="s1">&#39;是否删除:0-否,1-是&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">created_user</span><span class="w"> </span><span class="kt">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">COMMENT</span><span class="s1">&#39;創建人&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">created_time</span><span class="w"> </span><span class="kt">DATETIME</span><span class="w"> </span><span class="n">COMMENT</span><span class="w"> </span><span class="s1">&#39;創建時間&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">modified_user</span><span class="w"> </span><span class="kt">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="n">COMMENT</span><span class="s1">&#39;最後修改人&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">modified_time</span><span class="w"> </span><span class="kt">DATETIME</span><span class="w"> </span><span class="n">COMMENT</span><span class="s1">&#39;最後修改時間&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w">
+</span></code></pre></div><h2 id="創建用戶的實體類別">創建用戶的實體類別</h2>
+<h3 id="基類entity">基類（Entity）</h3>
+<p>在這邊，要先創建所有類別的基類，意思就是在將來所有實體的類別，例如商品、用戶等等都會用到這個基類，那這個類別我們把它命名為BaseEntity，詳細功能在本例中就是會記錄上最後修改的時間、使用者等等，大家應該看例子就知道了</p>
+<p>在這邊也學到了序列化，簡單說就是在電腦上，我們可以把資料順利的儲存在Ram上面，以便在執行上更順利，詳細的解說我也不太清楚，總之就是（以下網路參考）</p>
+<p>1、當想把的內存中的對象狀態保存到一個文件中或者資料庫中時候；</p>
+<p>2、當想用套接字在網絡上傳送對象的時候；</p>
+<p>3、當想通過RMI傳輸對象的時候；</p>
+<p>用上Serializable就對了！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="cm">/*全部實體類別的基底類別*/</span>
+<span class="c1">//implements Serializable序列化
+</span><span class="c1"></span><span class="nd">@Data</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BaseEntity</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">created_user</span> <span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Date</span> <span class="n">created_time</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">modified_user</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Date</span> <span class="n">modified_time</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="user-class">User Class</h3>
+<p>接下來創建User 這個類別，當然繼承了BaseEntity</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Data</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="kd">extends</span> <span class="n">BaseEntity</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">uid</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">updatepassword</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">gender</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">phone</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">avatar</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">isDelete</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">role</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">enabled</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="userrowmapper">UserRowMapper</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserRowMapper</span> <span class="kd">implements</span> <span class="n">RowMapper</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">User</span> <span class="nf">mapRow</span><span class="o">(</span><span class="n">ResultSet</span> <span class="n">resultSet</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+
+        <span class="n">User</span> <span class="n">user</span><span class="o">=</span><span class="k">new</span> <span class="n">User</span><span class="o">();</span>
+
+        <span class="c1">//後面result.getxx()，()裡面放的是要取得的資料在資料庫中的名字
+</span><span class="c1"></span>        <span class="n">user</span><span class="o">.</span><span class="na">setUid</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">&#34;uid&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;password&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setSalt</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;Salt&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setGender</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">&#34;gender&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setPhone</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;phone&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;email&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setAvatar</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;avatar&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setIsDelete</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">&#34;is_delete&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setCreated_user</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;created_user&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setCreated_time</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getTime</span><span class="o">(</span><span class="s">&#34;created_time&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setModified_user</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;modified_user&#34;</span><span class="o">));</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setModified_time</span><span class="o">(</span><span class="n">resultSet</span><span class="o">.</span><span class="na">getTime</span><span class="o">(</span><span class="s">&#34;modified_time&#34;</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">user</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="創建用戶用戶登入修改數據查詢數據">創建用戶、用戶登入、修改數據、查詢數據</h2>
+<h3 id="user-dao">User-Dao</h3>
+<h4 id="interface">Interface</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserDao</span> <span class="o">{</span>
+
+    <span class="c1">//創建用戶
+</span><span class="c1"></span>    <span class="n">String</span> <span class="nf">CreateUser</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">);</span>
+
+    <span class="c1">//根據用戶名稱username查詢數據
+</span><span class="c1"></span>    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">ReadByUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">);</span>
+    <span class="c1">//根據用戶uid查詢數據
+</span><span class="c1"></span>    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">ReadByUid</span><span class="o">(</span><span class="n">Integer</span> <span class="n">uid</span><span class="o">);</span>
+    <span class="c1">//根據用戶uid修改數據
+</span><span class="c1"></span>    <span class="n">String</span> <span class="nf">UpdateByUid</span><span class="o">(</span><span class="n">Integer</span> <span class="n">uid</span><span class="o">,</span><span class="n">User</span> <span class="n">user</span><span class="o">);</span>
+
+
+<span class="o">}</span>
+</code></pre></div><h4 id="implement">Implement</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserImpl</span> <span class="kd">implements</span> <span class="n">UserDao</span><span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">NamedParameterJdbcTemplate</span> <span class="n">namedParameterJdbcTemplate</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">CreateUser</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span><span class="s">&#34;INSERT INTO t_user&#34;</span> <span class="o">+</span>
+                <span class="s">&#34;(username,password,salt,gender,phone,email,avatar,is_delete,created_user,created_time,modified_user,modified_time)&#34;</span> <span class="o">+</span>
+                <span class="s">&#34;VALUE&#34;</span> <span class="o">+</span>
+                <span class="s">&#34;(:userName,:userPassword,:Salt,:Gender,:Phone,:Email,:Avatar,:Is_delete,:Create_user,:Create_time,:Modified_user,:Modified_time)&#34;</span><span class="o">;</span>
+
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span><span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;userName&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getUsername</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;userPassword&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getPassword</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Salt&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getSalt</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Gender&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getGender</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Phone&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getPhone</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Email&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getEmail</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Avatar&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getAvatar</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Is_delete&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getIsDelete</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Create_user&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getCreated_user</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Create_time&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getCreated_time</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Modified_user&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getModified_user</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Modified_time&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getModified_time</span><span class="o">());</span>
+
+        <span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">);</span>
+        <span class="k">return</span> <span class="o">(</span><span class="s">&#34;註冊成功&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">ReadByUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">sql</span><span class="o">=</span><span class="s">&#34;SELECT * FROM t_user WHERE username=:userName&#34;</span><span class="o">;</span>
+
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span><span class="n">map</span><span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;userName&#34;</span><span class="o">,</span><span class="n">username</span><span class="o">);</span>
+
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span><span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">,</span><span class="k">new</span> <span class="n">UserRowMapper</span><span class="o">());</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">()&gt;</span><span class="n">0</span><span class="o">){</span>
+            <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+        <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+            <span class="c1">//如果是空集合[]
+</span><span class="c1"></span>            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">ReadByUid</span><span class="o">(</span><span class="n">Integer</span> <span class="n">uid</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">sql</span><span class="o">=</span><span class="s">&#34;SELECT * FROM t_user WHERE uid=:Uid&#34;</span><span class="o">;</span>
+
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span><span class="n">map</span><span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Uid&#34;</span><span class="o">,</span><span class="n">uid</span><span class="o">);</span>
+
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span><span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">,</span><span class="k">new</span> <span class="n">UserRowMapper</span><span class="o">());</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">()&gt;</span><span class="n">0</span><span class="o">){</span>
+            <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+        <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+            <span class="c1">//如果是空集合[]
+</span><span class="c1"></span>            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">UpdateByUid</span><span class="o">(</span><span class="n">Integer</span> <span class="n">uid</span><span class="o">,</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span><span class="s">&#34;UPDATE t_user SET &#34;</span> <span class="o">+</span>
+                <span class="s">&#34;phone=:Phone,email=:Email,gender=:Gender ,modified_user=:Modified_user,modified_time=:Modified_time&#34;</span> <span class="o">+</span>
+                <span class="s">&#34; WHERE uid=:Uid&#34;</span><span class="o">;</span>
+
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span><span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Gender&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getGender</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Phone&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getPhone</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Email&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getEmail</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Modified_user&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getModified_user</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Modified_time&#34;</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getModified_time</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;Uid&#34;</span><span class="o">,</span><span class="n">uid</span><span class="o">);</span>
+        <span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="s">&#34;修改成功&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="user-service">User-Service</h3>
+<p>這邊學到了一個程式上設計的知識，就是在做創建用戶的service層時，也會順便做ReadByUsername(String username)這個依據用戶名稱查詢資料的方法，目的就是實作我們實際上要避免用戶名稱重複，或是做修改資料的時候找不到帳戶等等的概念。</p>
+<h4 id="interface-1">Interface</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserService</span> <span class="o">{</span>
+
+    <span class="c1">//創建用戶
+</span><span class="c1"></span>    <span class="n">String</span> <span class="nf">CreateUser</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">);</span>
+    <span class="c1">//根據用戶名稱username查詢數據
+</span><span class="c1"></span>    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">ReadByUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">);</span>
+  
+    <span class="c1">//登入
+</span><span class="c1"></span>    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">login</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span><span class="n">String</span> <span class="n">password</span><span class="o">);</span>
+		<span class="c1">//修改
+</span><span class="c1"></span>    <span class="n">String</span> <span class="nf">UpdateByUid</span><span class="o">(</span><span class="n">Integer</span> <span class="n">uid</span><span class="o">,</span><span class="n">User</span> <span class="n">user</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="implements">Implements</h4>
+<p>這邊學到了一個密碼加密的方法，就是先在後端產生一串隨機的亂碼，就是鹽值（Salt），之後再經過自定義的方法，把使用者的密碼做計算之後在產生一組新的密碼，</p>
+<p>簡單來說：</p>
+<p>即使別人擁有了鹽值過後，他也沒辦法得知我們在後端驗證演算的方式，我們可以是加上一組固定的數字，加減乘除等等都可以，鹽值經過這些計算之後再到資料庫已儲存的加密結果做驗證。</p>
+<p>所以我們來實作這些功能部分需要的工具</p>
+<h4 id="鹽值的產生">鹽值的產生</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="c1">//https://www.jianshu.com/p/2c62ae005db4 參考網址
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UUIDutil</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">uuid</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="n">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">().</span><span class="na">replace</span><span class="o">(</span><span class="s">&#34;-&#34;</span><span class="o">,</span><span class="s">&#34;&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="md5加密">MD5加密</h4>
+<p>這邊直接把鹽值再加上使用者輸入的原始密碼加上之後，在做MD5加密產生在資料庫儲存的密碼</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5util</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">md5</span><span class="o">(</span><span class="n">String</span> <span class="n">src</span> <span class="o">,</span><span class="n">String</span> <span class="n">salt</span><span class="o">){</span>
+        <span class="c1">//這邊使用了springframework的加密方式
+</span><span class="c1"></span>        <span class="c1">//md5DigestAsHex參數是Bytes，所以透過java String類將字串轉為Bytes
+</span><span class="c1"></span>        <span class="n">String</span> <span class="n">result</span><span class="o">=</span><span class="n">src</span><span class="o">+</span> <span class="n">salt</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">DigestUtils</span><span class="o">.</span><span class="na">md5DigestAsHex</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><h4 id="完整程式碼">完整程式碼</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserServiceImpl</span> <span class="kd">implements</span> <span class="n">UserService</span><span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">UserDao</span> <span class="n">userDao</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">RedisTemplate</span> <span class="n">redisTemplate</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">CreateUser</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//先檢查是否有重複名稱
+</span><span class="c1"></span>        <span class="n">String</span> <span class="n">username</span> <span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="na">getUsername</span><span class="o">();</span>
+        <span class="c1">//如果查詢結果不為null，代表有重複名稱
+</span><span class="c1"></span>        <span class="k">if</span><span class="o">(</span><span class="n">userDao</span><span class="o">.</span><span class="na">ReadByUsername</span><span class="o">(</span><span class="n">username</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="c1">//  拋出錯誤
+</span><span class="c1"></span>            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;用戶名稱重複&#34;</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">//如果可以執行到這一行，代表用戶名稱沒有被使用
+</span><span class="c1"></span>        <span class="c1">//存取當下時間
+</span><span class="c1"></span>        <span class="n">Date</span> <span class="n">now</span> <span class="o">=</span><span class="k">new</span> <span class="n">Date</span><span class="o">();</span>
+
+        <span class="c1">//密碼加密
+</span><span class="c1"></span>        <span class="n">String</span> <span class="n">salt</span> <span class="o">=</span> <span class="n">UUIDutil</span><span class="o">.</span><span class="na">uuid</span><span class="o">();</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setSalt</span><span class="o">(</span><span class="n">salt</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">md5Password</span> <span class="o">=</span> <span class="n">MD5util</span><span class="o">.</span><span class="na">md5</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getPassword</span><span class="o">(),</span><span class="n">salt</span><span class="o">);</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">md5Password</span><span class="o">);</span>
+        <span class="c1">//開始設置其他後台參數，時間，使用者等等
+</span><span class="c1"></span>        <span class="n">user</span><span class="o">.</span><span class="na">setIsDelete</span><span class="o">(</span><span class="n">0</span><span class="o">);</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setCreated_user</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setCreated_time</span><span class="o">(</span><span class="n">now</span><span class="o">);</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setModified_user</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setModified_time</span><span class="o">(</span><span class="n">now</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">userDao</span><span class="o">.</span><span class="na">CreateUser</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">login</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c1">//新增陣列，來接受userDao.ReadByUsername的回傳資料
+</span><span class="c1"></span>        <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">=</span><span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">list</span><span class="o">=</span><span class="n">userDao</span><span class="o">.</span><span class="na">ReadByUsername</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+        <span class="c1">//因為只會有一筆，所以在陣列的第0個位置
+</span><span class="c1"></span>        <span class="n">User</span> <span class="n">user</span><span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">0</span><span class="o">);</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="n">userDao</span><span class="o">.</span><span class="na">ReadByUsername</span><span class="o">(</span><span class="n">username</span><span class="o">)==</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="c1">//  拋出錯誤
+</span><span class="c1"></span>            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;登入失敗，找不到帳號&#34;</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getIsDelete</span><span class="o">()==</span><span class="n">1</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;登入失敗，帳號已經被刪除&#34;</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">String</span> <span class="n">salt</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getSalt</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">md5Password</span> <span class="o">=</span> <span class="n">MD5util</span><span class="o">.</span><span class="na">md5</span><span class="o">(</span><span class="n">password</span><span class="o">,</span><span class="n">salt</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(!</span><span class="n">user</span><span class="o">.</span><span class="na">getPassword</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">md5Password</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">PasswordExpiredException</span><span class="o">(</span><span class="s">&#34;密碼輸入錯誤，請重新輸入&#34;</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">ReadByUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">userDao</span><span class="o">.</span><span class="na">ReadByUsername</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">UpdateByUid</span><span class="o">(</span><span class="n">Integer</span> <span class="n">uid</span><span class="o">,</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="n">userDao</span><span class="o">.</span><span class="na">ReadByUid</span><span class="o">(</span><span class="n">uid</span><span class="o">)==</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="c1">//  拋出錯誤
+</span><span class="c1"></span>            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;獲取數據失敗，請再重新嘗試一次&#34;</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">//新增陣列，來接受userDao.ReadByUsername的回傳資料
+</span><span class="c1"></span>        <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">=</span><span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">list</span><span class="o">=</span><span class="n">userDao</span><span class="o">.</span><span class="na">ReadByUid</span><span class="o">(</span><span class="n">uid</span><span class="o">);</span>
+        <span class="c1">//因為只會有一筆，所以在陣列的第0個位置
+</span><span class="c1"></span>        <span class="n">User</span> <span class="n">olduser</span><span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">0</span><span class="o">);</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="n">olduser</span><span class="o">.</span><span class="na">getIsDelete</span><span class="o">()==</span><span class="n">1</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;登入失敗，帳號已經被刪除&#34;</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">olduser</span><span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getEmail</span><span class="o">());</span>
+        <span class="n">olduser</span><span class="o">.</span><span class="na">setPhone</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getPhone</span><span class="o">());</span>
+        <span class="n">olduser</span><span class="o">.</span><span class="na">setGender</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getGender</span><span class="o">());</span>
+        <span class="n">olduser</span><span class="o">.</span><span class="na">setModified_time</span><span class="o">(</span><span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
+        <span class="n">olduser</span><span class="o">.</span><span class="na">setModified_user</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getModified_user</span><span class="o">());</span>
+
+        <span class="k">return</span> <span class="n">userDao</span><span class="o">.</span><span class="na">UpdateByUid</span><span class="o">(</span><span class="n">uid</span><span class="o">,</span><span class="n">olduser</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="如何維持登入資訊">如何維持登入資訊</h3>
+<p>在這邊我卡了很久，因為記住登入的方法雖然Spring Security中有這個功能，但是在獲取資料上還沒有學習到，因為USER Controller也需要獲取這些記住的資訊，但也因為在整合上還沒有觸碰到（因為已經做了差不多了），所以打算以後先單獨學習再來做整合，才不會遇到連Service層都需要重做的問題，所以就去了解了Cookie、Session、Token（這邊卡超久去理解QAQ）。</p>
+<h4 id="cookiesessiontoken是什麼">Cookie、Session、Token是什麼？</h4>
+<p><a class="link" href="https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/712796/#outline__4"  target="_blank" rel="noopener"
+    >參考網址</a> 在看完文章以及一些實作的影片之後，也特別推薦這部<a class="link" href="https://www.youtube.com/watch?v=lNQAl71Abqc"  target="_blank" rel="noopener"
+    >Youtube的影片</a>，這次決定用Session，也把目前得知的知識記錄下來，</p>
+<p>Cookie：儲存在瀏覽器裡面，裡面存著cookie的名字、cookie值（也因為這樣Cookie 只支持存字符串數據）、在哪一個domain、安全性等等&hellip;（上面影片有詳細說明），藉由request header傳遞，藉由設定過期時間來使瀏覽器記住Cookie，這樣關閉瀏覽器在開啟之後就還是會存在在瀏覽器中。</p>
+<p>Session：session 是另一種記錄服務器和客戶端會話狀態的機制，其實Session是跟Cookie一樣的東西，只是它儲存在伺服器當中，透過(Key,Value)儲存在伺服器當中，使用者透過儲存在Cookie中的SessionId傳送到伺服器獲取資訊。</p>
+<p>SessionId：他其實就是儲存在Cookie中的Cookie Name叫SessionId的Value，裡面記錄一組SessionId。</p>
+<p>SessionId的產生<a class="link" href="https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/312110/"  target="_blank" rel="noopener"
+    >(參考)</a>，是由伺服器所產生的，再一次對話中都會產生，在Java裡面就是使用</p>
+<p><code>HttpServletRequest.getSession(ture)</code>這邊相等於<code>HttpServletRequest.getSession()</code>，因為預設是true，這邊的意思就是如果沒有得到SessionID的時候伺服器就會自動產生了。</p>
+<p>所以簡單說，使用者的瀏覽器Cookie儲存著一組SessionID（號碼牌），之後使用者再藉由Cookie傳送到伺服器裡面，伺服器就會藉由SessionID，來在伺服器中藉由ke來獲取 value</p>
+<p>Token：更複雜，但是更安全，Spring Security就是用這種方式來實現remember me的機制，日後再來更新。</p>
+<p><figure style="flex-grow: 184; flex-basis: 443px">
+		<a href="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/explain.png" data-size="2564x1386"><img src="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/explain.png"
+				srcset="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/explain_hua871a679d3c4f291d50745d36665ce18_619432_480x0_resize_box_3.png 480w, /p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/explain_hua871a679d3c4f291d50745d36665ce18_619432_1024x0_resize_box_3.png 1024w"
+				width="2564"
+				height="1386"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h4 id="透過實做攔截器來維持登入">透過實做攔截器來維持登入</h4>
+<p>我們就透過攔截器，來攔截HttpServletRequest中的Session，裡面存放用戶的uid，如果為空，返回302狀態碼，另外也學習到了如何使用HttpServletRequest request以及HttpServletResponse response，本來在想說是不是要新增類別把之後，用變數接住在透過return回傳回去，結果測試了一下根本不用，直接在方法裡面操作request以及response就好。</p>
+<p>新增類別：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span>  <span class="nc">LoginInterceptor</span> <span class="kd">implements</span> <span class="n">HandlerInterceptor</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span>
+            <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">().</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&#34;uid&#34;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;session中的uid為null&#34;</span><span class="o">);</span>
+            <span class="n">response</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="n">302</span><span class="o">);</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">//System.out.println(&#34;session中的uid為= &#34; + request.getSession().getAttribute(&#34;uid&#34;));
+</span><span class="c1"></span>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>透過@Configuration來設定</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebConfig</span> <span class="kd">implements</span> <span class="n">WebMvcConfigurer</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">LoginInterceptor</span> <span class="n">loginInterceptor</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addInterceptors</span><span class="o">(</span><span class="n">InterceptorRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+
+<span class="cm">/*
+</span><span class="cm">        //在這個patterns裡面就是不用登入的
+</span><span class="cm">        List&lt;String&gt; patterns = new ArrayList&lt;&gt;();
+</span><span class="cm">        patterns.add(&#34;/user_login&#34;);
+</span><span class="cm">        patterns.add(&#34;/static/**&#34;);
+</span><span class="cm">*/</span>
+
+      <span class="c1">//有些之後會用到
+</span><span class="c1"></span>        <span class="n">registry</span><span class="o">.</span><span class="na">addInterceptor</span><span class="o">(</span><span class="n">loginInterceptor</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">addPathPatterns</span><span class="o">(</span><span class="s">&#34;/login_success&#34;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">addPathPatterns</span><span class="o">(</span><span class="s">&#34;/carts/**&#34;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">addPathPatterns</span><span class="o">(</span><span class="s">&#34;/users/**&#34;</span><span class="o">);</span>
+        <span class="c1">//.excludePathPatterns(patterns);
+</span><span class="c1"></span>    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>這樣之後只要call 跟/user/**有關的API，就會先被攔截器攔截起來，經過驗證有無獲取user Id之後，才能進行相關操作，甚至在Controller裡面也可以再接住session一次，就可以在Service中跟User.getId()來進一步驗證id是否相同。</p>
+<h3 id="user-controller">User-Controller</h3>
+<p>這邊會加上@CrossOrigin(origins = &ldquo;*&quot;)的原因目前還不清楚，只是這個是跨網域專用的，因為沒有加上去時候雖然APITester沒問題，但透過Ajax call API的時候，ajax 會得不到物件的資料，得到的數據是&rdquo;{&lsquo;readyState&rsquo;:0,&lsquo;status&rsquo;:0,&lsquo;statusText&rsquo;:&lsquo;error&rsquo;}&quot;，查了很久才發現加上這個就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RestController</span>
+<span class="nd">@CrossOrigin</span><span class="o">(</span><span class="n">origins</span> <span class="o">=</span> <span class="s">&#34;*&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserController</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">UserService</span> <span class="n">userService</span><span class="o">;</span>
+
+
+    <span class="c1">//用戶註冊
+</span><span class="c1"></span>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">&#34;/register&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">create</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="n">User</span> <span class="n">user</span><span class="o">){</span>
+        <span class="k">return</span> <span class="n">userService</span><span class="o">.</span><span class="na">CreateUser</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">//用戶登入
+</span><span class="c1"></span>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">&#34;/userlogin&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">userlogin</span><span class="o">(</span><span class="n">HttpSession</span> <span class="n">session</span><span class="o">,</span> <span class="nd">@RequestBody</span> <span class="n">User</span> <span class="n">user</span><span class="o">){</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span><span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">list</span> <span class="o">=</span><span class="n">userService</span><span class="o">.</span><span class="na">login</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getUsername</span><span class="o">(),</span><span class="n">user</span><span class="o">.</span><span class="na">getPassword</span><span class="o">());</span>
+      	<span class="c1">//登入成功後設置session的值
+</span><span class="c1"></span>        <span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&#34;uid&#34;</span><span class="o">,</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">0</span><span class="o">).</span><span class="na">getUid</span><span class="o">());</span>
+        <span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">,</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">0</span><span class="o">).</span><span class="na">getUsername</span><span class="o">());</span>
+
+        <span class="k">return</span> <span class="o">(</span><span class="n">list</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@PutMapping</span><span class="o">(</span><span class="s">&#34;users/{uid}&#34;</span><span class="o">)</span> <span class="c1">//根據帳號做修改
+</span><span class="c1"></span>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">update</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">uid</span><span class="o">,</span><span class="nd">@RequestBody</span> <span class="n">User</span> <span class="n">user</span><span class="o">){</span> <span class="c1">//@Path用來取得url路徑的值
+</span><span class="c1"></span>
+        <span class="k">return</span> <span class="n">userService</span><span class="o">.</span><span class="na">UpdateByUid</span><span class="o">(</span><span class="n">uid</span><span class="o">,</span><span class="n">user</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;users/{username}&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">read</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">String</span> <span class="n">username</span><span class="o">){</span> <span class="c1">//@Path用來取得url路徑的值
+</span><span class="c1"></span>
+        <span class="k">return</span> <span class="n">userService</span><span class="o">.</span><span class="na">ReadByUsername</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+
+		<span class="c1">//用來獲取session中的username，在前端某些需要的地方會用到。
+</span><span class="c1"></span>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;users/session-username&#34;</span><span class="o">)</span>
+    <span class="kd">public</span>  <span class="n">String</span> <span class="nf">getsessionusername</span><span class="o">(</span><span class="n">HttpSession</span> <span class="n">session</span><span class="o">){</span> <span class="c1">//@Path用來取得url路徑的值
+</span><span class="c1"></span>        <span class="k">return</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span><span class="n">session</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">//用戶登出
+</span><span class="c1"></span>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/sign_out&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">signout</span><span class="o">(</span><span class="n">HttpSession</span> <span class="n">session</span><span class="o">){</span>
+      <span class="c1">//銷毀session中的KV
+</span><span class="c1"></span>        <span class="n">session</span><span class="o">.</span><span class="na">removeAttribute</span><span class="o">(</span><span class="s">&#34;uid&#34;</span><span class="o">);</span>
+        <span class="n">session</span><span class="o">.</span><span class="na">removeAttribute</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">&#34;登出成功&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><h3 id="規劃前端javascript">規劃前端Javascript</h3>
+<h4 id="登入頁面的javascript">登入頁面的Javascript</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">apiurl</span><span class="o">=</span><span class="p">{</span>
+    <span class="nx">loginurl</span><span class="o">:</span><span class="s2">&#34;/userlogin&#34;</span><span class="p">,</span>
+    <span class="nx">successloginurl</span><span class="o">:</span><span class="s2">&#34;/&#34;</span>
+<span class="p">}</span>
+
+<span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#enter&#34;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#username&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">password</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#password&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span>
+        <span class="nx">url</span><span class="o">:</span><span class="nx">apiurl</span><span class="p">.</span><span class="nx">loginurl</span><span class="p">,</span>
+        <span class="nx">contentType</span><span class="o">:</span><span class="s2">&#34;application/json;charset=UTF-8&#34;</span><span class="p">,</span>
+        <span class="nx">data</span><span class="o">:</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="s2">&#34;username&#34;</span><span class="o">:</span><span class="nx">username</span><span class="p">,</span><span class="s2">&#34;password&#34;</span><span class="o">:</span><span class="nx">password</span><span class="p">}),</span>
+        <span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//console.log(res);
+</span><span class="c1"></span>            <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">apiurl</span><span class="p">.</span><span class="nx">successloginurl</span><span class="p">;</span><span class="c1">//正確登入後頁面跳轉回首頁
+</span><span class="c1"></span>        <span class="p">}</span>
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div><h4 id="註冊頁面javascript">註冊頁面Javascript</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">apiurl</span><span class="o">=</span><span class="p">{</span>
+    <span class="nx">registerurl</span><span class="o">:</span><span class="s2">&#34;/register&#34;</span><span class="p">,</span>
+    <span class="nx">registersuccess</span><span class="o">:</span><span class="s2">&#34;/&#34;</span>
+<span class="p">}</span>
+
+<span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#sub&#34;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  
+    <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#username&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">password</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#password&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">phone</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#phone&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#email&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">gender</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nx">gender</span><span class="o">=</span><span class="nx">$</span><span class="p">(</span><span class="s2">&#34;input[name=&#39;gender&#39;]:checked&#34;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span>
+        <span class="nx">url</span><span class="o">:</span><span class="nx">apiurl</span><span class="p">.</span><span class="nx">registerurl</span><span class="p">,</span>
+        <span class="nx">contentType</span><span class="o">:</span><span class="s2">&#34;application/json;charset=UTF-8&#34;</span><span class="p">,</span>
+        <span class="nx">data</span><span class="o">:</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="s2">&#34;username&#34;</span><span class="o">:</span><span class="nx">username</span><span class="p">,</span><span class="s2">&#34;password&#34;</span><span class="o">:</span><span class="nx">password</span><span class="p">,</span><span class="s2">&#34;gender&#34;</span><span class="o">:</span><span class="nx">gender</span><span class="p">,</span><span class="s2">&#34;phone&#34;</span><span class="o">:</span><span class="nx">phone</span><span class="p">,</span><span class="s2">&#34;email&#34;</span><span class="o">:</span><span class="nx">email</span><span class="p">}),</span>
+        
+      <span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="s2">&#34;註冊成功&#34;</span><span class="p">);</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">apiurl</span><span class="p">.</span><span class="nx">registersuccess</span><span class="p">;</span><span class="c1">//正確登入後頁面跳轉
+</span><span class="c1"></span>        <span class="p">}</span>
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div><h4 id="最重要的javascript碼前端得知使否登入">最重要的Javascript碼，前端得知使否登入</h4>
+<p>主要透過Checklogin();檢查是否登入來決定html的狀況，例如是登入按鈕還是登出按鈕，</p>
+<p>在別的頁面，例如加入購物車時、前往個人商品頁時，都可以先透過/users/session-username這個API，如果進去的話就會反回username，沒有登入的話就會被攔截器返回302 error。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">//載入頁面時先在入熱門商品資訊（之後文章會寫）
+</span><span class="c1">//再來進入Checklogin();檢查是否登入來決定html的狀況，例如是登入按鈕還是登出按鈕
+</span><span class="c1"></span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">showHotList</span><span class="p">();</span>
+  <span class="nx">Checklogin</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">showHotList</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#hot-list&#34;</span><span class="p">).</span><span class="nx">empty</span><span class="p">();</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/products/list/hot&#34;</span><span class="p">,</span>
+    <span class="nx">dataType</span><span class="o">:</span> <span class="s2">&#34;json&#34;</span><span class="p">,</span>
+    <span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">hotlist</span><span class="o">=</span><span class="nx">data</span><span class="p">;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">hotlist</span><span class="p">);</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">hotlist</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span><span class="s1">&#39;&lt;div class=&#34;content col-md-2&#34;&gt;&#39;</span>
+            <span class="o">+</span><span class="s1">&#39;&lt;div class=&#34;title&#34;&gt;#{title}&lt;/div&gt;&#39;</span>
+            <span class="o">+</span><span class="s1">&#39;&lt;div class=&#34;price&#34;&gt;$#{price}&lt;/div&gt;&lt;a class=&#34;d-flex justify-content-end&#34; href=&#34;#{href}&#34;&gt;查看商品&lt;/a&gt;&#39;</span>
+            <span class="o">+</span><span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/#{title}/g</span><span class="p">,</span> <span class="nx">hotlist</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">title</span><span class="p">);</span>
+        <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/#{price}/g</span><span class="p">,</span> <span class="nx">hotlist</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">price</span><span class="p">);</span>
+        <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/#{href}/g</span><span class="p">,</span> <span class="s2">&#34;/product?id=&#34;</span> <span class="o">+</span> <span class="nx">hotlist</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">id</span><span class="p">);</span>
+
+        <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#hot-list&#34;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">username</span><span class="o">=</span><span class="s2">&#34; &#34;</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">Checklogin</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/users/session-username&#34;</span><span class="p">,</span>
+    <span class="nx">dataType</span><span class="o">:</span> <span class="s2">&#34;text&#34;</span><span class="p">,</span>
+    <span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">html</span><span class="p">;</span>
+        <span class="nx">html</span><span class="o">=</span><span class="s1">&#39;&lt;label&gt;#{username}&lt;/label&gt;&lt;a href=&#34;/sign_out&#34;&gt;登出&lt;/a&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/#{username}/g</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;#check&#34;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+        <span class="nx">username</span><span class="o">=</span><span class="nx">data</span><span class="p">;</span>
+    <span class="p">},</span><span class="nx">error</span><span class="o">:</span><span class="kd">function</span> <span class="p">(){</span>
+      <span class="c1">//alert(&#34;沒登入&#34;);
+</span><span class="c1"></span>    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">//在頁面Checklogin()時，會依據有無登入來設定js變數username的值，如果沒有設置到的話代表沒有登入，
+</span><span class="c1">//所以按下修改資料的超連結按鈕時，就會進行阻擋反饋
+</span><span class="c1"></span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&#34;click&#34;</span><span class="p">,</span><span class="s1">&#39;#modified&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">username</span> <span class="o">==</span> <span class="s2">&#34; &#34;</span><span class="p">){</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s2">&#34;尚未登入&#34;</span><span class="p">);</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span><span class="s2">&#34;/users/@&#34;</span><span class="o">+</span> <span class="nx">username</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div><h2 id="controlleradvice統一處理異常">@ControllerAdvice統一處理異常</h2>
+<p>springboot提供了可以用來攔截並處理應用程式中全部Controller所拋出的Exception例外錯誤的註解@ControllerAdvice，由於用法很固定，所以也不多說明，但目前沒有很摸懂各種錯誤詳細的錯誤碼是多少，目前也只把種類（2-5)開頭用正確而已</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@ControllerAdvice</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyExceptionHandler</span> <span class="o">{</span>
+
+    <span class="nd">@ExceptionHandler</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">handle</span><span class="o">(</span><span class="n">IllegalArgumentException</span> <span class="n">exception</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">ResponseEntity</span><span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">SERVICE_UNAVAILABLE</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">body</span><span class="o">(</span><span class="s">&#34;IllegalArgumentException：&#34;</span> <span class="o">+</span> <span class="n">exception</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+
+</code></pre></div><h2 id="規劃本專案所有返回model的controller">規劃本專案所有返回Model的Controller</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@org.springframework.stereotype.Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Controller</span> <span class="o">{</span>
+
+
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/login&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">loginpage</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;login&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">//登入頁面
+</span><span class="c1"></span>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/login_success&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">successpage</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;/login_success&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">//首頁
+</span><span class="c1"></span>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;/index&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">//註冊頁面
+</span><span class="c1"></span>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/register&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">register</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">){</span> <span class="k">return</span>  <span class="s">&#34;/register&#34;</span><span class="o">;}</span>
+
+    <span class="c1">//user修改資料頁面
+</span><span class="c1"></span>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/users/@{username}&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">usermodified</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">){</span> <span class="k">return</span>  <span class="s">&#34;/user_modified&#34;</span><span class="o">;}</span>
+
+    <span class="c1">//商品詳情頁面
+</span><span class="c1"></span>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/product&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">products</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">){</span> <span class="k">return</span>  <span class="s">&#34;/product&#34;</span><span class="o">;}</span>
+
+
+    <span class="c1">//購物車詳情頁面
+</span><span class="c1"></span>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">&#34;/mycarts&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">mycarts</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">){</span> <span class="k">return</span>  <span class="s">&#34;/mycarts&#34;</span><span class="o">;}</span>
+
+
+
+<span class="o">}</span>
+</code></pre></div><p>其他頁面HTML、ＣＳＳ、ＪＳ以及狀態程式碼、class資料夾位置都放在github裡面。需要的大家可以去看看。</p>
+<h2 id="github">Github</h2>
+<p><a class="link" href="https://github.com/yen0304/Electronic-business-platform"  target="_blank" rel="noopener"
+    >https://github.com/yen0304/Electronic-business-platform</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B0/">SpringBoot電商平台實戰</a>
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+            <a href="/tags/freemarker/">Freemarker</a>
+        
+            <a href="/tags/controlleradvice%E7%B5%B1%E4%B8%80%E8%99%95%E7%90%86%E7%95%B0%E5%B8%B8/">@ControllerAdvice統一處理異常</a>
+        
+            <a href="/tags/spring-aop/">Spring AOP</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B02%E5%95%86%E5%93%81%E8%A9%B3%E6%83%85%E7%86%B1%E9%96%80%E5%95%86%E5%93%81%E6%8E%92%E5%BA%8F/">
+        
+        
+            <div class="article-image">
+                <img src="/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B02%E5%95%86%E5%93%81%E8%A9%B3%E6%83%85%E7%86%B1%E9%96%80%E5%95%86%E5%93%81%E6%8E%92%E5%BA%8F/logo.b16d6095dd15d52be011b6b6cfbff781_hu807666e0efc0d1033f1aa166a1ba5367_206258_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-sW1gld0V1SvgEba2z7/3gQ==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SpringBoot電商平台實戰(2)，商品詳情、熱門商品排序</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/">
+        
+        
+            <div class="article-image">
+                <img src="/p/freemarker-spring-security-%E6%95%B4%E5%90%88/cover.515ea5998aae5c8c8061fb33c57b92e0_hu3d03a01dcc18bc5be0e67db3d8d209a6_702789_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-UV6lmYquXIyAYfszxXuS4A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Freemarker &#43; Spring Security 整合</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/">
+        
+        
+            <div class="article-image">
+                <img src="/p/spingboot-freemarker%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/post.a92ae3d1c6091a6261320251566d0fee_hu3cf4b63e80cf49258a3cdf19be741597_1490134_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-qSrj0cYJGmJhMgJRVm0P7g==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spingboot&#43;Freemarker基本配置</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#本例相關工具環境語言配置">本例相關工具、環境、語言、配置</a></li>
+    <li><a href="#applicationproperties配置"><strong>application.properties</strong>配置</a></li>
+    <li><a href="#maven設定">maven設定</a></li>
+    <li><a href="#規劃資料庫中的用戶數據">規劃資料庫中的用戶數據</a></li>
+    <li><a href="#創建用戶的實體類別">創建用戶的實體類別</a>
+      <ol>
+        <li><a href="#基類entity">基類（Entity）</a></li>
+        <li><a href="#user-class">User Class</a></li>
+        <li><a href="#userrowmapper">UserRowMapper</a></li>
+      </ol>
+    </li>
+    <li><a href="#創建用戶用戶登入修改數據查詢數據">創建用戶、用戶登入、修改數據、查詢數據</a>
+      <ol>
+        <li><a href="#user-dao">User-Dao</a>
+          <ol>
+            <li><a href="#interface">Interface</a></li>
+            <li><a href="#implement">Implement</a></li>
+          </ol>
+        </li>
+        <li><a href="#user-service">User-Service</a>
+          <ol>
+            <li><a href="#interface-1">Interface</a></li>
+            <li><a href="#implements">Implements</a></li>
+            <li><a href="#鹽值的產生">鹽值的產生</a></li>
+            <li><a href="#md5加密">MD5加密</a></li>
+            <li><a href="#完整程式碼">完整程式碼</a></li>
+          </ol>
+        </li>
+        <li><a href="#如何維持登入資訊">如何維持登入資訊</a>
+          <ol>
+            <li><a href="#cookiesessiontoken是什麼">Cookie、Session、Token是什麼？</a></li>
+            <li><a href="#透過實做攔截器來維持登入">透過實做攔截器來維持登入</a></li>
+          </ol>
+        </li>
+        <li><a href="#user-controller">User-Controller</a></li>
+        <li><a href="#規劃前端javascript">規劃前端Javascript</a>
+          <ol>
+            <li><a href="#登入頁面的javascript">登入頁面的Javascript</a></li>
+            <li><a href="#註冊頁面javascript">註冊頁面Javascript</a></li>
+            <li><a href="#最重要的javascript碼前端得知使否登入">最重要的Javascript碼，前端得知使否登入</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#controlleradvice統一處理異常">@ControllerAdvice統一處理異常</a></li>
+    <li><a href="#規劃本專案所有返回model的controller">規劃本專案所有返回Model的Controller</a></li>
+    <li><a href="#github">Github</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
