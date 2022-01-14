@@ -6,7 +6,431 @@
         <description>Recent content on Yen&#39;s部落格</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-tw</language>
-        <lastBuildDate>Wed, 12 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 14 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>GIT學習筆記－從初始化到上傳至遠端數據庫</title>
+        <link>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/</link>
+        <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/logo.jpeg" alt="Featured image of post GIT學習筆記－從初始化到上傳至遠端數據庫" /&gt;&lt;h1 id=&#34;git學習筆記從初始化到上傳至遠端數據庫&#34;&gt;GIT學習筆記－從初始化到上傳至遠端數據庫&lt;/h1&gt;
+&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;在看工作的時候，發現很多公司都希望擁有git的經驗，雖然有過使用Github Desktop的經驗，但是還是想知道背後的原理，所以就開始上網查資料學習了。&lt;/p&gt;
+&lt;p&gt;可以參考這位六角學院的老師&lt;a class=&#34;link&#34; href=&#34;https://w3c.hexschool.com/git/cfdbd310&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;文章&lt;/a&gt;還有&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=o0ngrUEh3hU&amp;amp;list=PLYrA-SsMvTPOZeB6DHvB0ewl3miMf-2tj&amp;amp;index=10&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;YT影片&lt;/a&gt;，實在是免費又大碗（淚。&lt;/p&gt;
+&lt;h2 id=&#34;安裝測試&#34;&gt;安裝＆測試&lt;/h2&gt;
+&lt;p&gt;用終端機使用brew安裝git：&lt;/p&gt;
+&lt;p&gt;Install command:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;brew install git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;測試：&lt;/p&gt;
+&lt;p&gt;打開終端機，輸入 &lt;code&gt;git --version&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  ~ git --version
+git version 2.34.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就代表安裝成功了&lt;/p&gt;
+&lt;h2 id=&#34;git基礎操作&#34;&gt;Git基礎操作&lt;/h2&gt;
+&lt;p&gt;首先這邊學習到&lt;a class=&#34;link&#34; href=&#34;https://w3c.hexschool.com/git/8dc4619b&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;終端機的使用&lt;/a&gt;，可以快速的移動到專案資料夾，&lt;/p&gt;
+&lt;h3 id=&#34;設定個人資訊&#34;&gt;設定個人資訊&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git config --global user.name &lt;span class=&#34;s2&#34;&gt;&amp;#34;您的姓名&amp;#34;&lt;/span&gt;
+git config --global user.email &lt;span class=&#34;s2&#34;&gt;&amp;#34;您的Email&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;查詢設定是否成功&#34;&gt;查詢設定是否成功&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git config --list
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;成功顯示之後按下q離開&lt;/p&gt;
+&lt;h3 id=&#34;新建數據庫repository&#34;&gt;新建數據庫(Repository)&lt;/h3&gt;
+&lt;p&gt;在電腦新增資料夾後，透過cd前往，在執行git指令&lt;code&gt;$ git init&lt;/code&gt;，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著到資料夾，並顯示隱藏檔案，就會看到.git資料夾了。&lt;/p&gt;
+&lt;p&gt;接著到了&lt;/p&gt;
+&lt;h3 id=&#34;版控流程&#34;&gt;版控流程&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;開新資料夾，&lt;code&gt;git init&lt;/code&gt; 建立數據庫&lt;/li&gt;
+&lt;li&gt;新增一個 &lt;code&gt;index.html&lt;/code&gt; 檔案&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;接著輸入&lt;code&gt;git status&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;到這裡應該會出現：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 228; flex-basis: 549px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/%EF%BC%91.png&#34; data-size=&#34;2870x1254&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/%EF%BC%91.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/%EF%BC%91_huc8c5cfe469d9d8686f70bbce294d0639_392511_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/%EF%BC%91_huc8c5cfe469d9d8686f70bbce294d0639_392511_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2870&#34;
+				height=&#34;1254&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;結果&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;結果&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;可以看到終端機告訴我們；&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; git status
+位於分支 master
+
+尚無提交
+
+未追蹤的檔案:
+  （使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git add &amp;lt;檔案&amp;gt;...&amp;#34;&lt;/span&gt; 以包含要提交的內容）
+	index.html
+
+提交為空，但是存在尚未追蹤的檔案（使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git add&amp;#34;&lt;/span&gt; 建立追蹤）
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;意思就是偵測到了檔案，但是他不是git所追蹤的對象，那就照他所說的&lt;/p&gt;
+&lt;h3 id=&#34;將檔案加入到索引&#34;&gt;將檔案加入到索引&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git add &amp;lt;檔案名稱&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果要將全部未追蹤加入索引的全部加入，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git add .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;結果&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git status
+位於分支 master
+
+尚無提交
+
+要提交的變更：
+  （使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git rm --cached &amp;lt;檔案&amp;gt;...&amp;#34;&lt;/span&gt; 以取消暫存）
+	新檔案：   index.html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到從「未追蹤的檔案」變成「要提交的變更」（英文的話是Untracked files變成Changes to be committed）&lt;/p&gt;
+&lt;h3 id=&#34;填寫版本資訊&#34;&gt;填寫版本資訊&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;填寫版本資訊&amp;gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;輸入&lt;code&gt;git commit -m &amp;quot;新增網頁&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;新增網頁&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;master &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;根提交&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; 03dcd4c&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; 新增網頁
+ &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; file changed, &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; insertions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; deletions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;-&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+ create mode &lt;span class=&#34;m&#34;&gt;100644&lt;/span&gt; index.html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再使用&lt;code&gt;git status&lt;/code&gt;查看&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;位於分支 master
+沒有要提交的檔案，工作區為乾淨狀態
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;查詢歷史紀錄&#34;&gt;查詢歷史紀錄&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;輸出：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;commit 03dcd4c0bbd54f72a67aaaf74092eb454b981957 (HEAD -&amp;gt; master)
+Author: a＊＊＊＊＊＊3 &amp;lt;a＊＊＊＊＊3@gmail.com&amp;gt;
+Date:   Mon Jan 10 16:59:05 2022 +0800
+
+    新增網頁
+
+(END)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;一樣小寫q退出。&lt;/p&gt;
+&lt;h3 id=&#34;總結&#34;&gt;總結&lt;/h3&gt;
+&lt;p&gt;目前實現了：&lt;/p&gt;
+&lt;h3 id=&#34;來源httpsw3chexschoolcomgitb9be5b1e2png&#34;&gt;&lt;figure style=&#34;flex-grow: 246; flex-basis: 592px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/2.png&#34; data-size=&#34;953x386&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/2_hu4b45238746bac83146e3812a66be4fe4_23861_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/2_hu4b45238746bac83146e3812a66be4fe4_23861_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;953&#34;
+				height=&#34;386&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;來源&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;來源&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/h3&gt;
+&lt;p&gt;學習了：&lt;/p&gt;
+&lt;p&gt;Git 是如何追蹤檔案變化的&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;當我們建立數據庫後，立即新增一個檔案時，用 &lt;code&gt;git status&lt;/code&gt; 查詢，會發現它是在 &lt;code&gt;Untracked&lt;/code&gt; 狀態。&lt;/li&gt;
+&lt;li&gt;這就表示此檔案還沒進到版本控制，藉由 &lt;code&gt;git add .&lt;/code&gt; 將檔案加入到索引 (Staged) 後，準備提交成一個 commit 版本。&lt;/li&gt;
+&lt;li&gt;藉由 &lt;code&gt;git commit -m &amp;lt;提交訊息&amp;gt;&lt;/code&gt; 後，該檔案就會開始被追蹤，檔案狀態就會變成 &lt;code&gt;UnModified&lt;/code&gt; 狀態。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 207; flex-basis: 498px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/3.png&#34; data-size=&#34;819x394&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/3.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/3_huebe692c53dc9762ed45beff33059ab70_105448_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/3_huebe692c53dc9762ed45beff33059ab70_105448_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;819&#34;
+				height=&#34;394&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;3&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;3&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著稍微練習一下，&lt;/p&gt;
+&lt;p&gt;新增兩個檔案，並查詢狀態，並用git add .開起全部追蹤&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git status
+位於分支 master
+未追蹤的檔案:
+  （使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git add &amp;lt;檔案&amp;gt;...&amp;#34;&lt;/span&gt; 以包含要提交的內容）
+	all.css
+	all.js
+
+提交為空，但是存在尚未追蹤的檔案（使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git add&amp;#34;&lt;/span&gt; 建立追蹤）
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git add *
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git status
+位於分支 master
+要提交的變更：
+  （使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git restore --staged &amp;lt;檔案&amp;gt;...&amp;#34;&lt;/span&gt; 以取消暫存）
+	新檔案：   all.css
+	新檔案：   all.js
+
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;加入兩個檔案css&amp;amp;js&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;master ab3e252&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; 加入兩個檔案css&lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;js
+ &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt; files changed, &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; insertions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; deletions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;-&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+ create mode &lt;span class=&#34;m&#34;&gt;100644&lt;/span&gt; all.css
+ create mode &lt;span class=&#34;m&#34;&gt;100644&lt;/span&gt; all.js
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; git status
+位於分支 master
+沒有要提交的檔案，工作區為乾淨狀態
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;sourcetree&#34;&gt;Sourcetree&lt;/h2&gt;
+&lt;p&gt;Sourcetree是一個介面圖形化的軟體，讓我們可以用點擊的方式來完成git指令。&lt;/p&gt;
+&lt;p&gt;可以在介面上看到有一個new repository點擊之後再按Add Existing Local Repository，打開已經建立好的數據庫。&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 153; flex-basis: 367px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st1.png&#34; data-size=&#34;1965x1284&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st1.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st1_hu188e791dcfb9b3e1d885f3d68aa50729_403071_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st1_hu188e791dcfb9b3e1d885f3d68aa50729_403071_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1965&#34;
+				height=&#34;1284&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;選擇我們剛剛所建立的資料夾之後，就會看到上面畫面中多了一個數據庫可以選擇，點擊右鍵兩下，就可以看到數據庫的資訊了，如下圖：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 159; flex-basis: 383px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st2.png&#34; data-size=&#34;2082x1302&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st2_hu3877de950bfb5d413ccb0db0e87992c0_357428_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st2_hu3877de950bfb5d413ccb0db0e87992c0_357428_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2082&#34;
+				height=&#34;1302&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;當我們把程式進行改變、新增檔案可以看多了&lt;/p&gt;
+&lt;p&gt;Uncommitted changes的選項，也可以看到檔案路徑被改變、或是新增哪些程式碼的資訊&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 162; flex-basis: 390px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st3.png&#34; data-size=&#34;2096x1288&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st3.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st3_hua5b1c41932e4126a2edd494fcea0ee49_432077_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st3_hua5b1c41932e4126a2edd494fcea0ee49_432077_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2096&#34;
+				height=&#34;1288&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;這時候，這些檔案的位置還在工作目錄，也就是尚加入索引Uncommitted&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 156; flex-basis: 374px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/main.jpg&#34; data-size=&#34;1218x780&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/main.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/main_huf4a1448afb4fd29f424975e93c99d319_213180_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/main_huf4a1448afb4fd29f424975e93c99d319_213180_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1218&#34;
+				height=&#34;780&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;所以要透過git add .來加入索引，在sourcetree想要進行add操作來加入commit，只要將要加入索引的檔案打勾，在按下commit按鍵，就會跳到commit畫面。&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 165; flex-basis: 396px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st4.png&#34; data-size=&#34;2084x1260&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st4.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st4_hu407089be3c114c793125b9cdcebb7ff7_445144_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st4_hu407089be3c114c793125b9cdcebb7ff7_445144_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2084&#34;
+				height=&#34;1260&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著在下面設定好我們要commit的名稱，並按下藍色commit&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 161; flex-basis: 387px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st5.png&#34; data-size=&#34;2086x1292&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st5.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st5_huff37d2f8cd40948b5b1607cf2a76c919_268379_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st5_huff37d2f8cd40948b5b1607cf2a76c919_268379_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2086&#34;
+				height=&#34;1292&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;上面的操作即等於&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;新增h1標題更改路徑&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就成功了&lt;/p&gt;
+&lt;h2 id=&#34;新增遠端數據庫-repo&#34;&gt;新增遠端數據庫 repo&lt;/h2&gt;
+&lt;p&gt;在github新增資料庫就像我們在github執行git init一樣，&lt;/p&gt;
+&lt;p&gt;所以到github new repository之後，可以看到github給了一些git指令&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 206; flex-basis: 496px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/github1.jpg&#34; data-size=&#34;2284x1104&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/github1.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/github1_hud696d4a7e5ef40aa25a5cd7f206ceafb_451693_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/github1_hud696d4a7e5ef40aa25a5cd7f206ceafb_451693_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;2284&#34;
+				height=&#34;1104&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著複製&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git remote add origin https://github.com/yen0304/test.git&lt;/code&gt;到終端機並執行後，雖然乍看之下沒有變化，但是到隱藏的資料夾後，打開config檔案，看到origin就代表成功了。&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 287; flex-basis: 690px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/git1.png&#34; data-size=&#34;2444x850&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/git1.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/git1_hu5bed2b243245909dfca0c97186b8cacf_406692_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/git1_hu5bed2b243245909dfca0c97186b8cacf_406692_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2444&#34;
+				height=&#34;850&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;再來看到push的指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git push -u origin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;輸入帳號密碼就成功了，那我是使用SSH的方式，
+可以按照&lt;a class=&#34;link&#34; href=&#34;https://blog.jaycetyle.com/2018/02/github-ssh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;這篇文章&lt;/a&gt;來設定公鑰來使用，這樣就不用輸入帳號密碼了！&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt; he list of known hosts.
+ 枚舉物件: 10, 完成.
+ 物件計數中: 100% &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;10/10&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, 完成.
+ 使用 &lt;span class=&#34;m&#34;&gt;8&lt;/span&gt; 個執行緒進行壓縮
+ 壓縮物件中: 100% &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;6/6&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, 完成.
+ 寫入物件中: 100% &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;10/10&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;m&#34;&gt;995&lt;/span&gt; 位元組 &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; 995.00 KiB/s, 完成.
+ 總共 &lt;span class=&#34;m&#34;&gt;10&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;差異 0&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;，復用 &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;差異 0&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;，重用包 &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
+ To github.com:yen0304/test.git
+
+* &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;new branch&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;      master -&amp;gt; master
+  分支 &lt;span class=&#34;s1&#34;&gt;&amp;#39;master&amp;#39;&lt;/span&gt; 設定為追蹤來自 &lt;span class=&#34;s1&#34;&gt;&amp;#39;origin&amp;#39;&lt;/span&gt; 的遠端分支 &lt;span class=&#34;s1&#34;&gt;&amp;#39;master&amp;#39;&lt;/span&gt;。
+
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;接著回到github，就可以看到檔案完成上傳了！&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 229; flex-basis: 550px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/success1.jpg&#34; data-size=&#34;1650x720&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/success1.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/success1_hucf4434b75128d02a88afaa1690be9b0b_245571_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/success1_hucf4434b75128d02a88afaa1690be9b0b_245571_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1650&#34;
+				height=&#34;720&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;那之後如果進行程式碼更改的時候，從Sourcetree可以看到&lt;/p&gt;
+&lt;p&gt;Master 還有 Origin/Master，
+這兩者Master所代表的是本地端的commit，Origin/master則是遠端數據庫的commit。&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 271; flex-basis: 651px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st6.jpg&#34; data-size=&#34;874x322&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st6.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st6_hub2de60b4f553287448e972b9d779c158_48813_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st6_hub2de60b4f553287448e972b9d779c158_48813_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;874&#34;
+				height=&#34;322&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;到了這邊，就可以自行使用git來進行版本控制了，
+接下來就要學會如何與團隊共同使用git。&lt;/p&gt;
+&lt;h2 id=&#34;github&#34;&gt;GITHUB&lt;/h2&gt;
+&lt;p&gt;如果需要文章中的檔案，可以到https://github.com/yen0304/test來下載。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
+        <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</link>
+        <pubDate>Wed, 12 Jan 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo.png" alt="Featured image of post SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴" /&gt;&lt;h1 id=&#34;springboot學習筆記-單元測試4-mockito&#34;&gt;SpringBoot學習筆記-單元測試(4)-Mockito&lt;/h1&gt;
+&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;部分文章內容來自於古老師在&lt;a class=&#34;link&#34; href=&#34;https://hahow.in/courses/5fe22e7fe810e10fc483dd78/discussions&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;hahow的課程&lt;/a&gt;，還有古老師的&lt;a class=&#34;link&#34; href=&#34;https://kucw.github.io/blog/2020/2/spring-unit-test-mockito/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;部落格&lt;/a&gt;，想要做筆記的原因是因為，邊記變做會比較容易記住，改天忘了也可以用自己的方式去理解。&lt;/p&gt;
+&lt;h2 id=&#34;mock測試目的與特性&#34;&gt;Mock測試目的與特性&lt;/h2&gt;
+&lt;p&gt;單元測試的特性為下：&lt;/p&gt;
+&lt;p&gt;1.可以被自動化運行&lt;/p&gt;
+&lt;p&gt;2.各個單元測試互相獨立，彼此之間不能有依賴關係&lt;/p&gt;
+&lt;p&gt;3.測試結果穩定，不受外部服務影響&lt;/p&gt;
+&lt;p&gt;在前面的筆記，如果要測試Service層的話，應該會這樣寫：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@SpringBootTest&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;StudentServiceImplMockTest&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+
+    &lt;span class=&#34;nd&#34;&gt;@Autowired&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;StudentService&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;studentService&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+
+    &lt;span class=&#34;nd&#34;&gt;@Test&lt;/span&gt;
+    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(){&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentService&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;assertNotNull&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Judy&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在上面的測試單元裡，StudentService其實用到了StudentDao這個Bean，&lt;/p&gt;
+&lt;p&gt;並不符合地２點，Bean之前在上面是有依賴關係的，所以Mock測試的&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;目的：避免測試某一個單元測試，而去建構整個bean的依賴。&lt;/li&gt;
+&lt;li&gt;作法：創造一個假的bean，替換掉容器原有的bean。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在程式裡面Mock的意思為「假的」的意思，而非英文單字模仿。&lt;/p&gt;
+&lt;h2 id=&#34;mockito&#34;&gt;Mockito&lt;/h2&gt;
+&lt;p&gt;Mockito是Spring Boot中，進行Mock測試的工具&lt;/p&gt;
+&lt;p&gt;功能大致上分為：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;模擬方法的返回值&lt;/li&gt;
+&lt;li&gt;模擬拋出Exception&lt;/li&gt;
+&lt;li&gt;記錄方法的使用次數、順序&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;mockbean&#34;&gt;@MockBean&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Test&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(){&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;//第二步
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;mockname&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+
+  	&lt;span class=&#34;c1&#34;&gt;//這句話的意思就是，當有人使用studentDao.getById(3)時，固定return mockStudent這個object
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;thenReturn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+
+    &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentService&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;assertNotNull&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Judy&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;執行結果：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;org.opentest4j.AssertionFailedError: 
+Expected :3
+Actual   :100
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;再把&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;assertEquals(3,student.getId());&lt;/code&gt;改成&lt;code&gt;assertEquals(3,student.getId());&lt;/code&gt;就會顯示測試成功了&lt;/p&gt;
+&lt;h3 id=&#34;使用mockbean注意事項&#34;&gt;使用MockBean注意事項&lt;/h3&gt;
+&lt;p&gt;承上，如果把&lt;code&gt;Student student=studentService.getById(3)&lt;/code&gt;改成了&lt;code&gt;Student student=studentService.getById(2)&lt;/code&gt;下面的單元測試依然會運行錯誤，&lt;strong&gt;原因是因為在沒有定義返回值是多少的情況下，這個假的mockbean預設會傳NULL&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Test&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(){&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;mockname&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;thenReturn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+
+    &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentService&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;assertNotNull&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Judy&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以我們會利用&lt;/p&gt;
+&lt;h3 id=&#34;mockitoany&#34;&gt;Mockito.any()&lt;/h3&gt;
+&lt;p&gt;來固定返回mockStudent這個數值&lt;/p&gt;
+&lt;p&gt;由&lt;code&gt;Mockito.when(studentDao.getById(3)).thenReturn(mockStudent);&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;變成&lt;code&gt;Mockito.when(studentDao.getById(Mockito.any())).thenReturn(mockStudent);&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;這樣不論參數是多少，都還是會固定返回mockStudent出來。&lt;/p&gt;
+&lt;h3 id=&#34;補充thenreturn-doreturn&#34;&gt;補充thenReturn doReturn&lt;/h3&gt;
+&lt;p&gt;其實只是寫法上的不同，下面的程式碼是等價的&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;())).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;thenReturn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;doReturn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;throw-expection&#34;&gt;Throw Expection&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;insert&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;())).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;thenThrow&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RuntimeException&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;doThrow&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RuntimeException&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;deleteById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;verify&#34;&gt;Verify&lt;/h3&gt;
+&lt;p&gt;用來記錄方法的使用次數、順序（少用）&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;doThrow&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RuntimeException&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;deleteById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;mockito-的限制&#34;&gt;Mockito 的限制&lt;/h3&gt;
+&lt;p&gt;上述就是 Mockito 的 mock 對象使用方法，不過當使用 Mockito 在 mock 對象時，有一些限制需要遵守&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;不能 mock 靜態方法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;不能 mock private 方法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;不能 mock final class&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>SQL學習筆記(3)-水平合併(JOIN ON)與垂直合併(UNION)</title>
         <link>https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/</link>
         <pubDate>Wed, 12 Jan 2022 00:00:00 +0000</pubDate>
@@ -529,7 +953,45 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h2 id=&#34;子查詢&#34;&gt;子查詢&lt;/h2&gt;
+&lt;h2 id=&#34;leetcode題目182113更新&#34;&gt;Leetcode題目182.(1/13更新)&lt;/h2&gt;
+&lt;p&gt;在DB中Leetcode的&lt;a class=&#34;link&#34; href=&#34;https://leetcode.com/problems/duplicate-emails&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;182. Duplicate Emails&lt;/a&gt;題目如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;+-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key column for this table.
+Each row of this table contains an email. The emails will not contain uppercase letters
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Write an SQL query to report all the duplicate emails.&lt;/p&gt;
+&lt;p&gt;Return the result table in &lt;strong&gt;any order&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The query result format is in the following example.&lt;/p&gt;
+&lt;p&gt;Example1.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Input: 
+Person table:
++----+---------+
+| id | email   |
++----+---------+
+| 1  | a@b.com |
+| 2  | c@d.com |
+| 3  | a@b.com |
++----+---------+
+Output: 
++---------+
+| Email   |
++---------+
+| a@b.com |
++---------+
+Explanation: a@b.com is repeated two times.
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;意思就是要找出重複的email，&lt;/p&gt;
+&lt;p&gt;所以我們可以利用GROUP BY選出重複數量，再利用HAVING先執行在篩選的概念，再把大於2的email count列印出來，解答：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;email&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Email&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Person&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;GROUP&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;BY&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;email&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;HAVING&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;COUNT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;email&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;子查詢&#34;&gt;子查詢&lt;/h2&gt;
 &lt;p&gt;子查詢就是在一個Select指令內再放入一個Select查詢指令進行查詢，通常是位在Select的Where子句，可以透過子查詢取得查詢條件。&lt;/p&gt;
 &lt;p&gt;簡單來說，如果我們想在WHERE後面的條件來自於資料表的值、查詢結果，所以通常這個子查詢SELECT後面的欄位只會一個(例如123)，因為我們不會在WHERE後面放 where a=（123,456 )這樣在語法上就錯誤了，&lt;/p&gt;
 &lt;h3 id=&#34;使用子查詢撰寫流程技巧&#34;&gt;使用子查詢撰寫流程技巧&lt;/h3&gt;
@@ -587,8 +1049,48 @@
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;movies&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WHERE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;runtime&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;MIN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;runtime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;minimum_runtime&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  									&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;movies&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;差不多就是這樣！&lt;/p&gt;
-</description>
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;leetcode題目183113更新&#34;&gt;Leetcode題目183.(1/13更新)&lt;/h2&gt;
+&lt;p&gt;在&lt;a class=&#34;link&#34; href=&#34;https://leetcode.com/problems/customers-who-never-order&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;183. Customers Who Never Order&lt;/a&gt;中，&lt;/p&gt;
+&lt;p&gt;題目：&lt;/p&gt;
+&lt;p&gt;Write an SQL query to report all customers who never order anything.&lt;/p&gt;
+&lt;p&gt;Return the result table in &lt;strong&gt;any order&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The query result format is in the following example.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Input: 
+Customers table:
++----+-------+
+| id | name  |
++----+-------+
+| 1  | Joe   |
+| 2  | Henry |
+| 3  | Sam   |
+| 4  | Max   |
++----+-------+
+Orders table:
++----+------------+
+| id | customerId |
++----+------------+
+| 1  | 3          |
+| 2  | 1          |
++----+------------+
+Output: 
++-----------+
+| Customers |
++-----------+
+| Henry     |
+| Max       |
++-----------+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;意思就是要從顧客名單Customers table裡面，從Orders挑出還沒點餐的顧客&lt;/p&gt;
+&lt;p&gt;這題如果我們在已知customerId的情況會這樣寫：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Customers&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Customers&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WHERE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;in&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以我們只要利用子查詢返回1.3就可以了！&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Customers&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Customers&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WHERE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;in&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;customerId&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;                        &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Orders&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
         </item>
         <item>
         <title>SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數</title>
@@ -2580,119 +3082,6 @@ spring.freemarker.request-context-attribute=request
 &lt;p&gt;本範例皆由hahow古老師的課程學習，範例也是，&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://hahow.in/courses/5fe22e7fe810e10fc483dd78/discussions&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;想要深入了解課程可參考&lt;/a&gt;&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
-        <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</link>
-        <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
-        
-        <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</guid>
-        <description>&lt;img src="https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/logo.png" alt="Featured image of post SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴" /&gt;&lt;h1 id=&#34;springboot學習筆記-單元測試4-mockito&#34;&gt;SpringBoot學習筆記-單元測試(4)-Mockito&lt;/h1&gt;
-&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
-&lt;p&gt;部分文章內容來自於古老師在&lt;a class=&#34;link&#34; href=&#34;https://hahow.in/courses/5fe22e7fe810e10fc483dd78/discussions&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;hahow的課程&lt;/a&gt;，還有古老師的&lt;a class=&#34;link&#34; href=&#34;https://kucw.github.io/blog/2020/2/spring-unit-test-mockito/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;部落格&lt;/a&gt;，想要做筆記的原因是因為，邊記變做會比較容易記住，改天忘了也可以用自己的方式去理解。&lt;/p&gt;
-&lt;h2 id=&#34;mock測試目的與特性&#34;&gt;Mock測試目的與特性&lt;/h2&gt;
-&lt;p&gt;單元測試的特性為下：&lt;/p&gt;
-&lt;p&gt;1.可以被自動化運行&lt;/p&gt;
-&lt;p&gt;2.各個單元測試互相獨立，彼此之間不能有依賴關係&lt;/p&gt;
-&lt;p&gt;3.測試結果穩定，不受外部服務影響&lt;/p&gt;
-&lt;p&gt;在前面的筆記，如果要測試Service層的話，應該會這樣寫：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@SpringBootTest&lt;/span&gt;
-&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;StudentServiceImplMockTest&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-
-    &lt;span class=&#34;nd&#34;&gt;@Autowired&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;StudentService&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;studentService&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-
-    &lt;span class=&#34;nd&#34;&gt;@Test&lt;/span&gt;
-    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(){&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentService&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;assertNotNull&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Judy&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-
-&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在上面的測試單元裡，StudentService其實用到了StudentDao這個Bean，&lt;/p&gt;
-&lt;p&gt;並不符合地２點，Bean之前在上面是有依賴關係的，所以Mock測試的&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;目的：避免測試某一個單元測試，而去建構整個bean的依賴。&lt;/li&gt;
-&lt;li&gt;作法：創造一個假的bean，替換掉容器原有的bean。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;在程式裡面Mock的意思為「假的」的意思，而非英文單字模仿。&lt;/p&gt;
-&lt;h2 id=&#34;mockito&#34;&gt;Mockito&lt;/h2&gt;
-&lt;p&gt;Mockito是Spring Boot中，進行Mock測試的工具&lt;/p&gt;
-&lt;p&gt;功能大致上分為：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;模擬方法的返回值&lt;/li&gt;
-&lt;li&gt;模擬拋出Exception&lt;/li&gt;
-&lt;li&gt;記錄方法的使用次數、順序&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;mockbean&#34;&gt;@MockBean&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Test&lt;/span&gt;
-&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(){&lt;/span&gt;
-    &lt;span class=&#34;c1&#34;&gt;//第二步
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;mockname&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-
-  	&lt;span class=&#34;c1&#34;&gt;//這句話的意思就是，當有人使用studentDao.getById(3)時，固定return mockStudent這個object
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;thenReturn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-
-    &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentService&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;assertNotNull&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Judy&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;執行結果：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;org.opentest4j.AssertionFailedError: 
-Expected :3
-Actual   :100
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;再把&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;assertEquals(3,student.getId());&lt;/code&gt;改成&lt;code&gt;assertEquals(3,student.getId());&lt;/code&gt;就會顯示測試成功了&lt;/p&gt;
-&lt;h3 id=&#34;使用mockbean注意事項&#34;&gt;使用MockBean注意事項&lt;/h3&gt;
-&lt;p&gt;承上，如果把&lt;code&gt;Student student=studentService.getById(3)&lt;/code&gt;改成了&lt;code&gt;Student student=studentService.getById(2)&lt;/code&gt;下面的單元測試依然會運行錯誤，&lt;strong&gt;原因是因為在沒有定義返回值是多少的情況下，這個假的mockbean預設會傳NULL&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Test&lt;/span&gt;
-&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(){&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;mockname&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-		&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;thenReturn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-
-    &lt;span class=&#34;n&#34;&gt;Student&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentService&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;assertNotNull&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;assertEquals&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Judy&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;student&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以我們會利用&lt;/p&gt;
-&lt;h3 id=&#34;mockitoany&#34;&gt;Mockito.any()&lt;/h3&gt;
-&lt;p&gt;來固定返回mockStudent這個數值&lt;/p&gt;
-&lt;p&gt;由&lt;code&gt;Mockito.when(studentDao.getById(3)).thenReturn(mockStudent);&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;變成&lt;code&gt;Mockito.when(studentDao.getById(Mockito.any())).thenReturn(mockStudent);&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;這樣不論參數是多少，都還是會固定返回mockStudent出來。&lt;/p&gt;
-&lt;h3 id=&#34;補充thenreturn-doreturn&#34;&gt;補充thenReturn doReturn&lt;/h3&gt;
-&lt;p&gt;其實只是寫法上的不同，下面的程式碼是等價的&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;())).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;thenReturn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;doReturn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mockStudent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()));&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;throw-expection&#34;&gt;Throw Expection&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;insert&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;())).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;thenThrow&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RuntimeException&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;doThrow&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RuntimeException&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;deleteById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;verify&#34;&gt;Verify&lt;/h3&gt;
-&lt;p&gt;用來記錄方法的使用次數、順序（少用）&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;doThrow&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RuntimeException&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;when&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;studentDao&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;deleteById&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Mockito&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;mockito-的限制&#34;&gt;Mockito 的限制&lt;/h3&gt;
-&lt;p&gt;上述就是 Mockito 的 mock 對象使用方法，不過當使用 Mockito 在 mock 對象時，有一些限制需要遵守&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;不能 mock 靜態方法&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;不能 mock private 方法&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;不能 mock final class&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 </description>
         </item>
         <item>

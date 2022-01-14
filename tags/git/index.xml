@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on Yen&#39;s部落格</title>
+    <link>https://yen0304.github.io/tags/git/</link>
+    <description>Recent content in Git on Yen&#39;s部落格</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Fri, 14 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GIT學習筆記－從初始化到上傳至遠端數據庫</title>
+      <link>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/</link>
+      <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/</guid>
+      <description>GIT學習筆記－從初始化到上傳至遠端數據庫 前言 在看工作的時候，發現很多公司都希望擁有git的經驗，雖然有過使用Github Desktop的經驗，但是還是想知道背後的原理，所以就開始上網查資料學習了。
+可以參考這位六角學院的老師文章還有YT影片，實在是免費又大碗（淚。
+安裝＆測試 用終端機使用brew安裝git：
+Install command:
+brew install git 測試：
+打開終端機，輸入 git --version
+➜ ~ git --version git version 2.34.1 就代表安裝成功了
+Git基礎操作 首先這邊學習到終端機的使用，可以快速的移動到專案資料夾，
+設定個人資訊 git config --global user.name &amp;#34;您的姓名&amp;#34; git config --global user.email &amp;#34;您的Email&amp;#34; 查詢設定是否成功 git config --list 成功顯示之後按下q離開
+新建數據庫(Repository) 在電腦新增資料夾後，透過cd前往，在執行git指令$ git init，
+$ git init 接著到資料夾，並顯示隱藏檔案，就會看到.git資料夾了。
+接著到了
+版控流程  開新資料夾，git init 建立數據庫 新增一個 index.html 檔案  接著輸入git status
+到這裡應該會出現：
+ 結果 
+可以看到終端機告訴我們；
+➜ gitTest git:(master) git status 位於分支 master 尚無提交 未追蹤的檔案: （使用 &amp;#34;git add &amp;lt;檔案&amp;gt;.</description>
+    </item>
+    
+  </channel>
+</rss>

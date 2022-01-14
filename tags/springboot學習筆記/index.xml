@@ -6,7 +6,28 @@
     <description>Recent content in SpringBoot學習筆記 on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Thu, 23 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 12 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
+      <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</link>
+      <pubDate>Wed, 12 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</guid>
+      <description>SpringBoot學習筆記-單元測試(4)-Mockito 前言 部分文章內容來自於古老師在hahow的課程，還有古老師的部落格，想要做筆記的原因是因為，邊記變做會比較容易記住，改天忘了也可以用自己的方式去理解。
+Mock測試目的與特性 單元測試的特性為下：
+1.可以被自動化運行
+2.各個單元測試互相獨立，彼此之間不能有依賴關係
+3.測試結果穩定，不受外部服務影響
+在前面的筆記，如果要測試Service層的話，應該會這樣寫：
+@SpringBootTest public class StudentServiceImplMockTest { @Autowired StudentService studentService; @Test public void getById(){ Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } } 在上面的測試單元裡，StudentService其實用到了StudentDao這個Bean，
+並不符合地２點，Bean之前在上面是有依賴關係的，所以Mock測試的
+ 目的：避免測試某一個單元測試，而去建構整個bean的依賴。 作法：創造一個假的bean，替換掉容器原有的bean。  在程式裡面Mock的意思為「假的」的意思，而非英文單字模仿。
+Mockito Mockito是Spring Boot中，進行Mock測試的工具
+功能大致上分為：
+ 模擬方法的返回值 模擬拋出Exception 記錄方法的使用次數、順序  @MockBean @Test public void getById(){ //第二步  Student mockStudent = new Student(); mockStudent.setId(100); mockStudent.setName(&amp;#34;mockname&amp;#34;); //這句話的意思就是，當有人使用studentDao.getById(3)時，固定return mockStudent這個object  Mockito.when(studentDao.getById(3)).thenReturn(mockStudent); Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } 執行結果：
+org.opentest4j.AssertionFailedError: Expected :3 Actual :100 再把</description>
+    </item>
+    
     <item>
       <title>Freemarker &#43; Spring Security 整合</title>
       <link>https://yen0304.github.io/p/freemarker-spring-security-%E6%95%B4%E5%90%88/</link>
@@ -39,27 +60,6 @@ Controller層 應該沒什麼好解釋的
 使用範例：
 @Transactional @Test public void deleteById(){ studentDao.deleteById(1); Student student =studentDao.getById(1); assertNull(student); } 不同的@Transactional註解 @Transactional在不同的資料夾下，有不同的差異，
    資料夾 @Transactional公用     main資料夾 程式運行中發生錯誤才進行rollback   test資料夾 單元測試結束之後，強制執行rollback    Controller層的測試 Controller層的測試目的在於，要模擬前端呼叫真實API CAll的行為，看API是否能運行正確，並且不能透過注入Bean的方式來測試，意思就是模擬http request</description>
-    </item>
-    
-    <item>
-      <title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
-      <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</link>
-      <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</guid>
-      <description>SpringBoot學習筆記-單元測試(4)-Mockito 前言 部分文章內容來自於古老師在hahow的課程，還有古老師的部落格，想要做筆記的原因是因為，邊記變做會比較容易記住，改天忘了也可以用自己的方式去理解。
-Mock測試目的與特性 單元測試的特性為下：
-1.可以被自動化運行
-2.各個單元測試互相獨立，彼此之間不能有依賴關係
-3.測試結果穩定，不受外部服務影響
-在前面的筆記，如果要測試Service層的話，應該會這樣寫：
-@SpringBootTest public class StudentServiceImplMockTest { @Autowired StudentService studentService; @Test public void getById(){ Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } } 在上面的測試單元裡，StudentService其實用到了StudentDao這個Bean，
-並不符合地２點，Bean之前在上面是有依賴關係的，所以Mock測試的
- 目的：避免測試某一個單元測試，而去建構整個bean的依賴。 作法：創造一個假的bean，替換掉容器原有的bean。  在程式裡面Mock的意思為「假的」的意思，而非英文單字模仿。
-Mockito Mockito是Spring Boot中，進行Mock測試的工具
-功能大致上分為：
- 模擬方法的返回值 模擬拋出Exception 記錄方法的使用次數、順序  @MockBean @Test public void getById(){ //第二步  Student mockStudent = new Student(); mockStudent.setId(100); mockStudent.setName(&amp;#34;mockname&amp;#34;); //這句話的意思就是，當有人使用studentDao.getById(3)時，固定return mockStudent這個object  Mockito.when(studentDao.getById(3)).thenReturn(mockStudent); Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } 執行結果：
-org.opentest4j.AssertionFailedError: Expected :3 Actual :100 再把</description>
     </item>
     
     <item>

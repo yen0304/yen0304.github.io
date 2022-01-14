@@ -6,26 +6,11 @@
     <description>Recent content in SpringBoot單元測試 on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Wed, 22 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/springboot%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 </title>
-      <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/</link>
-      <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/</guid>
-      <description>SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 Dao層以及Service層的測試方式 使用JUnit5測試SpringBoot程式 @SpringBootTest註解  只要在測試用的class上面加上@SpringBootTest，就會在單元測試時啟動Spring容器，也會創建Bean出來 這個@SpringBootTest的註解的功能非常完善，除了創建Bean之外，@Configuration或是攔截器Interceptor都會被生效，也就是等同於運行SpringBoot程式。 通常會把測試用的class變成public，  做好了準備之後可以運行看看成效以及顯示的結果為何：
-@SpringBootTest public class StudentDaoImplTest { //注入bean  @Autowired private StudentDao studentDao; @Test public void getById(){ Student student = studentDao.getById(1); assertNotNull(student); assertEquals(&amp;#34;Amy&amp;#34;,student.getName()); } } 運行成果：
- 
-@Transactional註解 假設今天我們透過@Test想測試deleteById的方法時，實際上是會去真實刪除資料庫裡面的數據的，所以如果先執行了測試deleteById，在執行測試getById，這時候如果Id是一樣的情況下，就會影響到測試結果，雖然可以透過測試不同的Id來避免此情況，但在越複雜的專案時此方法很不適合，所以我們可以透過加上@Transactional註解，在單元測試結束之後，SpringBoot會去rollback（回滾）這個單元測試裡面所有的資料庫操作。
-使用範例：
-@Transactional @Test public void deleteById(){ studentDao.deleteById(1); Student student =studentDao.getById(1); assertNull(student); } 不同的@Transactional註解 @Transactional在不同的資料夾下，有不同的差異，
-   資料夾 @Transactional公用     main資料夾 程式運行中發生錯誤才進行rollback   test資料夾 單元測試結束之後，強制執行rollback    Controller層的測試 Controller層的測試目的在於，要模擬前端呼叫真實API CAll的行為，看API是否能運行正確，並且不能透過注入Bean的方式來測試，意思就是模擬http request</description>
-    </item>
-    
+    <lastBuildDate>Wed, 12 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/springboot%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
       <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</link>
-      <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 12 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</guid>
       <description>SpringBoot學習筆記-單元測試(4)-Mockito 前言 部分文章內容來自於古老師在hahow的課程，還有古老師的部落格，想要做筆記的原因是因為，邊記變做會比較容易記住，改天忘了也可以用自己的方式去理解。
@@ -41,6 +26,21 @@ Mockito Mockito是Spring Boot中，進行Mock測試的工具
 功能大致上分為：
  模擬方法的返回值 模擬拋出Exception 記錄方法的使用次數、順序  @MockBean @Test public void getById(){ //第二步  Student mockStudent = new Student(); mockStudent.setId(100); mockStudent.setName(&amp;#34;mockname&amp;#34;); //這句話的意思就是，當有人使用studentDao.getById(3)時，固定return mockStudent這個object  Mockito.when(studentDao.getById(3)).thenReturn(mockStudent); Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } 執行結果：
 org.opentest4j.AssertionFailedError: Expected :3 Actual :100 再把</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 </title>
+      <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/</link>
+      <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A63-controller%E5%B1%A4dao%E5%B1%A4service%E5%B1%A4%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%96%B9%E5%BC%8Fmockmvc%E4%BD%BF%E7%94%A8%E8%A9%B3%E8%A7%A3/</guid>
+      <description>SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解 Dao層以及Service層的測試方式 使用JUnit5測試SpringBoot程式 @SpringBootTest註解  只要在測試用的class上面加上@SpringBootTest，就會在單元測試時啟動Spring容器，也會創建Bean出來 這個@SpringBootTest的註解的功能非常完善，除了創建Bean之外，@Configuration或是攔截器Interceptor都會被生效，也就是等同於運行SpringBoot程式。 通常會把測試用的class變成public，  做好了準備之後可以運行看看成效以及顯示的結果為何：
+@SpringBootTest public class StudentDaoImplTest { //注入bean  @Autowired private StudentDao studentDao; @Test public void getById(){ Student student = studentDao.getById(1); assertNotNull(student); assertEquals(&amp;#34;Amy&amp;#34;,student.getName()); } } 運行成果：
+ 
+@Transactional註解 假設今天我們透過@Test想測試deleteById的方法時，實際上是會去真實刪除資料庫裡面的數據的，所以如果先執行了測試deleteById，在執行測試getById，這時候如果Id是一樣的情況下，就會影響到測試結果，雖然可以透過測試不同的Id來避免此情況，但在越複雜的專案時此方法很不適合，所以我們可以透過加上@Transactional註解，在單元測試結束之後，SpringBoot會去rollback（回滾）這個單元測試裡面所有的資料庫操作。
+使用範例：
+@Transactional @Test public void deleteById(){ studentDao.deleteById(1); Student student =studentDao.getById(1); assertNull(student); } 不同的@Transactional註解 @Transactional在不同的資料夾下，有不同的差異，
+   資料夾 @Transactional公用     main資料夾 程式運行中發生錯誤才進行rollback   test資料夾 單元測試結束之後，強制執行rollback    Controller層的測試 Controller層的測試目的在於，要模擬前端呼叫真實API CAll的行為，看API是否能運行正確，並且不能透過注入Bean的方式來測試，意思就是模擬http request</description>
     </item>
     
     <item>

@@ -349,7 +349,45 @@ if (!doNotTrack) {
 </tr>
 </tbody>
 </table>
-<h2 id="子查詢">子查詢</h2>
+<h2 id="leetcode題目182113更新">Leetcode題目182.(1/13更新)</h2>
+<p>在DB中Leetcode的<a class="link" href="https://leetcode.com/problems/duplicate-emails"  target="_blank" rel="noopener"
+    >182. Duplicate Emails</a>題目如下：</p>
+<pre><code>+-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key column for this table.
+Each row of this table contains an email. The emails will not contain uppercase letters
+</code></pre><p>Write an SQL query to report all the duplicate emails.</p>
+<p>Return the result table in <strong>any order</strong>.</p>
+<p>The query result format is in the following example.</p>
+<p>Example1.</p>
+<pre><code>Input: 
+Person table:
++----+---------+
+| id | email   |
++----+---------+
+| 1  | a@b.com |
+| 2  | c@d.com |
+| 3  | a@b.com |
++----+---------+
+Output: 
++---------+
+| Email   |
++---------+
+| a@b.com |
++---------+
+Explanation: a@b.com is repeated two times.
+</code></pre><p>意思就是要找出重複的email，</p>
+<p>所以我們可以利用GROUP BY選出重複數量，再利用HAVING先執行在篩選的概念，再把大於2的email count列印出來，解答：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w">  </span><span class="n">email</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">Email</span><span class="w">
+</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Person</span><span class="w">
+</span><span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">email</span><span class="w">
+</span><span class="w">    </span><span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">email</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><h2 id="子查詢">子查詢</h2>
 <p>子查詢就是在一個Select指令內再放入一個Select查詢指令進行查詢，通常是位在Select的Where子句，可以透過子查詢取得查詢條件。</p>
 <p>簡單來說，如果我們想在WHERE後面的條件來自於資料表的值、查詢結果，所以通常這個子查詢SELECT後面的欄位只會一個(例如123)，因為我們不會在WHERE後面放 where a=（123,456 )這樣在語法上就錯誤了，</p>
 <h3 id="使用子查詢撰寫流程技巧">使用子查詢撰寫流程技巧</h3>
@@ -407,8 +445,48 @@ if (!doNotTrack) {
 </span><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w">
 </span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">runtime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">MIN</span><span class="p">(</span><span class="n">runtime</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">minimum_runtime</span><span class="w">  
 </span><span class="w">  									</span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="p">;)</span><span class="w">
-</span></code></pre></div><p>差不多就是這樣！</p>
-
+</span></code></pre></div><h2 id="leetcode題目183113更新">Leetcode題目183.(1/13更新)</h2>
+<p>在<a class="link" href="https://leetcode.com/problems/customers-who-never-order"  target="_blank" rel="noopener"
+    >183. Customers Who Never Order</a>中，</p>
+<p>題目：</p>
+<p>Write an SQL query to report all customers who never order anything.</p>
+<p>Return the result table in <strong>any order</strong>.</p>
+<p>The query result format is in the following example.</p>
+<pre><code>Input: 
+Customers table:
++----+-------+
+| id | name  |
++----+-------+
+| 1  | Joe   |
+| 2  | Henry |
+| 3  | Sam   |
+| 4  | Max   |
++----+-------+
+Orders table:
++----+------------+
+| id | customerId |
++----+------------+
+| 1  | 3          |
+| 2  | 1          |
++----+------------+
+Output: 
++-----------+
+| Customers |
++-----------+
+| Henry     |
+| Max       |
++-----------+
+</code></pre><p>意思就是要從顧客名單Customers table裡面，從Orders挑出還沒點餐的顧客</p>
+<p>這題如果我們在已知customerId的情況會這樣寫：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">Customers</span><span class="w">
+</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Customers</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">a</span><span class="w">
+</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w">
+</span></code></pre></div><p>所以我們只要利用子查詢返回1.3就可以了！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">Customers</span><span class="w">
+</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Customers</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">a</span><span class="w">
+</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">customerId</span><span class="w">
+</span><span class="w">                        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Orders</span><span class="p">)</span><span class="w">
+</span></code></pre></div>
 </section>
 
 
@@ -671,11 +749,13 @@ if (!doNotTrack) {
       </ol>
     </li>
     <li><a href="#having">HAVING</a></li>
+    <li><a href="#leetcode題目182113更新">Leetcode題目182.(1/13更新)</a></li>
     <li><a href="#子查詢">子查詢</a>
       <ol>
         <li><a href="#使用子查詢撰寫流程技巧">使用子查詢撰寫流程技巧</a></li>
       </ol>
     </li>
+    <li><a href="#leetcode題目183113更新">Leetcode題目183.(1/13更新)</a></li>
   </ol>
 </nav>
                 </div>

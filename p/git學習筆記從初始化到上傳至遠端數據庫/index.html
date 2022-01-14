@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='如何使用git基礎語法，從0到成功上傳到遠端數據庫（GITHUB）'><title>GIT學習筆記－從初始化到上傳至遠端數據庫</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='GIT學習筆記－從初始化到上傳至遠端數據庫'>
+<meta property='og:description' content='如何使用git基礎語法，從0到成功上傳到遠端數據庫（GITHUB）'>
+<meta property='og:url' content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Git學習筆記' /><meta property='article:tag' content='Git' /><meta property='article:published_time' content='2022-01-14'/><meta property='article:modified_time' content='2022-01-14'/><meta property='og:image' content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/logo.jpeg' />
+<meta name="twitter:title" content="GIT學習筆記－從初始化到上傳至遠端數據庫">
+<meta name="twitter:description" content="如何使用git基礎語法，從0到成功上傳到遠端數據庫（GITHUB）"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/">
+                <img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/logo_hu0871f2e332734283fcd708b643f05707_22105_800x0_resize_q75_box.jpeg"
+                        srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/logo_hu0871f2e332734283fcd708b643f05707_22105_800x0_resize_q75_box.jpeg 800w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/logo_hu0871f2e332734283fcd708b643f05707_22105_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="420" 
+                        loading="lazy"
+                        alt="Featured image of post GIT學習筆記－從初始化到上傳至遠端數據庫" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                Git學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/">GIT學習筆記－從初始化到上傳至遠端數據庫</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        如何使用git基礎語法，從0到成功上傳到遠端數據庫（GITHUB）
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-01-14</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="git學習筆記從初始化到上傳至遠端數據庫">GIT學習筆記－從初始化到上傳至遠端數據庫</h1>
+<h2 id="前言">前言</h2>
+<p>在看工作的時候，發現很多公司都希望擁有git的經驗，雖然有過使用Github Desktop的經驗，但是還是想知道背後的原理，所以就開始上網查資料學習了。</p>
+<p>可以參考這位六角學院的老師<a class="link" href="https://w3c.hexschool.com/git/cfdbd310"  target="_blank" rel="noopener"
+    >文章</a>還有<a class="link" href="https://www.youtube.com/watch?v=o0ngrUEh3hU&amp;list=PLYrA-SsMvTPOZeB6DHvB0ewl3miMf-2tj&amp;index=10"  target="_blank" rel="noopener"
+    >YT影片</a>，實在是免費又大碗（淚。</p>
+<h2 id="安裝測試">安裝＆測試</h2>
+<p>用終端機使用brew安裝git：</p>
+<p>Install command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">brew install git
+</code></pre></div><p>測試：</p>
+<p>打開終端機，輸入 <code>git --version</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  ~ git --version
+git version 2.34.1
+</code></pre></div><p>就代表安裝成功了</p>
+<h2 id="git基礎操作">Git基礎操作</h2>
+<p>首先這邊學習到<a class="link" href="https://w3c.hexschool.com/git/8dc4619b"  target="_blank" rel="noopener"
+    >終端機的使用</a>，可以快速的移動到專案資料夾，</p>
+<h3 id="設定個人資訊">設定個人資訊</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git config --global user.name <span class="s2">&#34;您的姓名&#34;</span>
+git config --global user.email <span class="s2">&#34;您的Email&#34;</span>
+</code></pre></div><h3 id="查詢設定是否成功">查詢設定是否成功</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git config --list
+</code></pre></div><p>成功顯示之後按下q離開</p>
+<h3 id="新建數據庫repository">新建數據庫(Repository)</h3>
+<p>在電腦新增資料夾後，透過cd前往，在執行git指令<code>$ git init</code>，</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ git init
+</code></pre></div><p>接著到資料夾，並顯示隱藏檔案，就會看到.git資料夾了。</p>
+<p>接著到了</p>
+<h3 id="版控流程">版控流程</h3>
+<ol>
+<li>開新資料夾，<code>git init</code> 建立數據庫</li>
+<li>新增一個 <code>index.html</code> 檔案</li>
+</ol>
+<p>接著輸入<code>git status</code></p>
+<p>到這裡應該會出現：</p>
+<p><figure style="flex-grow: 228; flex-basis: 549px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/%EF%BC%91.png" data-size="2870x1254"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/%EF%BC%91.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/%EF%BC%91_huc8c5cfe469d9d8686f70bbce294d0639_392511_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/%EF%BC%91_huc8c5cfe469d9d8686f70bbce294d0639_392511_1024x0_resize_box_3.png 1024w"
+				width="2870"
+				height="1254"
+				loading="lazy"
+				alt="結果">
+		</a>
+		
+		<figcaption>結果</figcaption>
+		
+	</figure></p>
+<p>可以看到終端機告訴我們；</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> git status
+位於分支 master
+
+尚無提交
+
+未追蹤的檔案:
+  （使用 <span class="s2">&#34;git add &lt;檔案&gt;...&#34;</span> 以包含要提交的內容）
+	index.html
+
+提交為空，但是存在尚未追蹤的檔案（使用 <span class="s2">&#34;git add&#34;</span> 建立追蹤）
+</code></pre></div><p>意思就是偵測到了檔案，但是他不是git所追蹤的對象，那就照他所說的</p>
+<h3 id="將檔案加入到索引">將檔案加入到索引</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git add &lt;檔案名稱&gt;
+</code></pre></div><p>如果要將全部未追蹤加入索引的全部加入，</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git add .
+</code></pre></div><p>結果</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git status
+位於分支 master
+
+尚無提交
+
+要提交的變更：
+  （使用 <span class="s2">&#34;git rm --cached &lt;檔案&gt;...&#34;</span> 以取消暫存）
+	新檔案：   index.html
+</code></pre></div><p>可以看到從「未追蹤的檔案」變成「要提交的變更」（英文的話是Untracked files變成Changes to be committed）</p>
+<h3 id="填寫版本資訊">填寫版本資訊</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git commit -m <span class="s2">&#34;&lt;填寫版本資訊&gt;&#34;</span>
+</code></pre></div><p>輸入<code>git commit -m &quot;新增網頁&quot;</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git commit -m <span class="s2">&#34;新增網頁&#34;</span>
+<span class="o">[</span>master <span class="o">(</span>根提交<span class="o">)</span> 03dcd4c<span class="o">]</span> 新增網頁
+ <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+ create mode <span class="m">100644</span> index.html
+</code></pre></div><p>再使用<code>git status</code>查看</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">位於分支 master
+沒有要提交的檔案，工作區為乾淨狀態
+</code></pre></div><h3 id="查詢歷史紀錄">查詢歷史紀錄</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git log
+</code></pre></div><p>輸出：</p>
+<pre><code>commit 03dcd4c0bbd54f72a67aaaf74092eb454b981957 (HEAD -&gt; master)
+Author: a＊＊＊＊＊＊3 &lt;a＊＊＊＊＊3@gmail.com&gt;
+Date:   Mon Jan 10 16:59:05 2022 +0800
+
+    新增網頁
+
+(END)
+</code></pre><p>一樣小寫q退出。</p>
+<h3 id="總結">總結</h3>
+<p>目前實現了：</p>
+<h3 id="來源httpsw3chexschoolcomgitb9be5b1e2png"><figure style="flex-grow: 246; flex-basis: 592px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/2.png" data-size="953x386"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/2.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/2_hu4b45238746bac83146e3812a66be4fe4_23861_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/2_hu4b45238746bac83146e3812a66be4fe4_23861_1024x0_resize_box_3.png 1024w"
+				width="953"
+				height="386"
+				loading="lazy"
+				alt="來源">
+		</a>
+		
+		<figcaption>來源</figcaption>
+		
+	</figure></h3>
+<p>學習了：</p>
+<p>Git 是如何追蹤檔案變化的</p>
+<ol>
+<li>當我們建立數據庫後，立即新增一個檔案時，用 <code>git status</code> 查詢，會發現它是在 <code>Untracked</code> 狀態。</li>
+<li>這就表示此檔案還沒進到版本控制，藉由 <code>git add .</code> 將檔案加入到索引 (Staged) 後，準備提交成一個 commit 版本。</li>
+<li>藉由 <code>git commit -m &lt;提交訊息&gt;</code> 後，該檔案就會開始被追蹤，檔案狀態就會變成 <code>UnModified</code> 狀態。</li>
+</ol>
+<p><figure style="flex-grow: 207; flex-basis: 498px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/3.png" data-size="819x394"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/3.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/3_huebe692c53dc9762ed45beff33059ab70_105448_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/3_huebe692c53dc9762ed45beff33059ab70_105448_1024x0_resize_box_3.png 1024w"
+				width="819"
+				height="394"
+				loading="lazy"
+				alt="3">
+		</a>
+		
+		<figcaption>3</figcaption>
+		
+	</figure></p>
+<p>接著稍微練習一下，</p>
+<p>新增兩個檔案，並查詢狀態，並用git add .開起全部追蹤</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git status
+位於分支 master
+未追蹤的檔案:
+  （使用 <span class="s2">&#34;git add &lt;檔案&gt;...&#34;</span> 以包含要提交的內容）
+	all.css
+	all.js
+
+提交為空，但是存在尚未追蹤的檔案（使用 <span class="s2">&#34;git add&#34;</span> 建立追蹤）
+➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git add *
+➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git status
+位於分支 master
+要提交的變更：
+  （使用 <span class="s2">&#34;git restore --staged &lt;檔案&gt;...&#34;</span> 以取消暫存）
+	新檔案：   all.css
+	新檔案：   all.js
+
+➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git commit -m <span class="s2">&#34;加入兩個檔案css&amp;js&#34;</span>
+<span class="o">[</span>master ab3e252<span class="o">]</span> 加入兩個檔案css<span class="p">&amp;</span>js
+ <span class="m">2</span> files changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+ create mode <span class="m">100644</span> all.css
+ create mode <span class="m">100644</span> all.js
+➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> git status
+位於分支 master
+沒有要提交的檔案，工作區為乾淨狀態
+➜  gitTest git:<span class="o">(</span>master<span class="o">)</span>
+</code></pre></div><h2 id="sourcetree">Sourcetree</h2>
+<p>Sourcetree是一個介面圖形化的軟體，讓我們可以用點擊的方式來完成git指令。</p>
+<p>可以在介面上看到有一個new repository點擊之後再按Add Existing Local Repository，打開已經建立好的數據庫。</p>
+<p><figure style="flex-grow: 153; flex-basis: 367px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st1.png" data-size="1965x1284"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st1.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st1_hu188e791dcfb9b3e1d885f3d68aa50729_403071_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st1_hu188e791dcfb9b3e1d885f3d68aa50729_403071_1024x0_resize_box_3.png 1024w"
+				width="1965"
+				height="1284"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>選擇我們剛剛所建立的資料夾之後，就會看到上面畫面中多了一個數據庫可以選擇，點擊右鍵兩下，就可以看到數據庫的資訊了，如下圖：</p>
+<p><figure style="flex-grow: 159; flex-basis: 383px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st2.png" data-size="2082x1302"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st2.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st2_hu3877de950bfb5d413ccb0db0e87992c0_357428_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st2_hu3877de950bfb5d413ccb0db0e87992c0_357428_1024x0_resize_box_3.png 1024w"
+				width="2082"
+				height="1302"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>當我們把程式進行改變、新增檔案可以看多了</p>
+<p>Uncommitted changes的選項，也可以看到檔案路徑被改變、或是新增哪些程式碼的資訊</p>
+<p><figure style="flex-grow: 162; flex-basis: 390px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st3.png" data-size="2096x1288"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st3.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st3_hua5b1c41932e4126a2edd494fcea0ee49_432077_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st3_hua5b1c41932e4126a2edd494fcea0ee49_432077_1024x0_resize_box_3.png 1024w"
+				width="2096"
+				height="1288"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>這時候，這些檔案的位置還在工作目錄，也就是尚加入索引Uncommitted</p>
+<p><figure style="flex-grow: 156; flex-basis: 374px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/main.jpg" data-size="1218x780"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/main.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/main_huf4a1448afb4fd29f424975e93c99d319_213180_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/main_huf4a1448afb4fd29f424975e93c99d319_213180_1024x0_resize_q75_box.jpg 1024w"
+				width="1218"
+				height="780"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>所以要透過git add .來加入索引，在sourcetree想要進行add操作來加入commit，只要將要加入索引的檔案打勾，在按下commit按鍵，就會跳到commit畫面。</p>
+<p><figure style="flex-grow: 165; flex-basis: 396px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st4.png" data-size="2084x1260"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st4.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st4_hu407089be3c114c793125b9cdcebb7ff7_445144_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st4_hu407089be3c114c793125b9cdcebb7ff7_445144_1024x0_resize_box_3.png 1024w"
+				width="2084"
+				height="1260"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>接著在下面設定好我們要commit的名稱，並按下藍色commit</p>
+<p><figure style="flex-grow: 161; flex-basis: 387px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st5.png" data-size="2086x1292"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st5.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st5_huff37d2f8cd40948b5b1607cf2a76c919_268379_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st5_huff37d2f8cd40948b5b1607cf2a76c919_268379_1024x0_resize_box_3.png 1024w"
+				width="2086"
+				height="1292"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>上面的操作即等於</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git commit -m <span class="s2">&#34;新增h1標題更改路徑&#34;</span>
+</code></pre></div><p>就成功了</p>
+<h2 id="新增遠端數據庫-repo">新增遠端數據庫 repo</h2>
+<p>在github新增資料庫就像我們在github執行git init一樣，</p>
+<p>所以到github new repository之後，可以看到github給了一些git指令</p>
+<p><figure style="flex-grow: 206; flex-basis: 496px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/github1.jpg" data-size="2284x1104"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/github1.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/github1_hud696d4a7e5ef40aa25a5cd7f206ceafb_451693_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/github1_hud696d4a7e5ef40aa25a5cd7f206ceafb_451693_1024x0_resize_q75_box.jpg 1024w"
+				width="2284"
+				height="1104"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>接著複製</p>
+<p><code>git remote add origin https://github.com/yen0304/test.git</code>到終端機並執行後，雖然乍看之下沒有變化，但是到隱藏的資料夾後，打開config檔案，看到origin就代表成功了。</p>
+<p><figure style="flex-grow: 287; flex-basis: 690px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/git1.png" data-size="2444x850"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/git1.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/git1_hu5bed2b243245909dfca0c97186b8cacf_406692_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/git1_hu5bed2b243245909dfca0c97186b8cacf_406692_1024x0_resize_box_3.png 1024w"
+				width="2444"
+				height="850"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>再來看到push的指令</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git push -u origin
+</code></pre></div><p>輸入帳號密碼就成功了，那我是使用SSH的方式，
+可以按照<a class="link" href="https://blog.jaycetyle.com/2018/02/github-ssh/"  target="_blank" rel="noopener"
+    >這篇文章</a>來設定公鑰來使用，這樣就不用輸入帳號密碼了！</p>
+<ul>
+<li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"> he list of known hosts.
+ 枚舉物件: 10, 完成.
+ 物件計數中: 100% <span class="o">(</span>10/10<span class="o">)</span>, 完成.
+ 使用 <span class="m">8</span> 個執行緒進行壓縮
+ 壓縮物件中: 100% <span class="o">(</span>6/6<span class="o">)</span>, 完成.
+ 寫入物件中: 100% <span class="o">(</span>10/10<span class="o">)</span>, <span class="m">995</span> 位元組 <span class="p">|</span> 995.00 KiB/s, 完成.
+ 總共 <span class="m">10</span> <span class="o">(</span>差異 0<span class="o">)</span>，復用 <span class="m">0</span> <span class="o">(</span>差異 0<span class="o">)</span>，重用包 <span class="m">0</span>
+ To github.com:yen0304/test.git
+
+* <span class="o">[</span>new branch<span class="o">]</span>      master -&gt; master
+  分支 <span class="s1">&#39;master&#39;</span> 設定為追蹤來自 <span class="s1">&#39;origin&#39;</span> 的遠端分支 <span class="s1">&#39;master&#39;</span>。
+
+
+
+</code></pre></div></li>
+</ul>
+<p>接著回到github，就可以看到檔案完成上傳了！</p>
+<p><figure style="flex-grow: 229; flex-basis: 550px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/success1.jpg" data-size="1650x720"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/success1.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/success1_hucf4434b75128d02a88afaa1690be9b0b_245571_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/success1_hucf4434b75128d02a88afaa1690be9b0b_245571_1024x0_resize_q75_box.jpg 1024w"
+				width="1650"
+				height="720"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>那之後如果進行程式碼更改的時候，從Sourcetree可以看到</p>
+<p>Master 還有 Origin/Master，
+這兩者Master所代表的是本地端的commit，Origin/master則是遠端數據庫的commit。</p>
+<p><figure style="flex-grow: 271; flex-basis: 651px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st6.jpg" data-size="874x322"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st6.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st6_hub2de60b4f553287448e972b9d779c158_48813_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/st6_hub2de60b4f553287448e972b9d779c158_48813_1024x0_resize_q75_box.jpg 1024w"
+				width="874"
+				height="322"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>到了這邊，就可以自行使用git來進行版本控制了，
+接下來就要學會如何與團隊共同使用git。</p>
+<h2 id="github">GITHUB</h2>
+<p>如果需要文章中的檔案，可以到https://github.com/yen0304/test來下載。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">Git學習筆記</a>
+        
+            <a href="/tags/git/">Git</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#安裝測試">安裝＆測試</a></li>
+    <li><a href="#git基礎操作">Git基礎操作</a>
+      <ol>
+        <li><a href="#設定個人資訊">設定個人資訊</a></li>
+        <li><a href="#查詢設定是否成功">查詢設定是否成功</a></li>
+        <li><a href="#新建數據庫repository">新建數據庫(Repository)</a></li>
+        <li><a href="#版控流程">版控流程</a></li>
+        <li><a href="#將檔案加入到索引">將檔案加入到索引</a></li>
+        <li><a href="#填寫版本資訊">填寫版本資訊</a></li>
+        <li><a href="#查詢歷史紀錄">查詢歷史紀錄</a></li>
+        <li><a href="#總結">總結</a></li>
+        <li><a href="#來源httpsw3chexschoolcomgitb9be5b1e2png"><img src="2.png" alt="來源"></a></li>
+      </ol>
+    </li>
+    <li><a href="#sourcetree">Sourcetree</a></li>
+    <li><a href="#新增遠端數據庫-repo">新增遠端數據庫 repo</a></li>
+    <li><a href="#github">GITHUB</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -6,7 +6,53 @@
     <description>Recent content in Posts on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Wed, 12 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 14 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GIT學習筆記－從初始化到上傳至遠端數據庫</title>
+      <link>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/</link>
+      <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/</guid>
+      <description>GIT學習筆記－從初始化到上傳至遠端數據庫 前言 在看工作的時候，發現很多公司都希望擁有git的經驗，雖然有過使用Github Desktop的經驗，但是還是想知道背後的原理，所以就開始上網查資料學習了。
+可以參考這位六角學院的老師文章還有YT影片，實在是免費又大碗（淚。
+安裝＆測試 用終端機使用brew安裝git：
+Install command:
+brew install git 測試：
+打開終端機，輸入 git --version
+➜ ~ git --version git version 2.34.1 就代表安裝成功了
+Git基礎操作 首先這邊學習到終端機的使用，可以快速的移動到專案資料夾，
+設定個人資訊 git config --global user.name &amp;#34;您的姓名&amp;#34; git config --global user.email &amp;#34;您的Email&amp;#34; 查詢設定是否成功 git config --list 成功顯示之後按下q離開
+新建數據庫(Repository) 在電腦新增資料夾後，透過cd前往，在執行git指令$ git init，
+$ git init 接著到資料夾，並顯示隱藏檔案，就會看到.git資料夾了。
+接著到了
+版控流程  開新資料夾，git init 建立數據庫 新增一個 index.html 檔案  接著輸入git status
+到這裡應該會出現：
+ 結果 
+可以看到終端機告訴我們；
+➜ gitTest git:(master) git status 位於分支 master 尚無提交 未追蹤的檔案: （使用 &amp;#34;git add &amp;lt;檔案&amp;gt;.</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
+      <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</link>
+      <pubDate>Wed, 12 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</guid>
+      <description>SpringBoot學習筆記-單元測試(4)-Mockito 前言 部分文章內容來自於古老師在hahow的課程，還有古老師的部落格，想要做筆記的原因是因為，邊記變做會比較容易記住，改天忘了也可以用自己的方式去理解。
+Mock測試目的與特性 單元測試的特性為下：
+1.可以被自動化運行
+2.各個單元測試互相獨立，彼此之間不能有依賴關係
+3.測試結果穩定，不受外部服務影響
+在前面的筆記，如果要測試Service層的話，應該會這樣寫：
+@SpringBootTest public class StudentServiceImplMockTest { @Autowired StudentService studentService; @Test public void getById(){ Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } } 在上面的測試單元裡，StudentService其實用到了StudentDao這個Bean，
+並不符合地２點，Bean之前在上面是有依賴關係的，所以Mock測試的
+ 目的：避免測試某一個單元測試，而去建構整個bean的依賴。 作法：創造一個假的bean，替換掉容器原有的bean。  在程式裡面Mock的意思為「假的」的意思，而非英文單字模仿。
+Mockito Mockito是Spring Boot中，進行Mock測試的工具
+功能大致上分為：
+ 模擬方法的返回值 模擬拋出Exception 記錄方法的使用次數、順序  @MockBean @Test public void getById(){ //第二步  Student mockStudent = new Student(); mockStudent.setId(100); mockStudent.setName(&amp;#34;mockname&amp;#34;); //這句話的意思就是，當有人使用studentDao.getById(3)時，固定return mockStudent這個object  Mockito.when(studentDao.getById(3)).thenReturn(mockStudent); Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } 執行結果：
+org.opentest4j.AssertionFailedError: Expected :3 Actual :100 再把</description>
+    </item>
+    
     <item>
       <title>SQL學習筆記(3)-水平合併(JOIN ON)與垂直合併(UNION)</title>
       <link>https://yen0304.github.io/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/</link>
@@ -162,27 +208,6 @@ Controller層 應該沒什麼好解釋的
 使用範例：
 @Transactional @Test public void deleteById(){ studentDao.deleteById(1); Student student =studentDao.getById(1); assertNull(student); } 不同的@Transactional註解 @Transactional在不同的資料夾下，有不同的差異，
    資料夾 @Transactional公用     main資料夾 程式運行中發生錯誤才進行rollback   test資料夾 單元測試結束之後，強制執行rollback    Controller層的測試 Controller層的測試目的在於，要模擬前端呼叫真實API CAll的行為，看API是否能運行正確，並且不能透過注入Bean的方式來測試，意思就是模擬http request</description>
-    </item>
-    
-    <item>
-      <title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
-      <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</link>
-      <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</guid>
-      <description>SpringBoot學習筆記-單元測試(4)-Mockito 前言 部分文章內容來自於古老師在hahow的課程，還有古老師的部落格，想要做筆記的原因是因為，邊記變做會比較容易記住，改天忘了也可以用自己的方式去理解。
-Mock測試目的與特性 單元測試的特性為下：
-1.可以被自動化運行
-2.各個單元測試互相獨立，彼此之間不能有依賴關係
-3.測試結果穩定，不受外部服務影響
-在前面的筆記，如果要測試Service層的話，應該會這樣寫：
-@SpringBootTest public class StudentServiceImplMockTest { @Autowired StudentService studentService; @Test public void getById(){ Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } } 在上面的測試單元裡，StudentService其實用到了StudentDao這個Bean，
-並不符合地２點，Bean之前在上面是有依賴關係的，所以Mock測試的
- 目的：避免測試某一個單元測試，而去建構整個bean的依賴。 作法：創造一個假的bean，替換掉容器原有的bean。  在程式裡面Mock的意思為「假的」的意思，而非英文單字模仿。
-Mockito Mockito是Spring Boot中，進行Mock測試的工具
-功能大致上分為：
- 模擬方法的返回值 模擬拋出Exception 記錄方法的使用次數、順序  @MockBean @Test public void getById(){ //第二步  Student mockStudent = new Student(); mockStudent.setId(100); mockStudent.setName(&amp;#34;mockname&amp;#34;); //這句話的意思就是，當有人使用studentDao.getById(3)時，固定return mockStudent這個object  Mockito.when(studentDao.getById(3)).thenReturn(mockStudent); Student student=studentService.getById(3); assertNotNull(student); assertEquals(3,student.getId()); assertEquals(&amp;#34;Judy&amp;#34;,student.getName()); } 執行結果：
-org.opentest4j.AssertionFailedError: Expected :3 Actual :100 再把</description>
     </item>
     
     <item>
