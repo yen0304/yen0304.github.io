@@ -6,7 +6,221 @@
         <description>Recent content on Yen&#39;s部落格</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-tw</language>
-        <lastBuildDate>Fri, 14 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 15 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>GIT學習筆記(2)－分支、還原</title>
+        <link>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/</link>
+        <pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/logo.jpeg" alt="Featured image of post GIT學習筆記(2)－分支、還原" /&gt;&lt;h1 id=&#34;git學習筆記2分支還原協作&#34;&gt;GIT學習筆記(2)－分支、還原、協作&lt;/h1&gt;
+&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;在看工作的時候，發現很多公司都希望擁有git的經驗，雖然有過使用Github Desktop的經驗，但是還是想知道背後的原理，所以就開始上網查資料學習了。&lt;/p&gt;
+&lt;p&gt;可以參考這位六角學院的老師&lt;a class=&#34;link&#34; href=&#34;https://w3c.hexschool.com/git/cfdbd310&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;文章&lt;/a&gt;還有&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=o0ngrUEh3hU&amp;amp;list=PLYrA-SsMvTPOZeB6DHvB0ewl3miMf-2tj&amp;amp;index=10&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;YT影片&lt;/a&gt;，實在是免費又大碗（淚。&lt;/p&gt;
+&lt;h2 id=&#34;head指標&#34;&gt;HEAD指標&lt;/h2&gt;
+&lt;p&gt;HEAD就是目前指向的版本狀態，他可以指向到分支或是commit&lt;/p&gt;
+&lt;p&gt;所以要回到先前的commit的話：&lt;/p&gt;
+&lt;h3 id=&#34;查詢commit版本&#34;&gt;查詢commit版本&lt;/h3&gt;
+&lt;p&gt;1.透過 &lt;code&gt;git log&lt;/code&gt;來看所有commit&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 125; flex-basis: 301px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd1.jpg&#34; data-size=&#34;1142x908&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd1.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd1_hu4b1bc3dea1f3548265ff8302e71d22a2_230908_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd1_hu4b1bc3dea1f3548265ff8302e71d22a2_230908_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1142&#34;
+				height=&#34;908&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;在每個 commit 旁邊的亂數就是&lt;strong&gt;SHA-1&lt;/strong&gt; 值&lt;/p&gt;
+&lt;h3 id=&#34;移動head&#34;&gt;移動HEAD&lt;/h3&gt;
+&lt;p&gt;要回到最初始的時後，使用&lt;code&gt;git checkout &amp;lt;SHA-1值&amp;gt;&lt;/code&gt;，&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 178; flex-basis: 427px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd2.jpg&#34; data-size=&#34;1140x640&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd2.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd2_hu22c6bf5a59119af0e32fd8535370546b_220307_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd2_hu22c6bf5a59119af0e32fd8535370546b_220307_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1140&#34;
+				height=&#34;640&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;這時候到本地目錄查看，其實檔案都回到了該HEAD移動的commit版本。&lt;/p&gt;
+&lt;p&gt;接著可以到sourcetree查看，可以看到HEAD移動到了剛剛指定的commit版本&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 163; flex-basis: 392px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st1.jpg&#34; data-size=&#34;2104x1288&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st1.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st1_hu650435a2927b5394470531c66ba0d207_445262_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st1_hu650435a2927b5394470531c66ba0d207_445262_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;2104&#34;
+				height=&#34;1288&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id=&#34;sourcetree移動head&#34;&gt;Sourcetree移動HEAD&lt;/h3&gt;
+&lt;p&gt;如果想要sourcetrr移動HEAD的話，在想要過去的commit點擊兩下就可以了&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 161; flex-basis: 387px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st2.png&#34; data-size=&#34;2092x1296&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st2_hu9f34c39586d35cb3e251913febe422ac_587596_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st2_hu9f34c39586d35cb3e251913febe422ac_587596_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2092&#34;
+				height=&#34;1296&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;按下ok之後就可以看到檔案被加進去、HEAD也跟著移動了&lt;/p&gt;
+&lt;h3 id=&#34;回到最新的版本&#34;&gt;回到最新的版本&lt;/h3&gt;
+&lt;p&gt;如果想要回到最新的commit，使用&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git checkout master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就可以了&lt;/p&gt;
+&lt;h2 id=&#34;分支&#34;&gt;分支&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://w3c.hexschool.com/git/a8ee6eee&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;分支&lt;/a&gt;可以說是git的重頭戲了，分支的好處，就是每一條線都各司其職，做完事後，再將兩條線的功能合併，並部署上線。&lt;/p&gt;
+&lt;p&gt;舉個分支個例子，例如公司在遠端伺服器上傳了主線(origin master)，在做beta但是不想污染上線的程式碼，這時候就需要分支做beta測試等等。&lt;/p&gt;
+&lt;p&gt;大概是這些概念&lt;/p&gt;
+&lt;h3 id=&#34;建立分支git-branch&#34;&gt;建立分支(git branch)&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git branch &amp;lt;分支名稱&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在終端機輸入&lt;code&gt;git branch dev&lt;/code&gt;後，就可以從sourcetree的commit也多了一個dev&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 161; flex-basis: 386px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd3.jpg&#34; data-size=&#34;2094x1300&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd3.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd3_hu3d71096c14180aaa444fad0dac27ab49_409667_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd3_hu3d71096c14180aaa444fad0dac27ab49_409667_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;2094&#34;
+				height=&#34;1300&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接下來再&lt;/p&gt;
+&lt;h3 id=&#34;把head移到分支git-checkout&#34;&gt;把HEAD移到分支(git checkout)&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git checkout &amp;lt;分支名稱&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以用&lt;code&gt;git branch&lt;/code&gt;查看&lt;/p&gt;
+&lt;p&gt;可以看到下面圖片sourcetree（左），終端機（右）的*號都移到了dev的位置。&lt;/p&gt;
+&lt;p&gt;圈圈、*號所代表的是目前git checkout位置（HEAD）&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 186; flex-basis: 446px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st3.png&#34; data-size=&#34;1704x916&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st3.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st3_hu49447e4962f2de9440a722fce500db20_198167_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st3_hu49447e4962f2de9440a722fce500db20_198167_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1704&#34;
+				height=&#34;916&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著新增檔案index2.html並直接commit來看看變化：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;dev&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; touch index2.html
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;dev&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git add .
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;dev&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;新增index2&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;dev 0549389&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; 新增index2
+ &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; file changed, &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; insertions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; deletions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;-&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+ create mode &lt;span class=&#34;m&#34;&gt;100644&lt;/span&gt; index2.html
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;figure style=&#34;flex-grow: 110; flex-basis: 265px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/sw4.jpg&#34; data-size=&#34;1424x1286&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/sw4.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/sw4_hu5ab7a5a02cf85c2cc3330af13519f871_253528_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/sw4_hu5ab7a5a02cf85c2cc3330af13519f871_253528_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1424&#34;
+				height=&#34;1286&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;這時候HEAD的位置在dev分支，如果想要&lt;/p&gt;
+&lt;h3 id=&#34;回到主支git-checkout-master&#34;&gt;回到主支(git checkout master)&lt;/h3&gt;
+&lt;p&gt;master的話，使用&lt;code&gt;git checkout master&lt;/code&gt;移動&lt;/p&gt;
+&lt;h3 id=&#34;分支合併git-merge&#34;&gt;分支合併(git merge)&lt;/h3&gt;
+&lt;h4 id=&#34;快轉模式fast-forward&#34;&gt;快轉模式(fast-forward)&lt;/h4&gt;
+&lt;p&gt;如果我們想要commit分支的紀錄，要先讓HEAD移動到master之後，在使用&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git merge &amp;lt;分支名稱&amp;gt;&lt;/code&gt;來合併master還有我們想要的分支&lt;/p&gt;
+&lt;p&gt;所以輸入&lt;code&gt;git merge dev&lt;/code&gt;，所以此時此刻&lt;/p&gt;
+&lt;p&gt;本地master、head、dev就會在相同的地方，而因為還沒上傳到遠端數據庫，所以origin master自然而然會停留在先前的commit上，如下圖&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 110; flex-basis: 265px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm.jpg&#34; data-size=&#34;1504x1358&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm_hu540ada27c6be6ca30f2bc079af6a22ad_574004_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm_hu540ada27c6be6ca30f2bc079af6a22ad_574004_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1504&#34;
+				height=&#34;1358&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;這個合併過程，就稱為快轉模式(fast-forward)，簡單說就是當 &lt;code&gt;HEAD&lt;/code&gt; 位置是某個要被 &lt;code&gt;merge branch(dev)&lt;/code&gt; 上的初始 commit，就會觸發快轉模式。&lt;/p&gt;
+&lt;p&gt;master沒有更新，且分支最初始的commit是從這個master出來的時候就會觸發。&lt;/p&gt;
+&lt;p&gt;反之：&lt;/p&gt;
+&lt;h4 id=&#34;非快轉模式&#34;&gt;非快轉模式&lt;/h4&gt;
+&lt;p&gt;先做準備，移動到分支，上傳檔案，commit，
+回到主支&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; git checkout dev
+切換到分支 &lt;span class=&#34;s1&#34;&gt;&amp;#39;dev&amp;#39;&lt;/span&gt;
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;dev&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; touch index3.html
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;dev&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git add .
+gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;dev&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;新增index4&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;dev 278b024&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; 新增index4
+ &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; file changed, &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; insertions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; deletions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;-&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+ create mode &lt;span class=&#34;m&#34;&gt;100644&lt;/span&gt; index4.html
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;dev&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git checkout master
+A	index3.html
+切換到分支 &lt;span class=&#34;s1&#34;&gt;&amp;#39;master&amp;#39;&lt;/span&gt;
+您的分支領先 &lt;span class=&#34;s1&#34;&gt;&amp;#39;origin/master&amp;#39;&lt;/span&gt; 共 &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; 個提交。
+  （使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git push&amp;#34;&lt;/span&gt; 來發布您的本機提交）
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然後輸入&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git merge &amp;lt;分支名稱&amp;gt; --no-ff
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;git merge dev&amp;ndash;no-ff後，會出現&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 126; flex-basis: 302px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/mercmd.jpg&#34; data-size=&#34;1168x926&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/mercmd.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/mercmd_hu236bc6148d4c49eb3a34c7f8411f886c_142680_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/mercmd_hu236bc6148d4c49eb3a34c7f8411f886c_142680_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1168&#34;
+				height=&#34;926&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;這邊的意思，就等同於輸入&lt;code&gt;git commit -m &amp;quot;&amp;quot;&lt;/code&gt;中“”裡面的內容，也就是commit名稱，當覺得沒問題就關掉，這個開啟的vim編輯器是可以修改vscode或是sublime的，&lt;a class=&#34;link&#34; href=&#34;https://w3c.hexschool.com/git/4ac1e4e1&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;參考這邊&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 294; flex-basis: 705px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st5.jpg&#34; data-size=&#34;1794x610&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st5.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st5_hua9648912d4ebcc0fb3372c312e3b6c58_240628_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st5_hua9648912d4ebcc0fb3372c312e3b6c58_240628_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1794&#34;
+				height=&#34;610&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;所以快轉模式跟非快轉模式其實就merge的結果而言其實是一樣的，但非快轉模式可以讓我們知道，在這段merge之前做了哪些事情。&lt;/p&gt;
+&lt;h3 id=&#34;語法回顧&#34;&gt;語法回顧&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;建立分支：&lt;code&gt;git branch &amp;lt;分支名稱&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;切換分支：&lt;code&gt;git checkout &amp;lt;分支名稱&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;合併分支：&lt;code&gt;git merge &amp;lt;分支名稱&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;版本還原git-reset&#34;&gt;版本還原(git reset)&lt;/h2&gt;
+&lt;p&gt;有些時候，總是會手殘操作錯誤，例如把不該加入索引的檔案加入，或者是檔案儲存後發現自己寫錯內容，想還原整個檔案。&lt;/p&gt;
+&lt;p&gt;所以檔案還原大致上分兩種方案&lt;/p&gt;
+&lt;p&gt;修改commit內容，或是連整個commit都不要，&lt;/p&gt;
+&lt;h3 id=&#34;修改commit內容&#34;&gt;修改commit內容&lt;/h3&gt;
+&lt;p&gt;如果要修改commit內容的話，使用&lt;code&gt;git reset HEAD^&lt;/code&gt;相關指令(HEAD後面的「＾」代表要幾個版本)，這時候從sourcetree會看到原本的commit名稱變成了「Uncommitted changes」，&lt;strong&gt;這時候還是會保留先前的修改紀錄&lt;/strong&gt;，更改程式之後再重新透過&lt;code&gt;git add .&lt;/code&gt;還有&lt;code&gt;git commit -m &amp;lt;修改過的標題名稱&amp;gt;&lt;/code&gt;重新commit&lt;/p&gt;
+&lt;h3 id=&#34;放棄commit&#34;&gt;放棄commit&lt;/h3&gt;
+&lt;p&gt;這跟上面的差別在於連先前的紀錄都不會保留，也就是不會有「Uncommitted changes」，方法如下：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git reset HEAD --hard&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;git-reset-以及checkout觀念&#34;&gt;git reset 以及checkout觀念&lt;/h3&gt;
+&lt;p&gt;總結來說，&lt;code&gt;git reset &amp;lt;shl-1&amp;gt;&lt;/code&gt;的功能就是將HEAD到指定的commit點去，所以可以將HEAD跟Master 做連結，在一起移動。&lt;/p&gt;
+&lt;p&gt;所以要注意HEAD的地方，&lt;code&gt;git checkout &amp;lt;&amp;gt;&lt;/code&gt;，可以是分支的名稱，也可以是commit的名稱，利用移動HEAD，來決定分支的移動，還是HEAD的移動。&lt;/p&gt;
+&lt;p&gt;但是上面的還原法，只能還原到origin master之後的commit。&lt;/p&gt;
+&lt;h3 id=&#34;查看歷史紀錄git-reflog&#34;&gt;查看歷史紀錄git reflog&lt;/h3&gt;
+&lt;p&gt;如果不小心刪除掉commit的話，可以透過&lt;code&gt;git reflog&lt;/code&gt;來查看編號，
+並救回來，查看完編號之後，再透過&lt;code&gt;git reset &amp;lt;refolg編號&amp;gt;&lt;/code&gt;來還原&lt;/p&gt;
+&lt;h2 id=&#34;分支練習網站&#34;&gt;分支練習網站&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learngitbranching.js.org/?locale=zh_TW&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;git learn&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;github&#34;&gt;GITHUB&lt;/h2&gt;
+&lt;p&gt;如果需要文章中的檔案，可以到https://github.com/yen0304/test來下載。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>GIT學習筆記－從初始化到上傳至遠端數據庫</title>
         <link>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/</link>
         <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
@@ -96,7 +310,12 @@ git config --global user.email &lt;span class=&#34;s2&#34;&gt;&amp;#34;您的Ema
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再使用&lt;code&gt;git status&lt;/code&gt;查看&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;位於分支 master
 沒有要提交的檔案，工作區為乾淨狀態
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;查詢歷史紀錄&#34;&gt;查詢歷史紀錄&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;另外，也可以&lt;/p&gt;
+&lt;h3 id=&#34;退出索引&#34;&gt;退出索引&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git reset HEAD
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;功能就是將加入索引的檔案還原到目錄。&lt;/p&gt;
+&lt;p&gt;（已經&lt;code&gt;git add .&lt;/code&gt; ，但還沒&lt;code&gt;git commit -m&lt;/code&gt;)。&lt;/p&gt;
+&lt;h3 id=&#34;查詢歷史紀錄&#34;&gt;查詢歷史紀錄&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git log
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;輸出：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;commit 03dcd4c0bbd54f72a67aaaf74092eb454b981957 (HEAD -&amp;gt; master)

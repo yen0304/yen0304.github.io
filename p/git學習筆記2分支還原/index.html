@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='如何使用git分支、還原來進行版本控制'><title>GIT學習筆記(2)－分支、還原</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='GIT學習筆記(2)－分支、還原'>
+<meta property='og:description' content='如何使用git分支、還原來進行版本控制'>
+<meta property='og:url' content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Git學習筆記' /><meta property='article:tag' content='Git' /><meta property='article:published_time' content='2022-01-15'/><meta property='article:modified_time' content='2022-01-15'/><meta property='og:image' content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/logo.jpeg' />
+<meta name="twitter:title" content="GIT學習筆記(2)－分支、還原">
+<meta name="twitter:description" content="如何使用git分支、還原來進行版本控制"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/">
+                <img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/logo_hu0871f2e332734283fcd708b643f05707_22105_800x0_resize_q75_box.jpeg"
+                        srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/logo_hu0871f2e332734283fcd708b643f05707_22105_800x0_resize_q75_box.jpeg 800w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/logo_hu0871f2e332734283fcd708b643f05707_22105_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="420" 
+                        loading="lazy"
+                        alt="Featured image of post GIT學習筆記(2)－分支、還原" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                Git學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/">GIT學習筆記(2)－分支、還原</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        如何使用git分支、還原來進行版本控制
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-01-15</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="git學習筆記2分支還原協作">GIT學習筆記(2)－分支、還原、協作</h1>
+<h2 id="前言">前言</h2>
+<p>在看工作的時候，發現很多公司都希望擁有git的經驗，雖然有過使用Github Desktop的經驗，但是還是想知道背後的原理，所以就開始上網查資料學習了。</p>
+<p>可以參考這位六角學院的老師<a class="link" href="https://w3c.hexschool.com/git/cfdbd310"  target="_blank" rel="noopener"
+    >文章</a>還有<a class="link" href="https://www.youtube.com/watch?v=o0ngrUEh3hU&amp;list=PLYrA-SsMvTPOZeB6DHvB0ewl3miMf-2tj&amp;index=10"  target="_blank" rel="noopener"
+    >YT影片</a>，實在是免費又大碗（淚。</p>
+<h2 id="head指標">HEAD指標</h2>
+<p>HEAD就是目前指向的版本狀態，他可以指向到分支或是commit</p>
+<p>所以要回到先前的commit的話：</p>
+<h3 id="查詢commit版本">查詢commit版本</h3>
+<p>1.透過 <code>git log</code>來看所有commit</p>
+<p><figure style="flex-grow: 125; flex-basis: 301px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd1.jpg" data-size="1142x908"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd1.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd1_hu4b1bc3dea1f3548265ff8302e71d22a2_230908_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd1_hu4b1bc3dea1f3548265ff8302e71d22a2_230908_1024x0_resize_q75_box.jpg 1024w"
+				width="1142"
+				height="908"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>在每個 commit 旁邊的亂數就是<strong>SHA-1</strong> 值</p>
+<h3 id="移動head">移動HEAD</h3>
+<p>要回到最初始的時後，使用<code>git checkout &lt;SHA-1值&gt;</code>，</p>
+<p><figure style="flex-grow: 178; flex-basis: 427px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd2.jpg" data-size="1140x640"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd2.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd2_hu22c6bf5a59119af0e32fd8535370546b_220307_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd2_hu22c6bf5a59119af0e32fd8535370546b_220307_1024x0_resize_q75_box.jpg 1024w"
+				width="1140"
+				height="640"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>這時候到本地目錄查看，其實檔案都回到了該HEAD移動的commit版本。</p>
+<p>接著可以到sourcetree查看，可以看到HEAD移動到了剛剛指定的commit版本</p>
+<p><figure style="flex-grow: 163; flex-basis: 392px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st1.jpg" data-size="2104x1288"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st1.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st1_hu650435a2927b5394470531c66ba0d207_445262_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st1_hu650435a2927b5394470531c66ba0d207_445262_1024x0_resize_q75_box.jpg 1024w"
+				width="2104"
+				height="1288"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h3 id="sourcetree移動head">Sourcetree移動HEAD</h3>
+<p>如果想要sourcetrr移動HEAD的話，在想要過去的commit點擊兩下就可以了</p>
+<p><figure style="flex-grow: 161; flex-basis: 387px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st2.png" data-size="2092x1296"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st2.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st2_hu9f34c39586d35cb3e251913febe422ac_587596_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st2_hu9f34c39586d35cb3e251913febe422ac_587596_1024x0_resize_box_3.png 1024w"
+				width="2092"
+				height="1296"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>按下ok之後就可以看到檔案被加進去、HEAD也跟著移動了</p>
+<h3 id="回到最新的版本">回到最新的版本</h3>
+<p>如果想要回到最新的commit，使用</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git checkout master
+</code></pre></div><p>就可以了</p>
+<h2 id="分支">分支</h2>
+<p><a class="link" href="https://w3c.hexschool.com/git/a8ee6eee"  target="_blank" rel="noopener"
+    >分支</a>可以說是git的重頭戲了，分支的好處，就是每一條線都各司其職，做完事後，再將兩條線的功能合併，並部署上線。</p>
+<p>舉個分支個例子，例如公司在遠端伺服器上傳了主線(origin master)，在做beta但是不想污染上線的程式碼，這時候就需要分支做beta測試等等。</p>
+<p>大概是這些概念</p>
+<h3 id="建立分支git-branch">建立分支(git branch)</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git branch &lt;分支名稱&gt;
+</code></pre></div><p>在終端機輸入<code>git branch dev</code>後，就可以從sourcetree的commit也多了一個dev</p>
+<p><figure style="flex-grow: 161; flex-basis: 386px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd3.jpg" data-size="2094x1300"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd3.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd3_hu3d71096c14180aaa444fad0dac27ab49_409667_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/cmd3_hu3d71096c14180aaa444fad0dac27ab49_409667_1024x0_resize_q75_box.jpg 1024w"
+				width="2094"
+				height="1300"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>接下來再</p>
+<h3 id="把head移到分支git-checkout">把HEAD移到分支(git checkout)</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git checkout &lt;分支名稱&gt;
+</code></pre></div><p>可以用<code>git branch</code>查看</p>
+<p>可以看到下面圖片sourcetree（左），終端機（右）的*號都移到了dev的位置。</p>
+<p>圈圈、*號所代表的是目前git checkout位置（HEAD）</p>
+<p><figure style="flex-grow: 186; flex-basis: 446px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st3.png" data-size="1704x916"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st3.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st3_hu49447e4962f2de9440a722fce500db20_198167_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st3_hu49447e4962f2de9440a722fce500db20_198167_1024x0_resize_box_3.png 1024w"
+				width="1704"
+				height="916"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>接著新增檔案index2.html並直接commit來看看變化：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>dev<span class="o">)</span> touch index2.html
+➜  gitTest git:<span class="o">(</span>dev<span class="o">)</span> ✗ git add .
+➜  gitTest git:<span class="o">(</span>dev<span class="o">)</span> ✗ git commit -m <span class="s2">&#34;新增index2&#34;</span>
+<span class="o">[</span>dev 0549389<span class="o">]</span> 新增index2
+ <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+ create mode <span class="m">100644</span> index2.html
+
+</code></pre></div><p><figure style="flex-grow: 110; flex-basis: 265px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/sw4.jpg" data-size="1424x1286"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/sw4.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/sw4_hu5ab7a5a02cf85c2cc3330af13519f871_253528_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/sw4_hu5ab7a5a02cf85c2cc3330af13519f871_253528_1024x0_resize_q75_box.jpg 1024w"
+				width="1424"
+				height="1286"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>這時候HEAD的位置在dev分支，如果想要</p>
+<h3 id="回到主支git-checkout-master">回到主支(git checkout master)</h3>
+<p>master的話，使用<code>git checkout master</code>移動</p>
+<h3 id="分支合併git-merge">分支合併(git merge)</h3>
+<h4 id="快轉模式fast-forward">快轉模式(fast-forward)</h4>
+<p>如果我們想要commit分支的紀錄，要先讓HEAD移動到master之後，在使用</p>
+<p><code>git merge &lt;分支名稱&gt;</code>來合併master還有我們想要的分支</p>
+<p>所以輸入<code>git merge dev</code>，所以此時此刻</p>
+<p>本地master、head、dev就會在相同的地方，而因為還沒上傳到遠端數據庫，所以origin master自然而然會停留在先前的commit上，如下圖</p>
+<p><figure style="flex-grow: 110; flex-basis: 265px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm.jpg" data-size="1504x1358"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm_hu540ada27c6be6ca30f2bc079af6a22ad_574004_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm_hu540ada27c6be6ca30f2bc079af6a22ad_574004_1024x0_resize_q75_box.jpg 1024w"
+				width="1504"
+				height="1358"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>這個合併過程，就稱為快轉模式(fast-forward)，簡單說就是當 <code>HEAD</code> 位置是某個要被 <code>merge branch(dev)</code> 上的初始 commit，就會觸發快轉模式。</p>
+<p>master沒有更新，且分支最初始的commit是從這個master出來的時候就會觸發。</p>
+<p>反之：</p>
+<h4 id="非快轉模式">非快轉模式</h4>
+<p>先做準備，移動到分支，上傳檔案，commit，
+回到主支</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> git checkout dev
+切換到分支 <span class="s1">&#39;dev&#39;</span>
+➜  gitTest git:<span class="o">(</span>dev<span class="o">)</span> touch index3.html
+➜  gitTest git:<span class="o">(</span>dev<span class="o">)</span> ✗ git add .
+gitTest git:<span class="o">(</span>dev<span class="o">)</span> ✗ git commit -m <span class="s2">&#34;新增index4&#34;</span>
+<span class="o">[</span>dev 278b024<span class="o">]</span> 新增index4
+ <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+ create mode <span class="m">100644</span> index4.html
+➜  gitTest git:<span class="o">(</span>dev<span class="o">)</span> ✗ git checkout master
+A	index3.html
+切換到分支 <span class="s1">&#39;master&#39;</span>
+您的分支領先 <span class="s1">&#39;origin/master&#39;</span> 共 <span class="m">1</span> 個提交。
+  （使用 <span class="s2">&#34;git push&#34;</span> 來發布您的本機提交）
+</code></pre></div><p>然後輸入</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git merge &lt;分支名稱&gt; --no-ff
+</code></pre></div><p>git merge dev&ndash;no-ff後，會出現</p>
+<p><figure style="flex-grow: 126; flex-basis: 302px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/mercmd.jpg" data-size="1168x926"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/mercmd.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/mercmd_hu236bc6148d4c49eb3a34c7f8411f886c_142680_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/mercmd_hu236bc6148d4c49eb3a34c7f8411f886c_142680_1024x0_resize_q75_box.jpg 1024w"
+				width="1168"
+				height="926"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>這邊的意思，就等同於輸入<code>git commit -m &quot;&quot;</code>中“”裡面的內容，也就是commit名稱，當覺得沒問題就關掉，這個開啟的vim編輯器是可以修改vscode或是sublime的，<a class="link" href="https://w3c.hexschool.com/git/4ac1e4e1"  target="_blank" rel="noopener"
+    >參考這邊</a>。</p>
+<p><figure style="flex-grow: 294; flex-basis: 705px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st5.jpg" data-size="1794x610"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st5.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st5_hua9648912d4ebcc0fb3372c312e3b6c58_240628_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st5_hua9648912d4ebcc0fb3372c312e3b6c58_240628_1024x0_resize_q75_box.jpg 1024w"
+				width="1794"
+				height="610"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>所以快轉模式跟非快轉模式其實就merge的結果而言其實是一樣的，但非快轉模式可以讓我們知道，在這段merge之前做了哪些事情。</p>
+<h3 id="語法回顧">語法回顧</h3>
+<ul>
+<li>建立分支：<code>git branch &lt;分支名稱&gt;</code></li>
+<li>切換分支：<code>git checkout &lt;分支名稱&gt;</code></li>
+<li>合併分支：<code>git merge &lt;分支名稱&gt;</code></li>
+</ul>
+<h2 id="版本還原git-reset">版本還原(git reset)</h2>
+<p>有些時候，總是會手殘操作錯誤，例如把不該加入索引的檔案加入，或者是檔案儲存後發現自己寫錯內容，想還原整個檔案。</p>
+<p>所以檔案還原大致上分兩種方案</p>
+<p>修改commit內容，或是連整個commit都不要，</p>
+<h3 id="修改commit內容">修改commit內容</h3>
+<p>如果要修改commit內容的話，使用<code>git reset HEAD^</code>相關指令(HEAD後面的「＾」代表要幾個版本)，這時候從sourcetree會看到原本的commit名稱變成了「Uncommitted changes」，<strong>這時候還是會保留先前的修改紀錄</strong>，更改程式之後再重新透過<code>git add .</code>還有<code>git commit -m &lt;修改過的標題名稱&gt;</code>重新commit</p>
+<h3 id="放棄commit">放棄commit</h3>
+<p>這跟上面的差別在於連先前的紀錄都不會保留，也就是不會有「Uncommitted changes」，方法如下：</p>
+<p><code>git reset HEAD --hard</code></p>
+<h3 id="git-reset-以及checkout觀念">git reset 以及checkout觀念</h3>
+<p>總結來說，<code>git reset &lt;shl-1&gt;</code>的功能就是將HEAD到指定的commit點去，所以可以將HEAD跟Master 做連結，在一起移動。</p>
+<p>所以要注意HEAD的地方，<code>git checkout &lt;&gt;</code>，可以是分支的名稱，也可以是commit的名稱，利用移動HEAD，來決定分支的移動，還是HEAD的移動。</p>
+<p>但是上面的還原法，只能還原到origin master之後的commit。</p>
+<h3 id="查看歷史紀錄git-reflog">查看歷史紀錄git reflog</h3>
+<p>如果不小心刪除掉commit的話，可以透過<code>git reflog</code>來查看編號，
+並救回來，查看完編號之後，再透過<code>git reset &lt;refolg編號&gt;</code>來還原</p>
+<h2 id="分支練習網站">分支練習網站</h2>
+<p><a class="link" href="https://learngitbranching.js.org/?locale=zh_TW"  target="_blank" rel="noopener"
+    >git learn</a></p>
+<h2 id="github">GITHUB</h2>
+<p>如果需要文章中的檔案，可以到https://github.com/yen0304/test來下載。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">Git學習筆記</a>
+        
+            <a href="/tags/git/">Git</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/">
+        
+        
+            <div class="article-image">
+                <img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/logo.2a767389db86969893e17922d767fb6a_hu0871f2e332734283fcd708b643f05707_22105_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-KnZziduGlpiT4Xki12f7ag==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GIT學習筆記－從初始化到上傳至遠端數據庫</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#head指標">HEAD指標</a>
+      <ol>
+        <li><a href="#查詢commit版本">查詢commit版本</a></li>
+        <li><a href="#移動head">移動HEAD</a></li>
+        <li><a href="#sourcetree移動head">Sourcetree移動HEAD</a></li>
+        <li><a href="#回到最新的版本">回到最新的版本</a></li>
+      </ol>
+    </li>
+    <li><a href="#分支">分支</a>
+      <ol>
+        <li><a href="#建立分支git-branch">建立分支(git branch)</a></li>
+        <li><a href="#把head移到分支git-checkout">把HEAD移到分支(git checkout)</a></li>
+        <li><a href="#回到主支git-checkout-master">回到主支(git checkout master)</a></li>
+        <li><a href="#分支合併git-merge">分支合併(git merge)</a>
+          <ol>
+            <li><a href="#快轉模式fast-forward">快轉模式(fast-forward)</a></li>
+            <li><a href="#非快轉模式">非快轉模式</a></li>
+          </ol>
+        </li>
+        <li><a href="#語法回顧">語法回顧</a></li>
+      </ol>
+    </li>
+    <li><a href="#版本還原git-reset">版本還原(git reset)</a>
+      <ol>
+        <li><a href="#修改commit內容">修改commit內容</a></li>
+        <li><a href="#放棄commit">放棄commit</a></li>
+        <li><a href="#git-reset-以及checkout觀念">git reset 以及checkout觀念</a></li>
+        <li><a href="#查看歷史紀錄git-reflog">查看歷史紀錄git reflog</a></li>
+      </ol>
+    </li>
+    <li><a href="#分支練習網站">分支練習網站</a></li>
+    <li><a href="#github">GITHUB</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
