@@ -6,7 +6,201 @@
         <description>Recent content on Yen&#39;s部落格</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-tw</language>
-        <lastBuildDate>Sat, 15 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 16 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>GIT學習筆記(3)－多人協作、分支衝突</title>
+        <link>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/</link>
+        <pubDate>Sun, 16 Jan 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/logo.jpeg" alt="Featured image of post GIT學習筆記(3)－多人協作、分支衝突" /&gt;&lt;h1 id=&#34;git學習筆記3多人協作分支衝突&#34;&gt;GIT學習筆記(3)－多人協作、分支衝突&lt;/h1&gt;
+&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;在看工作的時候，發現很多公司都希望擁有git的經驗，雖然有過使用Github Desktop的經驗，但是還是想知道背後的原理，所以就開始上網查資料學習了。&lt;/p&gt;
+&lt;p&gt;可以參考這位六角學院的老師&lt;a class=&#34;link&#34; href=&#34;https://w3c.hexschool.com/git/cfdbd310&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;文章&lt;/a&gt;還有&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=o0ngrUEh3hU&amp;amp;list=PLYrA-SsMvTPOZeB6DHvB0ewl3miMf-2tj&amp;amp;index=10&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;YT影片&lt;/a&gt;，實在是免費又大碗（淚。&lt;/p&gt;
+&lt;h2 id=&#34;發github-prpull-request請求流程&#34;&gt;發Github PR(pull request)請求流程&lt;/h2&gt;
+&lt;h3 id=&#34;何謂pr&#34;&gt;何謂PR&lt;/h3&gt;
+&lt;p&gt;PR可以幫助我們修改別人的遠端數據庫的程式碼，並發起一個PR到別人的遠端數據庫，審核過了就可以成功把修改正式到別人的repo了&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;p&gt;在 GitHub 上看到別人的 CODE 有問題，想幫他修改並提交讓他更新時，就得學會如何發 PR (pull request)，發完之後別人覺得不錯，他就會commit到你剛剛發起的PR commit。&lt;/p&gt;
+&lt;h3 id=&#34;在github發起pr&#34;&gt;在Github發起PR&lt;/h3&gt;
+&lt;p&gt;在&lt;a class=&#34;link&#34; href=&#34;https://github.com/hsiangfeng/1107-Pull-request&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;這裡&lt;/a&gt;可以有一個六角學院所提供的資源，讓我們練習PR，首先到連結頁面後，可以看到Fork，點擊&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 149; flex-basis: 358px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f.jpg&#34; data-size=&#34;1868x1252&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f_hu3afd16026fb2f1f13c57351ea798b2df_357124_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f_hu3afd16026fb2f1f13c57351ea798b2df_357124_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1868&#34;
+				height=&#34;1252&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著就會跳到我們的數據庫，這時，用clone指令把檔案下載下來&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 154; flex-basis: 371px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f2.jpg&#34; data-size=&#34;1850x1194&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f2.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f2_hu3afd16026fb2f1f13c57351ea798b2df_487332_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f2_hu3afd16026fb2f1f13c57351ea798b2df_487332_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1850&#34;
+				height=&#34;1194&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著在創建檔案，並且commit+上傳&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 125; flex-basis: 301px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/main.jpg&#34; data-size=&#34;1142x910&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/main.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/main_hufff6a8d7cc2594e55b48b6b2ee5e645f_385965_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/main_hufff6a8d7cc2594e55b48b6b2ee5e645f_385965_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1142&#34;
+				height=&#34;910&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;這裡我是用ssh的方式上傳，成功後可以在網頁上看到：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 140; flex-basis: 336px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/g1.jpg&#34; data-size=&#34;1854x1324&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/g1.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/g1_hu9445bd0038a8481530222a3d68f23ce6_528276_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/g1_hu9445bd0038a8481530222a3d68f23ce6_528276_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1854&#34;
+				height=&#34;1324&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著到自己的數據庫，選擇Pull request之後&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 167; flex-basis: 402px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/st1.jpg&#34; data-size=&#34;1828x1090&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/st1.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/st1_huce1b3df60d26e93ce5045628f64ab065_391253_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/st1_huce1b3df60d26e93ce5045628f64ab065_391253_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1828&#34;
+				height=&#34;1090&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;在按下Create pull request，下面也可以填PR的名字，還有要提交給對方的留言。&lt;/p&gt;
+&lt;p&gt;接下來到對方的repo看到我們提交的pr後，就代表成功了，剩下就只剩對方審核commit了&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 139; flex-basis: 334px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/pr2.png&#34; data-size=&#34;1878x1348&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/pr2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/pr2_hu550f47e8c519a61e3ca4c8ea61f676a9_281279_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/pr2_hu550f47e8c519a61e3ca4c8ea61f676a9_281279_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1878&#34;
+				height=&#34;1348&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;衝突&#34;&gt;衝突&lt;/h2&gt;
+&lt;p&gt;衝突就是指，分支的commit跟master的commit都動到同一行code的時候，在合併分支時就會有衝突，&lt;/p&gt;
+&lt;h3 id=&#34;本地衝突情境&#34;&gt;本地衝突情境&lt;/h3&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 161; flex-basis: 387px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/stcm1.jpg&#34; data-size=&#34;2082x1288&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/stcm1.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/stcm1_hu01f0a5beb2d47dd2026847b925b76429_691481_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/stcm1_hu01f0a5beb2d47dd2026847b925b76429_691481_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;2082&#34;
+				height=&#34;1288&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;情況製作好後，直接merge看看有什麼變化：&lt;/p&gt;
+&lt;p&gt;終端機出現：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;修改標題master&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;master d02ff9a&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; 修改標題master
+ &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; file changed, &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; insertion&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; deletion&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;-&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; git merge dev
+自動合併 index.html
+衝突（內容）：合併衝突於 index.html
+自動合併失敗，修正衝突然後提交修正的結果。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Git status&lt;/code&gt;會顯示&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git status
+位於分支 master
+您的分支領先 &lt;span class=&#34;s1&#34;&gt;&amp;#39;origin/master&amp;#39;&lt;/span&gt; 共 &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; 個提交。
+  （使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git push&amp;#34;&lt;/span&gt; 來發布您的本機提交）
+
+您有尚未合併的路徑。
+  （解決衝突並執行 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git commit&amp;#34;&lt;/span&gt;）
+  （使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git merge --abort&amp;#34;&lt;/span&gt; 終止合併）
+
+未合併的路徑：
+  （使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git add &amp;lt;檔案&amp;gt;...&amp;#34;&lt;/span&gt; 標記解決方案）
+	雙方修改：   index.html
+
+修改尚未加入提交（使用 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git add&amp;#34;&lt;/span&gt; 和/或 &lt;span class=&#34;s2&#34;&gt;&amp;#34;git commit -a&amp;#34;&lt;/span&gt;）
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這時候打開vscode看看，會有選項讓我們做整合，&lt;/p&gt;
+&lt;h3 id=&#34;解決衝突&#34;&gt;解決衝突&lt;/h3&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 157; flex-basis: 377px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/vs1.jpg&#34; data-size=&#34;2414x1536&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/vs1.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/vs1_hu66ecddba51fee94ac7381e777f9b35c5_465932_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/vs1_hu66ecddba51fee94ac7381e777f9b35c5_465932_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;2414&#34;
+				height=&#34;1536&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;選擇好之後，可以看一下&lt;code&gt;git status&lt;/code&gt;，其實還時一樣寫著衝突的提示，是因為其實merge還沒完成，可以到source看一下：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 127; flex-basis: 305px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/unmerge.jpg&#34; data-size=&#34;878x690&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/unmerge.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/unmerge_hu95e3c21dbec4af5d457990e3bc907ac1_124434_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/unmerge_hu95e3c21dbec4af5d457990e3bc907ac1_124434_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;878&#34;
+				height=&#34;690&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;這時候就需要在使用&lt;code&gt;git add&lt;/code&gt;還有&lt;code&gt;git commit&lt;/code&gt;來完成這次的合併，也同樣會跳出merge的提示視窗，保存後關起來，就會成功了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; ✗ git add .
+➜  gitTest git:&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;master&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; git commit
+&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;master 65eae63&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; Merge branch &lt;span class=&#34;s1&#34;&gt;&amp;#39;dev&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sourcetree：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 147; flex-basis: 354px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/merge.jpg&#34; data-size=&#34;1036x702&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/merge.jpg&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/merge_hub79048cf469333f6f579cd9b514e27d5_115318_480x0_resize_q75_box.jpg 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/merge_hub79048cf469333f6f579cd9b514e27d5_115318_1024x0_resize_q75_box.jpg 1024w&#34;
+				width=&#34;1036&#34;
+				height=&#34;702&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id=&#34;流程回顧&#34;&gt;流程回顧&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;checkout 到 &lt;code&gt;master&lt;/code&gt; 後，輸入 &lt;code&gt;git merge dev&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;發生衝突，&lt;code&gt;index.html&lt;/code&gt; 變成 &lt;code&gt;Unmerged&lt;/code&gt; 狀態&lt;/li&gt;
+&lt;li&gt;修改 &lt;code&gt;index.html&lt;/code&gt; 後，重新加入到索引 &lt;code&gt;git add index.html&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;透過 &lt;code&gt;git status&lt;/code&gt; 指令觀察，是否可以重新提交&lt;/li&gt;
+&lt;li&gt;輸入 &lt;code&gt;git commit&lt;/code&gt; 提交，並撰寫 commit 訊息，完成本次合併&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;遠端協作衝突&#34;&gt;遠端協作衝突&lt;/h2&gt;
+&lt;p&gt;遠端協作其實跟本地協作是一樣的概念，只是我自己沒辦法完成情境（有點小麻煩，要兩個帳號），但總而言之就是兩個不同的人在相同的repo commit並修改之後&lt;code&gt;git push&lt;/code&gt;相同的程式碼&lt;/p&gt;
+&lt;h3 id=&#34;流程回顧-1&#34;&gt;流程回顧&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;編輯完程式碼並且&lt;code&gt;git push&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;終端機顯示&lt;code&gt;git push&lt;/code&gt;發生衝突，程式碼 變成 &lt;code&gt;Unmerged&lt;/code&gt; 狀態&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git pull&lt;/code&gt;之後，遠端的master就會跟本地端master合併&lt;/li&gt;
+&lt;li&gt;修改過後，重新加入到索引 &lt;code&gt;git add .&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;透過 &lt;code&gt;git status&lt;/code&gt; 指令觀察，是否可以重新提交&lt;/li&gt;
+&lt;li&gt;輸入 &lt;code&gt;git commit&lt;/code&gt; 提交，並撰寫 commit 訊息，完成本次合併&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git push&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在這些編輯的過程中，原本本地端的commit也會紀錄原本兩個人的commit紀錄&lt;/p&gt;
+&lt;h1 id=&#34;gitflow&#34;&gt;GitFlow&lt;/h1&gt;
+&lt;p&gt;緣由：一個開發團隊可能有好幾個branch，但每個人對於分支的認知不同，造成每次commit到不同分支，大家也不知道合併要回到誰，若是都合併到master，一定會出大問題，故有了GitFlow去規範使用者。（&lt;a class=&#34;link&#34; href=&#34;https://medium.com/i-think-so-i-live/git%E4%B8%8A%E7%9A%84%E4%B8%89%E7%A8%AE%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-10f4f915167e&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;參考&lt;/a&gt;）&lt;/p&gt;
+&lt;p&gt;所以gitflow可以說是一個git使用的規範，其中分三種種類：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GitFlow&lt;/li&gt;
+&lt;li&gt;Github flow&lt;/li&gt;
+&lt;li&gt;GitLab flow&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;有興趣的可以去網路上google文章&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>GIT學習筆記(2)－分支、還原</title>
         <link>https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/</link>
         <pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate>
@@ -206,10 +400,35 @@ A	index3.html
 &lt;h3 id=&#34;放棄commit&#34;&gt;放棄commit&lt;/h3&gt;
 &lt;p&gt;這跟上面的差別在於連先前的紀錄都不會保留，也就是不會有「Uncommitted changes」，方法如下：&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git reset HEAD --hard&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;還原遠端倉庫commit&#34;&gt;還原遠端倉庫commit&lt;/h3&gt;
+&lt;p&gt;在一般的情況下，是沒有需要還原先前的版本的，只有誤傳或是非必要的情況才會使用，在下面的例子，我們先輸入&lt;code&gt;git reset HEAD^^ --hard&lt;/code&gt;讓本地commit回到先前兩個版本，在使用&lt;code&gt;git push&lt;/code&gt; ，可以看到終端機並不允許這樣的操作。&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 160; flex-basis: 384px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm2.png&#34; data-size=&#34;2880x1800&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm2_hu79fed6852a11505814919a43e31e66d5_2490931_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/stcm2_hu79fed6852a11505814919a43e31e66d5_2490931_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2880&#34;
+				height=&#34;1800&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;但也可以看到，本地檔案確實回到先前的commit，&lt;/p&gt;
+&lt;p&gt;這時候，我們只需要&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git push -f
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;-f就代表了強制的意思，所以會變成&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 161; flex-basis: 387px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st7.png&#34; data-size=&#34;2136x1322&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st7.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st7_hu3fc21385b8f5411cda8d34a3cbff1080_609004_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/st7_hu3fc21385b8f5411cda8d34a3cbff1080_609004_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2136&#34;
+				height=&#34;1322&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;h3 id=&#34;git-reset-以及checkout觀念&#34;&gt;git reset 以及checkout觀念&lt;/h3&gt;
 &lt;p&gt;總結來說，&lt;code&gt;git reset &amp;lt;shl-1&amp;gt;&lt;/code&gt;的功能就是將HEAD到指定的commit點去，所以可以將HEAD跟Master 做連結，在一起移動。&lt;/p&gt;
 &lt;p&gt;所以要注意HEAD的地方，&lt;code&gt;git checkout &amp;lt;&amp;gt;&lt;/code&gt;，可以是分支的名稱，也可以是commit的名稱，利用移動HEAD，來決定分支的移動，還是HEAD的移動。&lt;/p&gt;
-&lt;p&gt;但是上面的還原法，只能還原到origin master之後的commit。&lt;/p&gt;
 &lt;h3 id=&#34;查看歷史紀錄git-reflog&#34;&gt;查看歷史紀錄git reflog&lt;/h3&gt;
 &lt;p&gt;如果不小心刪除掉commit的話，可以透過&lt;code&gt;git reflog&lt;/code&gt;來查看編號，
 並救回來，查看完編號之後，再透過&lt;code&gt;git reset &amp;lt;refolg編號&amp;gt;&lt;/code&gt;來還原&lt;/p&gt;

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='解決相同程式碼同時commit的情況下該如何解決'><title>GIT學習筆記(3)－多人協作、分支衝突</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='GIT學習筆記(3)－多人協作、分支衝突'>
+<meta property='og:description' content='解決相同程式碼同時commit的情況下該如何解決'>
+<meta property='og:url' content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Git學習筆記' /><meta property='article:tag' content='Git' /><meta property='article:published_time' content='2022-01-16'/><meta property='article:modified_time' content='2022-01-16'/><meta property='og:image' content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/logo.jpeg' />
+<meta name="twitter:title" content="GIT學習筆記(3)－多人協作、分支衝突">
+<meta name="twitter:description" content="解決相同程式碼同時commit的情況下該如何解決"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/">
+                <img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/logo_hu0871f2e332734283fcd708b643f05707_22105_800x0_resize_q75_box.jpeg"
+                        srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/logo_hu0871f2e332734283fcd708b643f05707_22105_800x0_resize_q75_box.jpeg 800w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/logo_hu0871f2e332734283fcd708b643f05707_22105_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="420" 
+                        loading="lazy"
+                        alt="Featured image of post GIT學習筆記(3)－多人協作、分支衝突" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/" >
+                Git學習筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/">GIT學習筆記(3)－多人協作、分支衝突</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        解決相同程式碼同時commit的情況下該如何解決
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-01-16</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="git學習筆記3多人協作分支衝突">GIT學習筆記(3)－多人協作、分支衝突</h1>
+<h2 id="前言">前言</h2>
+<p>在看工作的時候，發現很多公司都希望擁有git的經驗，雖然有過使用Github Desktop的經驗，但是還是想知道背後的原理，所以就開始上網查資料學習了。</p>
+<p>可以參考這位六角學院的老師<a class="link" href="https://w3c.hexschool.com/git/cfdbd310"  target="_blank" rel="noopener"
+    >文章</a>還有<a class="link" href="https://www.youtube.com/watch?v=o0ngrUEh3hU&amp;list=PLYrA-SsMvTPOZeB6DHvB0ewl3miMf-2tj&amp;index=10"  target="_blank" rel="noopener"
+    >YT影片</a>，實在是免費又大碗（淚。</p>
+<h2 id="發github-prpull-request請求流程">發Github PR(pull request)請求流程</h2>
+<h3 id="何謂pr">何謂PR</h3>
+<p>PR可以幫助我們修改別人的遠端數據庫的程式碼，並發起一個PR到別人的遠端數據庫，審核過了就可以成功把修改正式到別人的repo了</p>
+<p>例如：</p>
+<p>在 GitHub 上看到別人的 CODE 有問題，想幫他修改並提交讓他更新時，就得學會如何發 PR (pull request)，發完之後別人覺得不錯，他就會commit到你剛剛發起的PR commit。</p>
+<h3 id="在github發起pr">在Github發起PR</h3>
+<p>在<a class="link" href="https://github.com/hsiangfeng/1107-Pull-request"  target="_blank" rel="noopener"
+    >這裡</a>可以有一個六角學院所提供的資源，讓我們練習PR，首先到連結頁面後，可以看到Fork，點擊</p>
+<p><figure style="flex-grow: 149; flex-basis: 358px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f.jpg" data-size="1868x1252"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f_hu3afd16026fb2f1f13c57351ea798b2df_357124_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f_hu3afd16026fb2f1f13c57351ea798b2df_357124_1024x0_resize_q75_box.jpg 1024w"
+				width="1868"
+				height="1252"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>接著就會跳到我們的數據庫，這時，用clone指令把檔案下載下來</p>
+<p><figure style="flex-grow: 154; flex-basis: 371px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f2.jpg" data-size="1850x1194"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f2.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f2_hu3afd16026fb2f1f13c57351ea798b2df_487332_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/f2_hu3afd16026fb2f1f13c57351ea798b2df_487332_1024x0_resize_q75_box.jpg 1024w"
+				width="1850"
+				height="1194"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>接著在創建檔案，並且commit+上傳</p>
+<p><figure style="flex-grow: 125; flex-basis: 301px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/main.jpg" data-size="1142x910"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/main.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/main_hufff6a8d7cc2594e55b48b6b2ee5e645f_385965_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/main_hufff6a8d7cc2594e55b48b6b2ee5e645f_385965_1024x0_resize_q75_box.jpg 1024w"
+				width="1142"
+				height="910"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>這裡我是用ssh的方式上傳，成功後可以在網頁上看到：</p>
+<p><figure style="flex-grow: 140; flex-basis: 336px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/g1.jpg" data-size="1854x1324"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/g1.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/g1_hu9445bd0038a8481530222a3d68f23ce6_528276_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/g1_hu9445bd0038a8481530222a3d68f23ce6_528276_1024x0_resize_q75_box.jpg 1024w"
+				width="1854"
+				height="1324"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>接著到自己的數據庫，選擇Pull request之後</p>
+<p><figure style="flex-grow: 167; flex-basis: 402px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/st1.jpg" data-size="1828x1090"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/st1.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/st1_huce1b3df60d26e93ce5045628f64ab065_391253_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/st1_huce1b3df60d26e93ce5045628f64ab065_391253_1024x0_resize_q75_box.jpg 1024w"
+				width="1828"
+				height="1090"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>在按下Create pull request，下面也可以填PR的名字，還有要提交給對方的留言。</p>
+<p>接下來到對方的repo看到我們提交的pr後，就代表成功了，剩下就只剩對方審核commit了</p>
+<p><figure style="flex-grow: 139; flex-basis: 334px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/pr2.png" data-size="1878x1348"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/pr2.png"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/pr2_hu550f47e8c519a61e3ca4c8ea61f676a9_281279_480x0_resize_box_3.png 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/pr2_hu550f47e8c519a61e3ca4c8ea61f676a9_281279_1024x0_resize_box_3.png 1024w"
+				width="1878"
+				height="1348"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h2 id="衝突">衝突</h2>
+<p>衝突就是指，分支的commit跟master的commit都動到同一行code的時候，在合併分支時就會有衝突，</p>
+<h3 id="本地衝突情境">本地衝突情境</h3>
+<p><figure style="flex-grow: 161; flex-basis: 387px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/stcm1.jpg" data-size="2082x1288"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/stcm1.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/stcm1_hu01f0a5beb2d47dd2026847b925b76429_691481_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/stcm1_hu01f0a5beb2d47dd2026847b925b76429_691481_1024x0_resize_q75_box.jpg 1024w"
+				width="2082"
+				height="1288"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>情況製作好後，直接merge看看有什麼變化：</p>
+<p>終端機出現：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git commit -m <span class="s2">&#34;修改標題master&#34;</span>
+<span class="o">[</span>master d02ff9a<span class="o">]</span> 修改標題master
+ <span class="m">1</span> file changed, <span class="m">1</span> insertion<span class="o">(</span>+<span class="o">)</span>, <span class="m">1</span> deletion<span class="o">(</span>-<span class="o">)</span>
+➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> git merge dev
+自動合併 index.html
+衝突（內容）：合併衝突於 index.html
+自動合併失敗，修正衝突然後提交修正的結果。
+</code></pre></div><p><code>Git status</code>會顯示</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git status
+位於分支 master
+您的分支領先 <span class="s1">&#39;origin/master&#39;</span> 共 <span class="m">1</span> 個提交。
+  （使用 <span class="s2">&#34;git push&#34;</span> 來發布您的本機提交）
+
+您有尚未合併的路徑。
+  （解決衝突並執行 <span class="s2">&#34;git commit&#34;</span>）
+  （使用 <span class="s2">&#34;git merge --abort&#34;</span> 終止合併）
+
+未合併的路徑：
+  （使用 <span class="s2">&#34;git add &lt;檔案&gt;...&#34;</span> 標記解決方案）
+	雙方修改：   index.html
+
+修改尚未加入提交（使用 <span class="s2">&#34;git add&#34;</span> 和/或 <span class="s2">&#34;git commit -a&#34;</span>）
+</code></pre></div><p>這時候打開vscode看看，會有選項讓我們做整合，</p>
+<h3 id="解決衝突">解決衝突</h3>
+<p><figure style="flex-grow: 157; flex-basis: 377px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/vs1.jpg" data-size="2414x1536"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/vs1.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/vs1_hu66ecddba51fee94ac7381e777f9b35c5_465932_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/vs1_hu66ecddba51fee94ac7381e777f9b35c5_465932_1024x0_resize_q75_box.jpg 1024w"
+				width="2414"
+				height="1536"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>選擇好之後，可以看一下<code>git status</code>，其實還時一樣寫著衝突的提示，是因為其實merge還沒完成，可以到source看一下：</p>
+<p><figure style="flex-grow: 127; flex-basis: 305px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/unmerge.jpg" data-size="878x690"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/unmerge.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/unmerge_hu95e3c21dbec4af5d457990e3bc907ac1_124434_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/unmerge_hu95e3c21dbec4af5d457990e3bc907ac1_124434_1024x0_resize_q75_box.jpg 1024w"
+				width="878"
+				height="690"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>這時候就需要在使用<code>git add</code>還有<code>git commit</code>來完成這次的合併，也同樣會跳出merge的提示視窗，保存後關起來，就會成功了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> ✗ git add .
+➜  gitTest git:<span class="o">(</span>master<span class="o">)</span> git commit
+<span class="o">[</span>master 65eae63<span class="o">]</span> Merge branch <span class="s1">&#39;dev&#39;</span>
+</code></pre></div><p>Sourcetree：</p>
+<p><figure style="flex-grow: 147; flex-basis: 354px">
+		<a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/merge.jpg" data-size="1036x702"><img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/merge.jpg"
+				srcset="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/merge_hub79048cf469333f6f579cd9b514e27d5_115318_480x0_resize_q75_box.jpg 480w, /p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983%E5%A4%9A%E4%BA%BA%E5%8D%94%E4%BD%9C%E5%88%86%E6%94%AF%E8%A1%9D%E7%AA%81/merge_hub79048cf469333f6f579cd9b514e27d5_115318_1024x0_resize_q75_box.jpg 1024w"
+				width="1036"
+				height="702"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h3 id="流程回顧">流程回顧</h3>
+<ol>
+<li>checkout 到 <code>master</code> 後，輸入 <code>git merge dev</code></li>
+<li>發生衝突，<code>index.html</code> 變成 <code>Unmerged</code> 狀態</li>
+<li>修改 <code>index.html</code> 後，重新加入到索引 <code>git add index.html</code></li>
+<li>透過 <code>git status</code> 指令觀察，是否可以重新提交</li>
+<li>輸入 <code>git commit</code> 提交，並撰寫 commit 訊息，完成本次合併</li>
+</ol>
+<h2 id="遠端協作衝突">遠端協作衝突</h2>
+<p>遠端協作其實跟本地協作是一樣的概念，只是我自己沒辦法完成情境（有點小麻煩，要兩個帳號），但總而言之就是兩個不同的人在相同的repo commit並修改之後<code>git push</code>相同的程式碼</p>
+<h3 id="流程回顧-1">流程回顧</h3>
+<ol>
+<li>編輯完程式碼並且<code>git push</code></li>
+<li>終端機顯示<code>git push</code>發生衝突，程式碼 變成 <code>Unmerged</code> 狀態</li>
+<li><code>git pull</code>之後，遠端的master就會跟本地端master合併</li>
+<li>修改過後，重新加入到索引 <code>git add .</code></li>
+<li>透過 <code>git status</code> 指令觀察，是否可以重新提交</li>
+<li>輸入 <code>git commit</code> 提交，並撰寫 commit 訊息，完成本次合併</li>
+<li><code>git push</code></li>
+</ol>
+<p>在這些編輯的過程中，原本本地端的commit也會紀錄原本兩個人的commit紀錄</p>
+<h1 id="gitflow">GitFlow</h1>
+<p>緣由：一個開發團隊可能有好幾個branch，但每個人對於分支的認知不同，造成每次commit到不同分支，大家也不知道合併要回到誰，若是都合併到master，一定會出大問題，故有了GitFlow去規範使用者。（<a class="link" href="https://medium.com/i-think-so-i-live/git%E4%B8%8A%E7%9A%84%E4%B8%89%E7%A8%AE%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-10f4f915167e"  target="_blank" rel="noopener"
+    >參考</a>）</p>
+<p>所以gitflow可以說是一個git使用的規範，其中分三種種類：</p>
+<ul>
+<li>GitFlow</li>
+<li>Github flow</li>
+<li>GitLab flow</li>
+</ul>
+<p>有興趣的可以去網路上google文章</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/">Git學習筆記</a>
+        
+            <a href="/tags/git/">Git</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/">
+        
+        
+            <div class="article-image">
+                <img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982%E5%88%86%E6%94%AF%E9%82%84%E5%8E%9F/logo.2a767389db86969893e17922d767fb6a_hu0871f2e332734283fcd708b643f05707_22105_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-KnZziduGlpiT4Xki12f7ag==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GIT學習筆記(2)－分支、還原</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/">
+        
+        
+            <div class="article-image">
+                <img src="/p/git%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E5%BE%9E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%B0%E4%B8%8A%E5%82%B3%E8%87%B3%E9%81%A0%E7%AB%AF%E6%95%B8%E6%93%9A%E5%BA%AB/logo.2a767389db86969893e17922d767fb6a_hu0871f2e332734283fcd708b643f05707_22105_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-KnZziduGlpiT4Xki12f7ag==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GIT學習筆記－從初始化到上傳至遠端數據庫</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#發github-prpull-request請求流程">發Github PR(pull request)請求流程</a>
+      <ol>
+        <li><a href="#何謂pr">何謂PR</a></li>
+        <li><a href="#在github發起pr">在Github發起PR</a></li>
+      </ol>
+    </li>
+    <li><a href="#衝突">衝突</a>
+      <ol>
+        <li><a href="#本地衝突情境">本地衝突情境</a></li>
+        <li><a href="#解決衝突">解決衝突</a></li>
+        <li><a href="#流程回顧">流程回顧</a></li>
+      </ol>
+    </li>
+    <li><a href="#遠端協作衝突">遠端協作衝突</a>
+      <ol>
+        <li><a href="#流程回顧-1">流程回顧</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
