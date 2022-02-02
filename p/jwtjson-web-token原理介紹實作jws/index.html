@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='認識JWT，並且實作'><title>JWT(JSON Web Token)原理介紹&amp;實作JWS</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='JWT(JSON Web Token)原理介紹&amp;實作JWS'>
+<meta property='og:description' content='認識JWT，並且實作'>
+<meta property='og:url' content='https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java筆記' /><meta property='article:tag' content='JWT' /><meta property='article:tag' content='JWS' /><meta property='article:published_time' content='2022-02-02'/><meta property='article:modified_time' content='2022-02-02'/><meta property='og:image' content='https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/logo.jpeg' />
+<meta name="twitter:title" content="JWT(JSON Web Token)原理介紹&amp;實作JWS">
+<meta name="twitter:description" content="認識JWT，並且實作"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/">
+                <img src="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/logo_hu0e3d24c70667b48af76446875ccb292a_51785_800x0_resize_q75_box.jpeg"
+                        srcset="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/logo_hu0e3d24c70667b48af76446875ccb292a_51785_800x0_resize_q75_box.jpeg 800w, /p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/logo_hu0e3d24c70667b48af76446875ccb292a_51785_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post JWT(JSON Web Token)原理介紹&amp;實作JWS" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/java%E7%AD%86%E8%A8%98/" >
+                Java筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/">JWT(JSON Web Token)原理介紹&amp;實作JWS</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        認識JWT，並且實作
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-02-02</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="jwtjson-web-token--原理介紹實作jws">JWT(JSON Web Token) — 原理介紹&amp;實作JWS</h1>
+<p>現在網上大多數介紹JWT的文章實際介紹的都是JWS(JSON Web Signature),也往往導致了人們對於JWT的誤解，但是JWT並不等於JWS，JWS只是JWT的一種實現，除了JWS外，JWE(JSON Web Encryption)也是JWT的一種實現</p>
+<p>原文網址：https://kknews.cc/code/ok4j92o.html</p>
+<h2 id="什麼是jwt">什麼是JWT</h2>
+<p>JWT 的全名是 <code>JSON Web Token</code>，是一種基於 JSON 的開放標準(<a class="link" href="https://tools.ietf.org/html/rfc7519"  target="_blank" rel="noopener"
+    >RFC 7519</a>)，它定義了一種簡潔(compact)且自包含(self-contained)的方式，用於在雙方之間安全地將訊息作為 JSON 物件傳輸。而這個訊息是經過數位簽章(Digital Signature)，因此可以被驗證及信任。可以使用 <code>密碼</code>(經過 <strong>HMAC</strong> 演算法) 或用一對 <code>公鑰/私鑰</code>(經過 <strong>RSA</strong> 或 <strong>ECDSA</strong> 演算法) 來對 JWT 進行簽章。</p>
+<h2 id="什麼情況適合使用-jwt">什麼情況適合使用 JWT</h2>
+<ul>
+<li><strong>授權(Authorization)</strong>：這是很常見 JWT 的使用方式，例如使用者從 Client 端登入後，該使用者再次對 Server 端發送請求的時候，會夾帶著 JWT，允許使用者存取該 token 有權限的資源。單一登錄(Single Sign On)是當今廣泛使用 JWT 的功能之一，因為它的成本較小並且可以在不同的網域(domain)中輕鬆使用。</li>
+<li><strong>訊息交換(Information Exchange)</strong>：JWT 可以透過公鑰/私鑰來做簽章，讓我們可以知道是誰發送這個 JWT，此外，由於簽章是使用 header 和 payload 計算的，因此還可以驗證內容是否遭到篡改。</li>
+</ul>
+<h1 id="環境設置">環境設置</h1>
+<p>JDK版本：17</p>
+<h3 id="jsonwebtoken套件">Jsonwebtoken套件</h3>
+<p>透過這個套件能更方便的創建、完成驗證 JWT，java11是沒有辦法安裝0.9.x以下的版本，在寫法上也略有些不同，所以安裝了0.11.2。</p>
+<h4 id="maven">Maven</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!--jwt--&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>jjwt-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.11.2<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>jjwt-impl<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.11.2<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>jjwt-jackson<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.11.2<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><h1 id="json-web-signaturejws">JSON Web Signature(JWS)</h1>
+<p>JWS的組合可以看成是三個JSON object，並且用**.**來做區隔，而這三個部分會各自進行編碼，組成一個JWT字串。</p>
+<p>也就是變成：<strong>xxxxx.yyyyy.zzzzz</strong></p>
+<ul>
+<li>JWT 其實是一種格式</li>
+<li>JWT 實作出來基本上就是 JWS 或是 JWE</li>
+<li>JWS 有三段，JWE 有五段</li>
+</ul>
+<p>JWS的三段方別式Header、Payload，以及Signature，接下來會編介紹編實作</p>
+<h1 id="產生jws">產生JWS</h1>
+<p>根據官方，我們可以按這下面的流程完成JWS的產生</p>
+<ol>
+<li>使用<code>Jwts.builder()</code>方法創建一個<code>JwtBuilder</code>實例。</li>
+<li>調用<code>JwtBuilder</code>方法以根據需要添加標頭參數和聲明。（也就是Header跟Payload）</li>
+<li>指定要用於簽署 JWT的<code>SecretKey</code>或非對稱<code>PrivateKey</code></li>
+<li>最後用<code>compact()</code>方法進行壓縮和簽名，產生最終的 JWS。</li>
+</ol>
+<h2 id="頭部-header">頭部 Header</h2>
+<p>由兩個欄位組合：</p>
+<ol>
+<li>alg</li>
+</ol>
+<p>也就是token被加密的演算法，如<strong>HMAC</strong>、<strong>SHA256</strong>、<strong>RSA</strong></p>
+<ol start="2">
+<li>typ</li>
+</ol>
+<p>也就是token的type，基本上就是<strong>JWT</strong></p>
+<p>範例：</p>
+<pre><code>{
+    &quot;alg&quot;: &quot;HS256&quot;,
+    &quot;typ&quot;: &quot;JWT&quot;
+}
+</code></pre><p>頭部用於描述關於該JWT的最基本的信息，例如其類型以及簽名所用的算法等。
+<strong>JSON內容要經Base64 編碼生成字符串成為Header。</strong></p>
+<p>根據官方， JJWT 會根據使用的簽名算法或壓縮算法自動設置<code>alg</code>或<code>zip</code>標頭參數。其他要加東西可以參考<code>setHeader(header)</code>相關方法</p>
+<h2 id="載賀-payload">載賀 Payload</h2>
+<p>這裡放的是聲明(Claim)內容，也就是用來放傳遞訊息的地方，在定義上有三種聲明：</p>
+<ol>
+<li>Registered claims</li>
+</ol>
+<p>可以想成是標準公認的一些訊息<strong>建議</strong>你可以放，但並不強迫，例如：</p>
+<ul>
+<li>iss(Issuer)：JWT簽發者</li>
+<li>exp(Expiration Time)：JWT的過期時間，過期時間必須大於簽發JWT時間</li>
+<li>sub(Subject)：JWT所面向的用戶</li>
+<li>aud(Audience)：接收JWT的一方</li>
+<li>nbf(Not Before)：也就是定義擬發放JWT之後，的某段時間點前該JWT仍舊是不可用的</li>
+<li>iat(Issued At)：JWT簽發時間</li>
+<li>jti(JWT Id)：JWT的身分標示，每個JWT的Id都應該是不重複的，避免重複發放</li>
+</ul>
+<h3 id="實作">實作</h3>
+<p>官方範例：</p>
+<p>String jws = Jwts.builder()</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="o">.</span><span class="na">setIssuer</span><span class="o">(</span><span class="s">&#34;me&#34;</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setSubject</span><span class="o">(</span><span class="s">&#34;Bob&#34;</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setAudience</span><span class="o">(</span><span class="s">&#34;you&#34;</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setExpiration</span><span class="o">(</span><span class="n">expiration</span><span class="o">)</span> <span class="c1">//a java.util.Date
+</span><span class="c1"></span><span class="o">.</span><span class="na">setNotBefore</span><span class="o">(</span><span class="n">notBefore</span><span class="o">)</span> <span class="c1">//a java.util.Date 
+</span><span class="c1"></span><span class="o">.</span><span class="na">setIssuedAt</span><span class="o">(</span><span class="k">new</span> <span class="n">Date</span><span class="o">())</span> <span class="c1">// for example, now
+</span><span class="c1"></span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">())</span> <span class="c1">//just an example id
+</span><span class="c1"></span>
+<span class="c1">/// ... etc ...
+</span></code></pre></div><p>所以這邊我寫成這樣</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">EXPIRE_TIME</span> <span class="o">=</span> <span class="n">15</span> <span class="o">*</span> <span class="n">60</span> <span class="o">*</span> <span class="n">1000</span><span class="o">;</span> <span class="c1">//過期時間，15分鐘
+</span><span class="c1"></span>    <span class="cm">/**
+</span><span class="cm">     * 生成jws
+</span><span class="cm">     * @param id UUID，這邊是唯一ID，也就是可以放UserID的參數
+</span><span class="cm">     * @param subject 使用者資訊，EX:可以放使用者物件
+</span><span class="cm">     * @param ttlMillis 過期時間
+</span><span class="cm">     * @return
+</span><span class="cm">     */</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">creatJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">,</span><span class="n">String</span> <span class="n">subject</span><span class="o">,</span><span class="n">Long</span> <span class="n">ttlMillis</span><span class="o">){</span>
+
+    <span class="kt">long</span> <span class="n">nowMillis</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span> <span class="c1">//.currentTimeMillis() 方法返回當前時間(毫秒)
+</span><span class="c1"></span>    <span class="n">Date</span> <span class="n">now</span><span class="o">=</span><span class="k">new</span> <span class="n">Date</span><span class="o">(</span><span class="n">nowMillis</span><span class="o">);</span> <span class="c1">//如果傳進的預設時間為null，預設過期時間設為15分鐘
+</span><span class="c1"></span>    <span class="k">if</span><span class="o">(</span><span class="n">ttlMillis</span>  <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+        <span class="n">ttlMillis</span><span class="o">=</span><span class="n">JWTutils</span><span class="o">.</span><span class="na">EXPIRE_TIME</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kt">long</span> <span class="n">expMills</span> <span class="o">=</span> <span class="n">nowMillis</span> <span class="o">+</span> <span class="n">ttlMillis</span><span class="o">;</span> <span class="c1">//過期時間點＝目前時間＋過期時間
+</span><span class="c1"></span>    <span class="n">Date</span> <span class="n">expDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">(</span><span class="n">expMills</span><span class="o">);</span> <span class="c1">//將時間轉換成Date物件
+</span><span class="c1"></span>
+    <span class="n">JwtBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">Jwts</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">id</span><span class="o">)</span> <span class="c1">//JWT的身分標示
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">setSubject</span><span class="o">(</span><span class="n">subject</span><span class="o">)</span> <span class="c1">//主題可以是json數據
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">setIssuer</span><span class="o">(</span><span class="s">&#34;yen&#34;</span><span class="o">)</span> <span class="c1">//簽發者
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">setIssuedAt</span><span class="o">(</span><span class="n">now</span><span class="o">)</span> <span class="c1">//簽發時間
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">setExpiration</span><span class="o">(</span><span class="n">expDate</span><span class="o">);</span><span class="c1">//設置過期時間
+</span><span class="c1"></span>
+    <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">compact</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="簽名-signature">簽名 Signature</h2>
+<p>簽章（Signature ）是將被轉換成 Base64 編碼的 Header、Payload 與自己定義的密鑰，透過在 Header 設定的雜湊演算法方式所產生的。</p>
+<p>由於密鑰並非公開，因此伺服器端在拿到 Token 後，能透過密鑰解碼，確認資料內容正確，且未被變更，以驗證對方身份。</p>
+<h3 id="產生私有密鑰">產生私有密鑰</h3>
+<p>官方說明密鑰格式：</p>
+<p>如果要用 HMAC-SHA 算法簽署 JWS的話，我們的密鑰必須符合<code>signWith</code>方法參數，所以先看一下sign方法的參數，可以知道密鑰必須是Key類型的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">JwtBuilder</span> <span class="nf">signWith</span><span class="o">(</span><span class="n">Key</span> <span class="n">var1</span><span class="o">,</span> <span class="n">SignatureAlgorithm</span> <span class="n">var2</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InvalidKeyException</span><span class="o">;</span>
+</code></pre></div><p>這裡要注意的是，官方範例私有密鑰給的是SecretKey類型，但是到了0.11.x版本參數已經變成了Key類型了</p>
+<p>官方範例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">SecretKey</span> <span class="n">key</span> <span class="o">=</span> <span class="n">Keys</span><span class="o">.</span><span class="na">hmacShaKeyFor</span><span class="o">(</span><span class="n">Decoders</span><span class="o">.</span><span class="na">BASE64</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="n">secretString</span><span class="o">));</span>
+</code></pre></div><p>secretString就是自定義的私鑰，也是需要經過加密，且官方建議要創建一個新的隨機的密鑰，所以在類別裡面宣告一個密鑰（但是我把它固定，如果想用隨機，可以用UUID的方式，這個密鑰必須也要符合HMAC-SHA簽名演算法，官方文件大致的意思我們的密鑰必須與簽名演算法長度符合。</p>
+<ul>
+<li><code>HS256</code>是 HMAC-SHA-256，它會生成 256 位（32 字節）長的摘要，因此<code>HS256</code> <em>要求</em>您使用至少 32 字節長的密鑰。</li>
+<li><code>HS384</code>是 HMAC-SHA-384，它會產生 384 位（48 字節）長的摘要，因此<code>HS384</code> <em>要求</em>您使用至少 48 字節長的密鑰。</li>
+<li><code>HS512</code>是 HMAC-SHA-512，它會生成 512 位（64 字節）長的摘要，因此<code>HS512</code> <em>要求</em>您使用至少 64 字節長的密鑰。</li>
+</ul>
+<p>官方建議的寫法是使用SignWith方法，如下</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">jws</span> <span class="o">=</span> <span class="n">Jwts</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+
+   <span class="c1">// ... etc ...
+</span><span class="c1"></span>
+   <span class="o">.</span><span class="na">signWith</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="c1">// &lt;---
+</span><span class="c1"></span>
+   <span class="o">.</span><span class="na">compact</span><span class="o">();</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">TOKEN_SECRET</span> <span class="o">=</span> <span class="s">&#34;cuAihCz53DZRjZwbsGcZJ2Ai6At+T142uphtJMsk7iQ=&#34;</span><span class="o">;</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span>  <span class="kd">static</span>  <span class="n">Key</span> <span class="nf">generalKey</span><span class="o">(){</span>
+    <span class="kt">byte</span><span class="o">[]</span> <span class="n">encodeKey</span> <span class="o">=</span> <span class="n">Decoders</span><span class="o">.</span><span class="na">BASE64</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="n">JWTutils</span><span class="o">.</span><span class="na">TOKEN_SECRET</span><span class="o">);</span>
+    <span class="n">Key</span> <span class="n">key</span><span class="o">=</span> <span class="n">Keys</span><span class="o">.</span><span class="na">hmacShaKeyFor</span><span class="o">(</span><span class="n">encodeKey</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">key</span><span class="o">;</span>
+
+<span class="o">}</span>
+</code></pre></div><p>然後在我們要進行產生的類別裡使用</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">creatJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">,</span><span class="n">String</span> <span class="n">subject</span><span class="o">,</span><span class="n">Long</span> <span class="n">ttlMillis</span><span class="o">){</span>
+
+		<span class="cm">/*....
+</span><span class="cm">		*/</span>
+    <span class="c1">//SecretKey secretKey = generalKey(); //生成私有密鑰 (jwt 0.9.0)
+</span><span class="c1"></span>  <span class="n">SignatureAlgorithm</span> <span class="n">signatureAlgorithm</span><span class="o">=</span><span class="n">SignatureAlgorithm</span><span class="o">.</span><span class="na">HS256</span><span class="o">;</span><span class="c1">//密鑰加密演算法  
+</span><span class="c1"></span>  <span class="n">Key</span> <span class="n">secretKey</span> <span class="o">=</span> <span class="n">generalKey</span><span class="o">();</span>
+
+    <span class="n">JwtBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">Jwts</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">signWith</span><span class="o">(</span><span class="n">secretKey</span><span class="o">,</span><span class="n">signatureAlgorithm</span><span class="o">)</span>
+
+    <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">compact</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="完整jws程式碼">完整JWS程式碼</h3>
+<p>結合上面的，就完成了如何生成JWS</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">creatJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">,</span><span class="n">String</span> <span class="n">subject</span><span class="o">,</span><span class="n">Long</span> <span class="n">ttlMillis</span><span class="o">){</span>
+
+    <span class="c1">//SignatureAlgorithm signatureAlgorithm=SignatureAlgorithm.ES256; jwt(0.9.0)
+</span><span class="c1"></span>    <span class="n">SignatureAlgorithm</span> <span class="n">signatureAlgorithm</span><span class="o">=</span><span class="n">SignatureAlgorithm</span><span class="o">.</span><span class="na">HS256</span><span class="o">;</span>
+    <span class="kt">long</span> <span class="n">nowMillis</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span> <span class="c1">//.currentTimeMillis() 方法返回當前時間(毫秒)
+</span><span class="c1"></span>    <span class="n">Date</span> <span class="n">now</span><span class="o">=</span><span class="k">new</span> <span class="n">Date</span><span class="o">(</span><span class="n">nowMillis</span><span class="o">);</span>
+    <span class="c1">//如果傳進的預設時間為null，預設過期時間設為15分鐘
+</span><span class="c1"></span>    <span class="k">if</span><span class="o">(</span><span class="n">ttlMillis</span>  <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+        <span class="n">ttlMillis</span><span class="o">=</span><span class="n">JWTutils</span><span class="o">.</span><span class="na">EXPIRE_TIME</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kt">long</span> <span class="n">expMills</span> <span class="o">=</span> <span class="n">nowMillis</span> <span class="o">+</span> <span class="n">ttlMillis</span><span class="o">;</span> <span class="c1">//過期時間點＝目前時間＋過期時間
+</span><span class="c1"></span>    <span class="n">Date</span> <span class="n">expDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">(</span><span class="n">expMills</span><span class="o">);</span>
+
+    <span class="c1">//SecretKey secretKey = generalKey(); //生成私有密鑰 (jwt 0.9.0)
+</span><span class="c1"></span>    <span class="n">Key</span> <span class="n">secretKey</span> <span class="o">=</span> <span class="n">generalKey</span><span class="o">();</span>
+
+    <span class="n">JwtBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">Jwts</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">setSubject</span><span class="o">(</span><span class="n">subject</span><span class="o">)</span> <span class="c1">//主題可以是json數據
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">setIssuer</span><span class="o">(</span><span class="s">&#34;yen&#34;</span><span class="o">)</span> <span class="c1">//簽名
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">setIssuedAt</span><span class="o">(</span><span class="n">now</span><span class="o">)</span> <span class="c1">//簽發時間
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">signWith</span><span class="o">(</span><span class="n">secretKey</span><span class="o">,</span><span class="n">signatureAlgorithm</span><span class="o">)</span>
+            <span class="c1">//.signWith(signatureAlgorithm,secretKey) //(jwt 0.9.0)使用ES256演算法簽名，第二個參數為密鑰
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">setExpiration</span><span class="o">(</span><span class="n">expDate</span><span class="o">);</span><span class="c1">//設置過期時間
+</span><span class="c1"></span>
+    <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">compact</span><span class="o">();</span> <span class="c1">//最後使用compact()	進行生成
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><p>接著可以按照使用者傳不同的參數，可決定我們要預設產生什麼參數</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 生成jwt
+</span><span class="cm"> * @param subject
+</span><span class="cm"> * @param ttlMillis
+</span><span class="cm"> * @return
+</span><span class="cm"> */</span>
+<span class="c1">//沒給ID
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">creatJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">subject</span><span class="o">,</span><span class="n">Long</span> <span class="n">ttlMillis</span><span class="o">){</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">ttlMillis</span>  <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+        <span class="n">ttlMillis</span><span class="o">=</span><span class="n">JWTutils</span><span class="o">.</span><span class="na">EXPIRE_TIME</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span>  <span class="n">creatJWT</span><span class="o">(</span><span class="n">getUUID</span><span class="o">(),</span><span class="n">subject</span><span class="o">,</span><span class="n">ttlMillis</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * 生成jwt
+</span><span class="cm"> * @param subject
+</span><span class="cm"> * @return
+</span><span class="cm"> */</span>
+<span class="c1">//只有給要存什麼
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">creatJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">subject</span><span class="o">){</span>
+    <span class="k">return</span>  <span class="n">creatJWT</span><span class="o">(</span><span class="n">getUUID</span><span class="o">(),</span><span class="n">subject</span><span class="o">,</span><span class="kc">null</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">//隨機產生UUID方法
+</span><span class="c1"></span><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getUUID</span><span class="o">(){</span>
+ <span class="k">return</span> <span class="n">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">}</span>
+
+</code></pre></div><h1 id="解析jws">解析JWS</h1>
+<p>官方給的解析JWS流程：</p>
+<ol>
+<li>使用該<code>Jwts.parserBuilder()</code>方法創建一個<code>JwtParserBuilder</code>實例。</li>
+<li>指定要用於驗證 JWS 簽名的<code>SecretKey</code>或非對稱的<code>PublicKey</code></li>
+<li>調用的<code>build()</code>方法<code>JwtParserBuilder</code>以返迴<code>JwtParser</code>。</li>
+<li>最後，<code>parseClaimsJws(String)</code>使用您的 jws 調用該方法<code>String</code>，生成原始 JWS。</li>
+<li>整個調用被包裝在一個 try/catch 塊中，以防解析或簽名驗證失敗。</li>
+</ol>
+<p>官方範例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Jws</span><span class="o">&lt;</span><span class="n">Claims</span><span class="o">&gt;</span> <span class="n">jws</span><span class="o">;</span>
+
+<span class="k">try</span> <span class="o">{</span>
+    <span class="n">jws</span> <span class="o">=</span> <span class="n">Jwts</span><span class="o">.</span><span class="na">parserBuilder</span><span class="o">()</span>  <span class="c1">// (1)
+</span><span class="c1"></span>    <span class="o">.</span><span class="na">setSigningKey</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>         <span class="c1">// (2)
+</span><span class="c1"></span>    <span class="o">.</span><span class="na">build</span><span class="o">()</span>                    <span class="c1">// (3)
+</span><span class="c1"></span>    <span class="o">.</span><span class="na">parseClaimsJws</span><span class="o">(</span><span class="n">jwsString</span><span class="o">);</span> <span class="c1">// (4)
+</span><span class="c1"></span>    
+
+    <span class="c1">// we can safely trust the JWT
+</span><span class="c1"></span>
+<span class="k">catch</span> <span class="o">(</span><span class="n">JwtException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>       <span class="c1">// (5)
+</span><span class="c1"></span>    
+
+    <span class="c1">// we *cannot* use the JWT as intended by its creator
+</span><span class="c1"></span>
+<span class="o">}</span>
+</code></pre></div><h2 id="實作-1">實作</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 解析JWT
+</span><span class="cm"> *
+</span><span class="cm"> * @param jwt 要解析的jwt
+</span><span class="cm"> * @return
+</span><span class="cm"> * @throws Exception
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">Claims</span> <span class="nf">parseJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">jwt</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+    <span class="n">Key</span> <span class="n">secretKey</span> <span class="o">=</span> <span class="n">generalKey</span><span class="o">();</span> <span class="c1">//簽名祕鑰，和生成的簽名的祕鑰一模一樣
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">Jwts</span>
+            <span class="o">.</span><span class="na">parserBuilder</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setSigningKey</span><span class="o">(</span><span class="n">secretKey</span><span class="o">)</span> <span class="c1">//設定簽名的祕鑰
+</span><span class="c1"></span>            <span class="o">.</span><span class="na">build</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">parseClaimsJws</span><span class="o">(</span><span class="n">jwt</span><span class="o">).</span><span class="na">getBody</span><span class="o">();</span> <span class="c1">//設定需要解析的jwt
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><h1 id="測試">測試</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="c1">//生成
+</span><span class="c1"></span>    <span class="n">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">JWTutils</span><span class="o">.</span><span class="na">creatJWT</span><span class="o">(</span><span class="s">&#34;測試&#34;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;生成token=:&#34;</span> <span class="o">+</span> <span class="n">token</span><span class="o">);</span>
+    <span class="c1">//解析
+</span><span class="c1"></span>    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">Claims</span> <span class="n">claims</span> <span class="o">=</span> <span class="n">JWTutils</span><span class="o">.</span><span class="na">parseJWT</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;解析成功：&#34;</span> <span class="o">+</span> <span class="n">claims</span><span class="o">.</span><span class="na">getSubject</span><span class="o">());</span>
+
+     <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">exception</span><span class="o">){</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;解析失敗:&#34;</span><span class="o">);</span>
+        <span class="n">exception</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+     <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>ConSole:</p>
+<pre><code>
+生成token=:
+eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJiNTVhNThmYi00YTc3LTQ5ZjMtYTkwNy1jNjFiNGRiOGVjOTIiLCJzdWIiOiLmuKzoqaYiLCJpc3MiOiJ5ZW4iLCJpYXQiOjE2NDM3OTU0MzIsImV4cCI6MTY0Mzc5NjMzMn0.zxknrxmnEiA90Z6MwvpNEBxdp-6tDvvjUZ5Sjy7mdYA
+解析成功：測試
+</code></pre><p>就說明成功了！</p>
+<p>接著到https://jwt.io 做測試，把剛剛生成的token貼上</p>
+<p><figure style="flex-grow: 143; flex-basis: 345px">
+		<a href="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/2.png" data-size="1079x750"><img src="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/2.png"
+				srcset="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/2_hu5a4944c4b903c4c273a3ce6667e37d76_129723_480x0_resize_box_3.png 480w, /p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/2_hu5a4944c4b903c4c273a3ce6667e37d76_129723_1024x0_resize_box_3.png 1024w"
+				width="1079"
+				height="750"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>看到藍色勾勾代表成功了</p>
+<p>所以可見我們認證流程如下：</p>
+<p><figure style="flex-grow: 250; flex-basis: 601px">
+		<a href="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/1.png" data-size="1400x559"><img src="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/1.png"
+				srcset="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/1_hu60e2c9e677d05ae714c7cb5783115606_97983_480x0_resize_box_3.png 480w, /p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/1_hu60e2c9e677d05ae714c7cb5783115606_97983_1024x0_resize_box_3.png 1024w"
+				width="1400"
+				height="559"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p><a class="link" href="https://medium.com/%E9%BA%A5%E5%85%8B%E7%9A%84%E5%8D%8A%E8%B7%AF%E5%87%BA%E5%AE%B6%E7%AD%86%E8%A8%98/%E7%AD%86%E8%A8%98-%E9%80%8F%E9%81%8E-jwt-%E5%AF%A6%E4%BD%9C%E9%A9%97%E8%AD%89%E6%A9%9F%E5%88%B6-2e64d72594f8"  target="_blank" rel="noopener"
+    >圖片來源</a></p>
+<h1 id="完整程式碼">完整程式碼</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.example.demo.utils</span><span class="o">;</span>
+
+
+<span class="kn">import</span> <span class="nn">io.jsonwebtoken.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.jsonwebtoken.io.Decoders</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.jsonwebtoken.security.Keys</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.web.header.Header</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.security.Key</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.UUID</span><span class="o">;</span>
+
+
+<span class="c1">//生成jwt工具
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JWTutils</span> <span class="o">{</span>
+    <span class="cm">/**
+</span><span class="cm">     *
+</span><span class="cm">    一個JWT由三部分组成：
+</span><span class="cm">    header（頭部） —— base64編碼的Json字符串
+</span><span class="cm">    payload（資料）—— base64編碼的Json字符串
+</span><span class="cm">    signature（簽名）—— JWT 的最後一部分是 Signature ，這部分內容有三個部分，
+</span><span class="cm">    先是用 Base64 編碼的 header.payload ，再用加密演算法加密一下，加密的時候要放進去一個 Secret ，
+</span><span class="cm">    這個相當於是一個密碼，這個密碼祕密地儲存在服務端。
+</span><span class="cm">    中間用點分隔開，並且都會使用 Base64 編碼
+</span><span class="cm">    */</span>
+
+    <span class="c1">//過期時間，15分鐘
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">EXPIRE_TIME</span> <span class="o">=</span> <span class="n">15</span> <span class="o">*</span> <span class="n">60</span> <span class="o">*</span> <span class="n">1000</span><span class="o">;</span>
+    <span class="c1">//私鑰
+</span><span class="c1"></span>    <span class="c1">//private static final String TOKEN_SECRET = &#34;privateKey&#34;;
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">TOKEN_SECRET</span> <span class="o">=</span> <span class="s">&#34;cuAihCz53DZRjZwbsGcZJ2Ai6At+T142uphtJMsk7iQ=&#34;</span><span class="o">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 生成jwt
+</span><span class="cm">     * @param id UUID
+</span><span class="cm">     * @param subject 資訊
+</span><span class="cm">     * @param ttlMillis 過期時間
+</span><span class="cm">     * @return
+</span><span class="cm">     */</span>
+    <span class="c1">//id是唯一的id，uuid進行生成，subject是jwt帶的數據，ttlMills是超時時間
+</span><span class="c1"></span>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">creatJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">,</span><span class="n">String</span> <span class="n">subject</span><span class="o">,</span><span class="n">Long</span> <span class="n">ttlMillis</span><span class="o">){</span>
+
+        <span class="c1">//SignatureAlgorithm signatureAlgorithm=SignatureAlgorithm.ES256; jwt(0.9.0)
+</span><span class="c1"></span>        <span class="n">SignatureAlgorithm</span> <span class="n">signatureAlgorithm</span><span class="o">=</span><span class="n">SignatureAlgorithm</span><span class="o">.</span><span class="na">HS256</span><span class="o">;</span>
+        <span class="kt">long</span> <span class="n">nowMillis</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span> <span class="c1">//.currentTimeMillis() 方法返回當前時間(毫秒)
+</span><span class="c1"></span>        <span class="n">Date</span> <span class="n">now</span><span class="o">=</span><span class="k">new</span> <span class="n">Date</span><span class="o">(</span><span class="n">nowMillis</span><span class="o">);</span>
+        <span class="c1">//如果傳進的預設時間為null，預設過期時間設為15分鐘
+</span><span class="c1"></span>        <span class="k">if</span><span class="o">(</span><span class="n">ttlMillis</span>  <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="n">ttlMillis</span><span class="o">=</span><span class="n">JWTutils</span><span class="o">.</span><span class="na">EXPIRE_TIME</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">expMills</span> <span class="o">=</span> <span class="n">nowMillis</span> <span class="o">+</span> <span class="n">ttlMillis</span><span class="o">;</span> <span class="c1">//過期時間點＝目前時間＋過期時間
+</span><span class="c1"></span>        <span class="n">Date</span> <span class="n">expDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">(</span><span class="n">expMills</span><span class="o">);</span>
+
+        <span class="c1">//SecretKey secretKey = generalKey(); //生成私有密鑰 (jwt 0.9.0)
+</span><span class="c1"></span>        <span class="n">Key</span> <span class="n">secretKey</span> <span class="o">=</span> <span class="n">generalKey</span><span class="o">();</span>
+
+        <span class="n">JwtBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">Jwts</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">setSubject</span><span class="o">(</span><span class="n">subject</span><span class="o">)</span> <span class="c1">//主題可以是json數據
+</span><span class="c1"></span>                <span class="o">.</span><span class="na">setIssuer</span><span class="o">(</span><span class="s">&#34;yen&#34;</span><span class="o">)</span> <span class="c1">//簽名
+</span><span class="c1"></span>                <span class="o">.</span><span class="na">setIssuedAt</span><span class="o">(</span><span class="n">now</span><span class="o">)</span> <span class="c1">//簽發時間
+</span><span class="c1"></span>                <span class="o">.</span><span class="na">signWith</span><span class="o">(</span><span class="n">secretKey</span><span class="o">,</span><span class="n">signatureAlgorithm</span><span class="o">)</span>
+                <span class="c1">//.signWith(signatureAlgorithm,secretKey) //(jwt 0.9.0)使用ES256演算法簽名，第二個參數為密鑰
+</span><span class="c1"></span>                <span class="o">.</span><span class="na">setExpiration</span><span class="o">(</span><span class="n">expDate</span><span class="o">);</span><span class="c1">//設置過期時間
+</span><span class="c1"></span>
+        <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">compact</span><span class="o">();</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+</span><span class="cm">     * 生成jwt
+</span><span class="cm">     * @param subject
+</span><span class="cm">     * @param ttlMillis
+</span><span class="cm">     * @return
+</span><span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">creatJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">subject</span><span class="o">,</span><span class="n">Long</span> <span class="n">ttlMillis</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">ttlMillis</span>  <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="n">ttlMillis</span><span class="o">=</span><span class="n">JWTutils</span><span class="o">.</span><span class="na">EXPIRE_TIME</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span>  <span class="n">creatJWT</span><span class="o">(</span><span class="n">getUUID</span><span class="o">(),</span><span class="n">subject</span><span class="o">,</span><span class="n">ttlMillis</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 生成jwt
+</span><span class="cm">     * @param subject
+</span><span class="cm">     * @return
+</span><span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">creatJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">subject</span><span class="o">){</span>
+        <span class="k">return</span>  <span class="n">creatJWT</span><span class="o">(</span><span class="n">getUUID</span><span class="o">(),</span><span class="n">subject</span><span class="o">,</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="c1">//生成令牌
+</span><span class="c1"></span>    <span class="c1">//public  static  SecretKey generalKey(){ //(jwt 0.9.0)
+</span><span class="c1"></span>    <span class="kd">public</span>  <span class="kd">static</span>  <span class="n">Key</span> <span class="nf">generalKey</span><span class="o">(){</span>
+        <span class="cm">/*
+</span><span class="cm">        byte[] encodeKey = Base64.getDecoder().decode(JWTutils.TOKEN_SECRET);
+</span><span class="cm">        SecretKey key = new SecretKeySpec(encodeKey,0, encodeKey.length, &#34;AES&#34;);
+</span><span class="cm">        */</span>
+        <span class="kt">byte</span><span class="o">[]</span> <span class="n">encodeKey</span> <span class="o">=</span> <span class="n">Decoders</span><span class="o">.</span><span class="na">BASE64</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="n">JWTutils</span><span class="o">.</span><span class="na">TOKEN_SECRET</span><span class="o">);</span>
+        <span class="n">Key</span> <span class="n">key</span><span class="o">=</span> <span class="n">Keys</span><span class="o">.</span><span class="na">hmacShaKeyFor</span><span class="o">(</span><span class="n">encodeKey</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">key</span><span class="o">;</span>
+
+    <span class="o">}</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 解析JWT
+</span><span class="cm">     *
+</span><span class="cm">     * @param jwt 要解析的jwt
+</span><span class="cm">     * @return
+</span><span class="cm">     * @throws Exception
+</span><span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Claims</span> <span class="nf">parseJWT</span><span class="o">(</span><span class="n">String</span> <span class="n">jwt</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+        <span class="c1">//SecretKey secretKey = generalKey(); jwt0.9.0
+</span><span class="c1"></span>        <span class="n">Key</span> <span class="n">secretKey</span> <span class="o">=</span> <span class="n">generalKey</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">Jwts</span>
+                <span class="cm">/*.parser() jwt(0.9.0)
+</span><span class="cm">                //.setSigningKey(secretKey)
+</span><span class="cm">                 */</span>
+                <span class="o">.</span><span class="na">parserBuilder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">setSigningKey</span><span class="o">(</span><span class="n">secretKey</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">parseClaimsJws</span><span class="o">(</span><span class="n">jwt</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">getBody</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getUUID</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="n">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="cm">/**
+</span><span class="cm">     * 測試JWT生成與解析的工具
+</span><span class="cm">     *
+</span><span class="cm">     * @param args
+</span><span class="cm">     * @throws Exception
+</span><span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">//生成
+</span><span class="c1"></span>        <span class="n">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">JWTutils</span><span class="o">.</span><span class="na">creatJWT</span><span class="o">(</span><span class="s">&#34;測試&#34;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;生成token=:&#34;</span> <span class="o">+</span> <span class="n">token</span><span class="o">);</span>
+        <span class="c1">//解析
+</span><span class="c1"></span>        <span class="k">try</span> <span class="o">{</span>
+        <span class="n">Claims</span> <span class="n">claims</span> <span class="o">=</span> <span class="n">JWTutils</span><span class="o">.</span><span class="na">parseJWT</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;解析成功&#34;</span> <span class="o">+</span> <span class="n">claims</span><span class="o">.</span><span class="na">getSubject</span><span class="o">());</span>
+
+        <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">exception</span><span class="o">){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;解析失敗:&#34;</span><span class="o">);</span>
+        <span class="n">exception</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/java%E7%AD%86%E8%A8%98/">Java筆記</a>
+        
+            <a href="/tags/jwt/">JWT</a>
+        
+            <a href="/tags/jws/">JWS</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#什麼是jwt">什麼是JWT</a></li>
+    <li><a href="#什麼情況適合使用-jwt">什麼情況適合使用 JWT</a></li>
+  </ol>
+
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#jsonwebtoken套件">Jsonwebtoken套件</a>
+          <ol>
+            <li><a href="#maven">Maven</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#頭部-header">頭部 Header</a></li>
+    <li><a href="#載賀-payload">載賀 Payload</a>
+      <ol>
+        <li><a href="#實作">實作</a></li>
+      </ol>
+    </li>
+    <li><a href="#簽名-signature">簽名 Signature</a>
+      <ol>
+        <li><a href="#產生私有密鑰">產生私有密鑰</a></li>
+        <li><a href="#完整jws程式碼">完整JWS程式碼</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#實作-1">實作</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

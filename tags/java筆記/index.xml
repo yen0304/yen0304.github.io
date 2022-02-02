@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java筆記 on Yen&#39;s部落格</title>
+    <link>https://yen0304.github.io/tags/java%E7%AD%86%E8%A8%98/</link>
+    <description>Recent content in Java筆記 on Yen&#39;s部落格</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Wed, 02 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/java%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>JWT(JSON Web Token)原理介紹&amp;實作JWS</title>
+      <link>https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/</link>
+      <pubDate>Wed, 02 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/</guid>
+      <description>JWT(JSON Web Token) — 原理介紹&amp;amp;實作JWS 現在網上大多數介紹JWT的文章實際介紹的都是JWS(JSON Web Signature),也往往導致了人們對於JWT的誤解，但是JWT並不等於JWS，JWS只是JWT的一種實現，除了JWS外，JWE(JSON Web Encryption)也是JWT的一種實現
+原文網址：https://kknews.cc/code/ok4j92o.html
+什麼是JWT JWT 的全名是 JSON Web Token，是一種基於 JSON 的開放標準(RFC 7519)，它定義了一種簡潔(compact)且自包含(self-contained)的方式，用於在雙方之間安全地將訊息作為 JSON 物件傳輸。而這個訊息是經過數位簽章(Digital Signature)，因此可以被驗證及信任。可以使用 密碼(經過 HMAC 演算法) 或用一對 公鑰/私鑰(經過 RSA 或 ECDSA 演算法) 來對 JWT 進行簽章。
+什麼情況適合使用 JWT  授權(Authorization)：這是很常見 JWT 的使用方式，例如使用者從 Client 端登入後，該使用者再次對 Server 端發送請求的時候，會夾帶著 JWT，允許使用者存取該 token 有權限的資源。單一登錄(Single Sign On)是當今廣泛使用 JWT 的功能之一，因為它的成本較小並且可以在不同的網域(domain)中輕鬆使用。 訊息交換(Information Exchange)：JWT 可以透過公鑰/私鑰來做簽章，讓我們可以知道是誰發送這個 JWT，此外，由於簽章是使用 header 和 payload 計算的，因此還可以驗證內容是否遭到篡改。  環境設置 JDK版本：17
+Jsonwebtoken套件 透過這個套件能更方便的創建、完成驗證 JWT，java11是沒有辦法安裝0.9.x以下的版本，在寫法上也略有些不同，所以安裝了0.11.2。
+Maven &amp;lt;!--jwt--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.jsonwebtoken&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;jjwt-api&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;0.</description>
+    </item>
+    
+  </channel>
+</rss>
