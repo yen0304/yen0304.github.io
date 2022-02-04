@@ -6,7 +6,324 @@
         <description>Recent content on Yen&#39;s部落格</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-tw</language>
-        <lastBuildDate>Wed, 02 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 04 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Docker筆記-基本</title>
+        <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/</link>
+        <pubDate>Fri, 04 Feb 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/logo.png" alt="Featured image of post Docker筆記-基本" /&gt;&lt;h1 id=&#34;docker基本&#34;&gt;Docker基本&lt;/h1&gt;
+&lt;p&gt;參考來源：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://hahow.in/courses/5df27f1fa5ee510022a08500/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://hahow.in/courses/5df27f1fa5ee510022a08500/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_21197507/article/details/115071715&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://blog.csdn.net/qq_21197507/article/details/115071715&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/twtrubiks/docker-tutorial&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/twtrubiks/docker-tutorial&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;什麼是docker&#34;&gt;什麼是Docker&lt;/h2&gt;
+&lt;p&gt;docker是一種容器化技術，問題的起源在於在多個APP在同一台主機的同一個系統上運行，只要有問題發生，所有APP會受影響，所有演變成了使用多個主機來完成（傳統模式），但這樣耗費量還是很大，所以就出現了虛擬機（VM模式），就可以達到保護功能，同時用一個主機就可以完成，但這些虛擬機在系統資源（VM、OS）的耗費量還是非常大，所以出現了Docker（容器模式），使用軟體的虛擬的空間來完成。&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 175; flex-basis: 421px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2.png&#34; data-size=&#34;946x539&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2_hu4ffc4645e1ce4ac42870a51d33ced0bc_207291_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2_hu4ffc4645e1ce4ac42870a51d33ced0bc_207291_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;946&#34;
+				height=&#34;539&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;docker三大功用&#34;&gt;Docker三大功用&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;簡化部署流程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在部署運行環境時，常常要進行環境安安裝，或是安裝指令，耗時又常常出錯，Docker可以把這些用指令變成程式部署包&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;跨平台部署&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;無論在什麼系統下使用Docker的部署包都可以運行&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;建立乾淨測試環境&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;將測試資料、資料庫安裝、安裝指令打包成資料庫部署包&lt;/p&gt;
+&lt;p&gt;當有了城市以及資料庫部署包之後，就可以快速運行全新的環境，也可以做安靜的安裝跟清空，不用擔心有殘留檔案的問題&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 177; flex-basis: 426px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8.png&#34; data-size=&#34;936x527&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8_hua6f97e172b0701fcc587fe567a022063_320939_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8_hua6f97e172b0701fcc587fe567a022063_320939_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;936&#34;
+				height=&#34;527&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;名詞解釋&#34;&gt;名詞解釋&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;鏡像（image）&lt;/p&gt;
+&lt;p&gt;映像檔，可以把它想成是以前我們在玩 VM 的 Guest OS（ 安裝在虛擬機上的作業系統 ）。&lt;/p&gt;
+&lt;p&gt;Image 是唯讀（ R\O ）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;容器（container）
+Docker利用容器技術，獨立運行一個或者一組應用， 通過鏡像來創建的
+啟動，停止，刪除，基本命令！
+就目前可以把這個容器理解為一個建議的linux系統&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;倉庫（repository）
+存放鏡像(image)的地方，可以把它想成類似 &lt;a class=&#34;link&#34; href=&#34;https://github.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;GitHub&lt;/a&gt;，裡面存放了非常多的 Image ，可在 &lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Docker Hub&lt;/a&gt; 中查看。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;安裝docker&#34;&gt;安裝Docker&lt;/h2&gt;
+&lt;p&gt;直接到官網無腦安裝docker-desktop（也可以安裝Docker ToolBox）：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.docker.com/products/docker-desktop&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.docker.com/products/docker-desktop&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;確認安裝&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker --version
+docker-compose --version
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;終端機結果&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;➜  ~ docker --version
+docker-compose --version
+Docker version 20.10.12, build e91ed57
+docker-compose version 1.29.2, build 5becea4c
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在右上角的設定可以調整分配的資源(Docker Desktop)：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 174; flex-basis: 419px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8.png&#34; data-size=&#34;2526x1444&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8_hu7b20f49b7837aeb8251c2e8611aca3b1_210016_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8_hu7b20f49b7837aeb8251c2e8611aca3b1_210016_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2526&#34;
+				height=&#34;1444&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;其實MAC、WINDOWS安裝這些軟體都是為了在Linux底下運行，因為Docker的底層是Linux，如圖：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 177; flex-basis: 426px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF.png&#34; data-size=&#34;1052x592&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF_hu4c9a8288ab48308d1a678f0d7e59e1ba_175965_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF_hu4c9a8288ab48308d1a678f0d7e59e1ba_175965_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1052&#34;
+				height=&#34;592&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h1 id=&#34;建立與使用docker-images&#34;&gt;建立與使用Docker Images&lt;/h1&gt;
+&lt;p&gt;首先要註冊&lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Docker hub&lt;/a&gt;帳號，完成之後可以到首頁上方的搜尋案件搜尋&lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/_/hello-world&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;hello-world&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;可以看到下面相關指令：&lt;/p&gt;
+&lt;h2 id=&#34;docker-hello-word&#34;&gt;docker hello-word&lt;/h2&gt;
+&lt;p&gt;先到遠端（Docker hub）下載hello-world檔案&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker pull hello-world
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;docker run hello-world
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這個&lt;code&gt;docker run&lt;/code&gt;等同於&lt;code&gt;docker container runˊ&lt;/code&gt;指令&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 125; flex-basis: 301px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/helloworld.png&#34; data-size=&#34;577x459&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/helloworld.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/helloworld_hu5a003e91672af9cd49d517a45eabd09b_63792_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/helloworld_hu5a003e91672af9cd49d517a45eabd09b_63792_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;577&#34;
+				height=&#34;459&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;可以透過&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker images
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;查看本地有哪些image&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+hello-world   latest    18e5af790473   4 months ago   9.14kB
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;docker-hub雲端下載&#34;&gt;Docker hub雲端下載&lt;/h2&gt;
+&lt;p&gt;透過pull指令可以指定版本號「tag」，只要是透過&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker pull [名稱]]:[版本號]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;範例如下：&lt;/p&gt;
+&lt;p&gt;到https://hub.docker.com/r/uopsdod/course-image-first/tags可以看到有很多版本號，&lt;/p&gt;
+&lt;p&gt;下載最新的話依照網址的指示&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker pull uopsdod/course-image-first:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在查看目前有哪些images，tag就會顯示images的版本&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 257; flex-basis: 619px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/tag.png&#34; data-size=&#34;1140x442&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/tag.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/tag_hud02e18a8007577c35e8223efddfea34b_101772_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/tag_hud02e18a8007577c35e8223efddfea34b_101772_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1140&#34;
+				height=&#34;442&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;tag&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;tag&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;建立images&#34;&gt;建立images&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;docker create [OPTIONS] IMAGE [COMMAND] [ARG...]
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;建立資料夾&lt;/li&gt;
+&lt;li&gt;資料夾裡面的Dockerfile名稱一定要是Dockerfile(大小寫要一樣)&lt;/li&gt;
+&lt;li&gt;在終端機到資料夾目錄後，輸入&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;docker bulid -t [帳號名稱]/[images名稱] .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中.的意思就是到目錄搜尋Dockerfile的檔案&lt;/p&gt;
+&lt;h2 id=&#34;上傳images&#34;&gt;上傳images&lt;/h2&gt;
+&lt;p&gt;透過以下指令登入或登出：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker login
+docker logout
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;接著&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker push [帳號名稱]/[images名稱] 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;即可上傳&lt;/p&gt;
+&lt;h2 id=&#34;刪除images&#34;&gt;刪除images&lt;/h2&gt;
+&lt;p&gt;指令&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Docker rmi [帳號名稱]/[images名稱] 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果跳出訊息是有container在使用的話，就先移除container&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker rmi [container編號]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果想要強制刪除（連同contaier）&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker rmi -f [帳號名稱]/[images名稱] 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;可以透過docker images查看&lt;/p&gt;
+&lt;h1 id=&#34;docker基本指令&#34;&gt;Docker基本指令&lt;/h1&gt;
+&lt;p&gt;查看目前所有container&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Docker container ls
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;先抓取一個image下來&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker pull alpine
+&lt;/code&gt;&lt;/pre&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  ~ clear
+➜  ~ docker container ls
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+➜  ~ docker pull alpine
+Using default tag: latest
+latest: Pulling from library/alpine
+9b3977197b4f: Pull &lt;span class=&#34;nb&#34;&gt;complete&lt;/span&gt;
+Digest: sha256:21a3deaa0d32a8057914f36584b5288d2e5ecc984380bc0118285c70fa8c9300
+Status: Downloaded newer image &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; alpine:latest
+docker.io/library/alpine:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著啟用container運行剛剛抓的alpine image&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker container run --name [container] [images]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;範例：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker container run --name test01 alpine
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;或是加上 ls / 可以顯示出可以使用的指令&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker container run --name test01 alpine ls/ 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;成功後可以到docker desktop看到in use&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 176; flex-basis: 423px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/inuse.png&#34; data-size=&#34;2532x1434&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/inuse.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/inuse_hua67f6c58dc4d4b11e7d63b69b17d354a_225479_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/inuse_hua67f6c58dc4d4b11e7d63b69b17d354a_225479_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2532&#34;
+				height=&#34;1434&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;docker desktop畫面&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;docker desktop畫面&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著透過ls指令查看運行中的container&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://yen0304.github.io/Users/yen/Desktop/docker%e7%ad%86%e8%a8%98/containerls.png&#34; alt=&#34;containerls&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;可以看到沒有，是因為container的運作機制是，當沒有程序一直運作，他會自動停止，所以要透過&lt;/p&gt;
+&lt;h2 id=&#34;interactive-mode&#34;&gt;Interactive mode&lt;/h2&gt;
+&lt;p&gt;使用-it建造Interactive mode，讓程序持續運作某一個程序&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run -it --name [container] [images] /[需要的指令]
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;docker run -it --name test02 /bin/sh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看到#代表成功進去container，可以再透過ls查看哪些可用的Linux指令， 在使用exit離開&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 560; flex-basis: 1345px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/it.png&#34; data-size=&#34;1256x224&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/it.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/it_hu0bc4223790e94a247320746aae649bfa_37381_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/it_hu0bc4223790e94a247320746aae649bfa_37381_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1256&#34;
+				height=&#34;224&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;結果&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;結果&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;Interactive mode 在exit時，也會因為沒有事情做而運行關閉，所以要讓他在背景運行，就使用-d 像是daemon服務&lt;/p&gt;
+&lt;h2 id=&#34;container背景運行--d&#34;&gt;Container背景運行 -d&lt;/h2&gt;
+&lt;p&gt;tail可以幫我們持續追蹤某個docker file的log，印到console上面&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run -d --name [container] [images] tail -f [/運行目的地]
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;docker run -d --name test03 alpine tail -f /dev/null
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在使用ls指令就可以看到剛剛啟用的container還在運行，&lt;/p&gt;
+&lt;p&gt;也可以透過指令進入container&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker exec -it [containerID] /bin/sh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;接著不論在裡面做什麼事情，exit後container還是持續的在運行&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 304; flex-basis: 730px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C.png&#34; data-size=&#34;1882x618&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C_hua088ce7abafaddf292c68ca171245df1_136741_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C_hua088ce7abafaddf292c68ca171245df1_136741_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1882&#34;
+				height=&#34;618&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;背景運行&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;背景運行&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 344; flex-basis: 826px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/running.png&#34; data-size=&#34;2038x592&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/running.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/running_hu4f4e11f4e568423924e055d2b82556fa_71602_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/running_hu4f4e11f4e568423924e055d2b82556fa_71602_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2038&#34;
+				height=&#34;592&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;docker desktop畫面&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;docker desktop畫面&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;port指令&#34;&gt;port指令&lt;/h2&gt;
+&lt;p&gt;首先下載nginx這個websever的images&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker pull nginx:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;port-mapping--p&#34;&gt;port mapping -p&lt;/h3&gt;
+&lt;p&gt;-p的意思就是port mapping&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-p [VM linux port]:[對應container的port]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;所以這邊寫成：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run -d -p 8081:80 --name nginxtest  nginx
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;再透過ls指令可以看到port已經建立了&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 796; flex-basis: 1910px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/nginxrun.png&#34; data-size=&#34;1688x212&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/nginxrun.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/nginxrun_hu2390570ffb2fd336752951f834c326bd_63517_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/nginxrun_hu2390570ffb2fd336752951f834c326bd_63517_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1688&#34;
+				height=&#34;212&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;可以透過&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo $(docker-machine ip)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;接著到瀏覽器輸入http://localhost:8081&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 99; flex-basis: 239px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/welcomenginx.png&#34; data-size=&#34;1040x1044&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/welcomenginx.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/welcomenginx_hu421e13c57f02a8806714524724cc5d6d_92574_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/welcomenginx_hu421e13c57f02a8806714524724cc5d6d_92574_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1040&#34;
+				height=&#34;1044&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;welcome&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;welcome&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;使用結束後，&lt;/p&gt;
+&lt;h2 id=&#34;停止container&#34;&gt;停止container&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;docker container stop [containerID]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;列出所有container(不管有無運行)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker container ls -a
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;清除container&#34;&gt;清除container&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;docker container rm [containerID]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;範例：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 235; flex-basis: 564px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/cmd1.png&#34; data-size=&#34;1852x788&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/cmd1.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/cmd1_hu35fdd381545e8b44a7e2697168958e40_224417_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/cmd1_hu35fdd381545e8b44a7e2697168958e40_224417_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1852&#34;
+				height=&#34;788&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;範例&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;範例&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;從開剛始到最後就可以看到container真的被清空了&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>JWT(JSON Web Token)原理介紹&amp;實作JWS</title>
         <link>https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/</link>
         <pubDate>Wed, 02 Feb 2022 00:00:00 +0000</pubDate>
@@ -15,7 +332,7 @@
         <description>&lt;img src="https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/logo.jpeg" alt="Featured image of post JWT(JSON Web Token)原理介紹&amp;實作JWS" /&gt;&lt;h1 id=&#34;jwtjson-web-token--原理介紹實作jws&#34;&gt;JWT(JSON Web Token) — 原理介紹&amp;amp;實作JWS&lt;/h1&gt;
 &lt;p&gt;現在網上大多數介紹JWT的文章實際介紹的都是JWS(JSON Web Signature),也往往導致了人們對於JWT的誤解，但是JWT並不等於JWS，JWS只是JWT的一種實現，除了JWS外，JWE(JSON Web Encryption)也是JWT的一種實現&lt;/p&gt;
 &lt;p&gt;原文網址：https://kknews.cc/code/ok4j92o.html&lt;/p&gt;
-&lt;h2 id=&#34;什麼是jwt&#34;&gt;什麼是JWT&lt;/h2&gt;
+&lt;h1 id=&#34;什麼是jwt&#34;&gt;什麼是JWT&lt;/h1&gt;
 &lt;p&gt;JWT 的全名是 &lt;code&gt;JSON Web Token&lt;/code&gt;，是一種基於 JSON 的開放標準(&lt;a class=&#34;link&#34; href=&#34;https://tools.ietf.org/html/rfc7519&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;RFC 7519&lt;/a&gt;)，它定義了一種簡潔(compact)且自包含(self-contained)的方式，用於在雙方之間安全地將訊息作為 JSON 物件傳輸。而這個訊息是經過數位簽章(Digital Signature)，因此可以被驗證及信任。可以使用 &lt;code&gt;密碼&lt;/code&gt;(經過 &lt;strong&gt;HMAC&lt;/strong&gt; 演算法) 或用一對 &lt;code&gt;公鑰/私鑰&lt;/code&gt;(經過 &lt;strong&gt;RSA&lt;/strong&gt; 或 &lt;strong&gt;ECDSA&lt;/strong&gt; 演算法) 來對 JWT 進行簽章。&lt;/p&gt;
 &lt;h2 id=&#34;什麼情況適合使用-jwt&#34;&gt;什麼情況適合使用 JWT&lt;/h2&gt;
@@ -23,11 +340,11 @@
 &lt;li&gt;&lt;strong&gt;授權(Authorization)&lt;/strong&gt;：這是很常見 JWT 的使用方式，例如使用者從 Client 端登入後，該使用者再次對 Server 端發送請求的時候，會夾帶著 JWT，允許使用者存取該 token 有權限的資源。單一登錄(Single Sign On)是當今廣泛使用 JWT 的功能之一，因為它的成本較小並且可以在不同的網域(domain)中輕鬆使用。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;訊息交換(Information Exchange)&lt;/strong&gt;：JWT 可以透過公鑰/私鑰來做簽章，讓我們可以知道是誰發送這個 JWT，此外，由於簽章是使用 header 和 payload 計算的，因此還可以驗證內容是否遭到篡改。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;環境設置&#34;&gt;環境設置&lt;/h1&gt;
+&lt;h2 id=&#34;環境設置&#34;&gt;環境設置&lt;/h2&gt;
 &lt;p&gt;JDK版本：17&lt;/p&gt;
 &lt;h3 id=&#34;jsonwebtoken套件&#34;&gt;Jsonwebtoken套件&lt;/h3&gt;
 &lt;p&gt;透過這個套件能更方便的創建、完成驗證 JWT，java11是沒有辦法安裝0.9.x以下的版本，在寫法上也略有些不同，所以安裝了0.11.2。&lt;/p&gt;
-&lt;h4 id=&#34;maven&#34;&gt;Maven&lt;/h4&gt;
+&lt;h3 id=&#34;maven&#34;&gt;Maven&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;c&#34;&gt;&amp;lt;!--jwt--&amp;gt;&lt;/span&gt;
 &lt;span class=&#34;nt&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
     &lt;span class=&#34;nt&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;io.jsonwebtoken&lt;span class=&#34;nt&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;

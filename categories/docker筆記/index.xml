@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker筆記 on Yen&#39;s部落格</title>
+    <link>https://yen0304.github.io/categories/docker%E7%AD%86%E8%A8%98/</link>
+    <description>Recent content in Docker筆記 on Yen&#39;s部落格</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Fri, 04 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/categories/docker%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker筆記-基本</title>
+      <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/</link>
+      <pubDate>Fri, 04 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/</guid>
+      <description>Docker基本 參考來源：
+https://hahow.in/courses/5df27f1fa5ee510022a08500/
+https://blog.csdn.net/qq_21197507/article/details/115071715
+https://github.com/twtrubiks/docker-tutorial
+什麼是Docker docker是一種容器化技術，問題的起源在於在多個APP在同一台主機的同一個系統上運行，只要有問題發生，所有APP會受影響，所有演變成了使用多個主機來完成（傳統模式），但這樣耗費量還是很大，所以就出現了虛擬機（VM模式），就可以達到保護功能，同時用一個主機就可以完成，但這些虛擬機在系統資源（VM、OS）的耗費量還是非常大，所以出現了Docker（容器模式），使用軟體的虛擬的空間來完成。
+ 
+Docker三大功用  簡化部署流程  在部署運行環境時，常常要進行環境安安裝，或是安裝指令，耗時又常常出錯，Docker可以把這些用指令變成程式部署包
+ 跨平台部署  無論在什麼系統下使用Docker的部署包都可以運行
+ 建立乾淨測試環境  將測試資料、資料庫安裝、安裝指令打包成資料庫部署包
+當有了城市以及資料庫部署包之後，就可以快速運行全新的環境，也可以做安靜的安裝跟清空，不用擔心有殘留檔案的問題
+ 
+名詞解釋   鏡像（image）
+映像檔，可以把它想成是以前我們在玩 VM 的 Guest OS（ 安裝在虛擬機上的作業系統 ）。
+Image 是唯讀（ R\O ）
+  容器（container） Docker利用容器技術，獨立運行一個或者一組應用， 通過鏡像來創建的 啟動，停止，刪除，基本命令！ 就目前可以把這個容器理解為一個建議的linux系統
+  倉庫（repository） 存放鏡像(image)的地方，可以把它想成類似 GitHub，裡面存放了非常多的 Image ，可在 Docker Hub 中查看。
+  安裝Docker 直接到官網無腦安裝docker-desktop（也可以安裝Docker ToolBox）：
+https://www.docker.com/products/docker-desktop
+確認安裝
+docker --version docker-compose --version 終端機結果
+➜ ~ docker --version docker-compose --version Docker version 20.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -148,7 +148,7 @@ if (!doNotTrack) {
     <h1 id="jwtjson-web-token--原理介紹實作jws">JWT(JSON Web Token) — 原理介紹&amp;實作JWS</h1>
 <p>現在網上大多數介紹JWT的文章實際介紹的都是JWS(JSON Web Signature),也往往導致了人們對於JWT的誤解，但是JWT並不等於JWS，JWS只是JWT的一種實現，除了JWS外，JWE(JSON Web Encryption)也是JWT的一種實現</p>
 <p>原文網址：https://kknews.cc/code/ok4j92o.html</p>
-<h2 id="什麼是jwt">什麼是JWT</h2>
+<h1 id="什麼是jwt">什麼是JWT</h1>
 <p>JWT 的全名是 <code>JSON Web Token</code>，是一種基於 JSON 的開放標準(<a class="link" href="https://tools.ietf.org/html/rfc7519"  target="_blank" rel="noopener"
     >RFC 7519</a>)，它定義了一種簡潔(compact)且自包含(self-contained)的方式，用於在雙方之間安全地將訊息作為 JSON 物件傳輸。而這個訊息是經過數位簽章(Digital Signature)，因此可以被驗證及信任。可以使用 <code>密碼</code>(經過 <strong>HMAC</strong> 演算法) 或用一對 <code>公鑰/私鑰</code>(經過 <strong>RSA</strong> 或 <strong>ECDSA</strong> 演算法) 來對 JWT 進行簽章。</p>
 <h2 id="什麼情況適合使用-jwt">什麼情況適合使用 JWT</h2>
@@ -156,11 +156,11 @@ if (!doNotTrack) {
 <li><strong>授權(Authorization)</strong>：這是很常見 JWT 的使用方式，例如使用者從 Client 端登入後，該使用者再次對 Server 端發送請求的時候，會夾帶著 JWT，允許使用者存取該 token 有權限的資源。單一登錄(Single Sign On)是當今廣泛使用 JWT 的功能之一，因為它的成本較小並且可以在不同的網域(domain)中輕鬆使用。</li>
 <li><strong>訊息交換(Information Exchange)</strong>：JWT 可以透過公鑰/私鑰來做簽章，讓我們可以知道是誰發送這個 JWT，此外，由於簽章是使用 header 和 payload 計算的，因此還可以驗證內容是否遭到篡改。</li>
 </ul>
-<h1 id="環境設置">環境設置</h1>
+<h2 id="環境設置">環境設置</h2>
 <p>JDK版本：17</p>
 <h3 id="jsonwebtoken套件">Jsonwebtoken套件</h3>
 <p>透過這個套件能更方便的創建、完成驗證 JWT，java11是沒有辦法安裝0.9.x以下的版本，在寫法上也略有些不同，所以安裝了0.11.2。</p>
-<h4 id="maven">Maven</h4>
+<h3 id="maven">Maven</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!--jwt--&gt;</span>
 <span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="nt">&lt;/groupId&gt;</span>
@@ -815,18 +815,11 @@ eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJiNTVhNThmYi00YTc3LTQ5ZjMtYTkwNy1jNjFiNGRiOGVjOTI
                 <div class="widget--toc">
                     <nav id="TableOfContents">
   <ol>
-    <li><a href="#什麼是jwt">什麼是JWT</a></li>
     <li><a href="#什麼情況適合使用-jwt">什麼情況適合使用 JWT</a></li>
-  </ol>
-
-  <ol>
-    <li>
+    <li><a href="#環境設置">環境設置</a>
       <ol>
-        <li><a href="#jsonwebtoken套件">Jsonwebtoken套件</a>
-          <ol>
-            <li><a href="#maven">Maven</a></li>
-          </ol>
-        </li>
+        <li><a href="#jsonwebtoken套件">Jsonwebtoken套件</a></li>
+        <li><a href="#maven">Maven</a></li>
       </ol>
     </li>
   </ol>
