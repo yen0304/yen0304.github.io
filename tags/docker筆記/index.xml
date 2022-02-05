@@ -6,7 +6,16 @@
     <description>Recent content in Docker筆記 on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Fri, 04 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/docker%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 05 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/docker%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker筆記-Dockerfile語法使用</title>
+      <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Sat, 05 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</guid>
+      <description>Docekrfile使用觀念 常用Linux指令    MacOS / Linux 指令 說明 範例     exit 離開 exit   pwd 取得目前的路徑 pwd   ls 取得當前資料夾與檔案名稱 ls   cd 切換目錄 cd ~   touch 建立檔案 touch demo.html   mkdir 建立資料夾 mkdir demo   rm 刪除檔案 rm demo.html   cp 複製檔案 cp demo.html demo1.html   scp 在不同的 Linux 主機之間複製檔案 scp user_name@riverye.com:/home/data/考試100分.pdf ~/Desktop   mv 移動檔案 mv demo1.</description>
+    </item>
+    
     <item>
       <title>Docker筆記-基本</title>
       <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/</link>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='認識Dockerfile語法，使用情境'><title>Docker筆記-Dockerfile語法使用</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Docker筆記-Dockerfile語法使用'>
+<meta property='og:description' content='認識Dockerfile語法，使用情境'>
+<meta property='og:url' content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Docker筆記' /><meta property='article:published_time' content='2022-02-05'/><meta property='article:modified_time' content='2022-02-05'/><meta property='og:image' content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo.png' />
+<meta name="twitter:title" content="Docker筆記-Dockerfile語法使用">
+<meta name="twitter:description" content="認識Dockerfile語法，使用情境"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo.png' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/">
+                <img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_800x0_resize_box_3.png"
+                        srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_800x0_resize_box_3.png 800w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post Docker筆記-Dockerfile語法使用" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/docker%E7%AD%86%E8%A8%98/" >
+                Docker筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/">Docker筆記-Dockerfile語法使用</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        認識Dockerfile語法，使用情境
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-02-05</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="docekrfile使用觀念">Docekrfile使用觀念</h1>
+<h2 id="常用linux指令">常用Linux指令</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">MacOS / Linux 指令</th>
+<th style="text-align:center">說明</th>
+<th style="text-align:center">範例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">exit</td>
+<td style="text-align:center">離開</td>
+<td style="text-align:center"><code>exit</code></td>
+</tr>
+<tr>
+<td style="text-align:center">pwd</td>
+<td style="text-align:center">取得目前的路徑</td>
+<td style="text-align:center"><code>pwd</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ls</td>
+<td style="text-align:center">取得當前資料夾與檔案名稱</td>
+<td style="text-align:center"><code>ls</code></td>
+</tr>
+<tr>
+<td style="text-align:center">cd</td>
+<td style="text-align:center">切換目錄</td>
+<td style="text-align:center"><code>cd ~</code></td>
+</tr>
+<tr>
+<td style="text-align:center">touch</td>
+<td style="text-align:center">建立檔案</td>
+<td style="text-align:center"><code>touch demo.html</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mkdir</td>
+<td style="text-align:center">建立資料夾</td>
+<td style="text-align:center"><code>mkdir demo</code></td>
+</tr>
+<tr>
+<td style="text-align:center">rm</td>
+<td style="text-align:center">刪除檔案</td>
+<td style="text-align:center"><code>rm demo.html</code></td>
+</tr>
+<tr>
+<td style="text-align:center">cp</td>
+<td style="text-align:center">複製檔案</td>
+<td style="text-align:center"><code>cp demo.html demo1.html</code></td>
+</tr>
+<tr>
+<td style="text-align:center">scp</td>
+<td style="text-align:center">在不同的 Linux 主機之間複製檔案</td>
+<td style="text-align:center"><code>scp user_name@riverye.com:/home/data/考試100分.pdf ~/Desktop</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mv</td>
+<td style="text-align:center">移動檔案</td>
+<td style="text-align:center"><code>mv demo1.html ~</code></td>
+</tr>
+<tr>
+<td style="text-align:center">sudo</td>
+<td style="text-align:center">使用最高權限</td>
+<td style="text-align:center"><code>sudo 欲使用的指令</code></td>
+</tr>
+<tr>
+<td style="text-align:center">man</td>
+<td style="text-align:center">查看指令說明文件</td>
+<td style="text-align:center"><code>man pwd</code></td>
+</tr>
+<tr>
+<td style="text-align:center">help</td>
+<td style="text-align:center">查看指令說明</td>
+<td style="text-align:center"><code>mv --help</code></td>
+</tr>
+<tr>
+<td style="text-align:center">clear</td>
+<td style="text-align:center">清除終端機上的訊息(往上捲看得到)</td>
+<td style="text-align:center"><code>clear</code></td>
+</tr>
+<tr>
+<td style="text-align:center">which</td>
+<td style="text-align:center">查詢指令的來源路徑</td>
+<td style="text-align:center"><code>which sudo</code></td>
+</tr>
+<tr>
+<td style="text-align:center">find</td>
+<td style="text-align:center">找出符合條件的檔案或資料夾</td>
+<td style="text-align:center"><code>find .</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="重要觀念">重要觀念</h2>
+<p>圖片的文字解說：</p>
+<p>Docker Client就是下docker指令的地方</p>
+<p>Bulid Context就是Docker bulid .指令的時候，當下的目錄就是Bulid Context，也會產生Dockerfile以及其他檔案Other Files</p>
+<p><figure style="flex-grow: 93; flex-basis: 223px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1.png" data-size="233x250"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1_hub1f87b920603ffec725785ec0f843f2d_32922_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1_hub1f87b920603ffec725785ec0f843f2d_32922_1024x0_resize_box_3.png 1024w"
+				width="233"
+				height="250"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>在Linux OS（VM）上面，會安裝所謂的Docker Engine，Docker Engine會接收<code>Docker build</code>指令，接收之後的第一個動作就是將Mac OS(主機)上面目錄的檔案全部copy到VM上面，</p>
+<p><figure style="flex-grow: 171; flex-basis: 411px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2.png" data-size="384x224"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2_hu4eaed72f9d1dfe0afb1ee2bac518a02b_52307_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2_hu4eaed72f9d1dfe0afb1ee2bac518a02b_52307_1024x0_resize_box_3.png 1024w"
+				width="384"
+				height="224"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>接著Dockerfile的第一個指令一定會是<code>From [images]</code>，抓到base images之後，就會臨時起用一個Container ，這個臨時的Container叫做tmp Container01，接著Dockerfile裡面重要的指令，例如Run，就會在原本的Container加一個layer，layer就是Dockerfile Commend跟tmp Container01合起來建立出臨時性的tmp image01就是layer，就著Docler Engine就會透過臨時的image01來產生container02</p>
+<p>這邊到目前為止像這樣：</p>
+<p><figure style="flex-grow: 69; flex-basis: 167px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3.png" data-size="156x223"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3_hu852a4caa6ca575a46622b2b996292387_41263_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3_hu852a4caa6ca575a46622b2b996292387_41263_1024x0_resize_box_3.png 1024w"
+				width="156"
+				height="223"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>下一個Commamd COPY/src/dst，COPY /src指的是在VM的檔案系統，dst是指目前當下的Container02，放進去Container02之中的files就是imported files，再次打包成臨時的image02，image02就會在啟用臨時的tmp container03，最後一個Docker Commend，接著會和最後一個指令<code>(ENTRYPOINT[&quot;httpd&quot;])</code>和最後的tmp container03產生最後的final image，以上就是image產生的過程。</p>
+<p>兩個工作者Docker Client，用來執行指令，用來傳送docker指令到Docker Engine。</p>
+<p>還有三個空間，主機空間、虛擬機空間、臨時的三個虛擬機空間</p>
+<p><figure style="flex-grow: 177; flex-basis: 426px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96.png" data-size="1159x652"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96_hu19f4b0d2a7552fdc40cfe2babf1293e8_300151_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96_hu19f4b0d2a7552fdc40cfe2babf1293e8_300151_1024x0_resize_box_3.png 1024w"
+				width="1159"
+				height="652"
+				loading="lazy"
+				alt="流程圖">
+		</a>
+		
+		<figcaption>流程圖</figcaption>
+		
+	</figure></p>
+<h1 id="dockerfile語法">Dockerfile語法</h1>
+<h2 id="from">FROM</h2>
+<p>首先新建一個資料夾並且用終端機到目錄底下，使用touch指令建立空白檔案，檔名叫做Dockerfile（大小寫要一樣），</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile">touch Dockerfile<span class="err">
+</span></code></pre></div><p>接著打開它（只要是編輯器都可以）</p>
+<p>FROM指令用來選擇Base image的來源，這邊用alpine image，他是一個輕量的Linux OS</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> alpine:latest</span><span class="err">
+</span></code></pre></div><p>存擋後，回到終端機，用<code>cat</code>指令查看檔案內容</p>
+<pre><code>cat Dockerfile
+</code></pre><p>確認之後，就來建立image，</p>
+<pre><code>docker build -t [imagename] .
+</code></pre><p>上面的 <code>.</code>還重要，他的意思就是到當下的目錄找Dockerfile</p>
+<pre><code>➜  dk練習 docker build -t test001 .
+[+] Building 0.1s (5/5) FINISHED
+ =&gt; [internal] load build definition from Dockerfile                       0.0s
+ =&gt; =&gt; transferring dockerfile: 107B                                       0.0s
+ =&gt; [internal] load .dockerignore                                          0.0s
+ =&gt; =&gt; transferring context: 2B                                            0.0s
+ =&gt; [internal] load metadata for docker.io/library/alpine:latest           0.0s
+ =&gt; [1/1] FROM docker.io/library/alpine:latest                             0.0s
+ =&gt; exporting to image                                                     0.0s
+ =&gt; =&gt; exporting layers                                                    0.0s
+ =&gt; =&gt; writing image sha256:1ad3d6652d7301865db4e7cf5acb4efd2e09631f429f7  0.0s
+ =&gt; =&gt; naming to docker.io/library/test001                                 0.0s
+</code></pre><p>然後使用docker images就可以看到下載下來的alpine images了</p>
+<p>查看系統版本</p>
+<pre><code>docker run [imagesname] cat /etc/os-release
+</code></pre><p><figure style="flex-grow: 247; flex-basis: 592px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4.png" data-size="1176x476"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4_hucc7a7a55db6a7fdb70229d5fe772645c_180027_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4_hucc7a7a55db6a7fdb70229d5fe772645c_180027_1024x0_resize_box_3.png 1024w"
+				width="1176"
+				height="476"
+				loading="lazy"
+				alt="執行結果">
+		</a>
+		
+		<figcaption>執行結果</figcaption>
+		
+	</figure></p>
+<h2 id="entrypoint">ENTRYPOINT</h2>
+<p>在上面的例子中，還是得手動透過</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile">docker run -d <span class="o">[</span>imagesname<span class="o">]</span> tail -f /dev/null<span class="err">
+</span></code></pre></div><p>來維持運行，但如果今天想要給別人使用，又不想要求他打上語法才能在背景運行，這時候到Dockerfile編輯，<code>ENTRYPOINT</code>是Docker run的時候會第一個執行的指令，所以ENTRYPOINT是用來預設在docker run的時候會執行的指令。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;指令&#34;</span><span class="p">,</span><span class="s2">&#34;指令&#34;</span><span class="err">....</span><span class="p">]</span><span class="err">
+</span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">ENTRYPOINT</span> <span class="p">[</span> <span class="s2">&#34;tail&#34;</span><span class="p">,</span><span class="s2">&#34;f&#34;</span><span class="p">,</span><span class="s2">&#34;/dev/null&#34;</span> <span class="p">]</span><span class="err">
+</span></code></pre></div><p>再重新建立image-test003並查看ls看看，在run查看ls可以發現test還是在執行：</p>
+<pre><code>cat Dockerfile //查看dockerfile程式碼
+docker container ls //查看運行中的容器
+docker build -t test003 . //建議images
+docker images //查看images
+docker run -d  test003 . //運行images -d後面不用指令，因為寫在ENTRYPOINT裡面了
+docker container ls //查看運行中容器
+</code></pre><p><figure style="flex-grow: 127; flex-basis: 306px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint.png" data-size="1648x1290"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint_hu98f7a58bc5a7280cbba98efabdd966bd_523430_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint_hu98f7a58bc5a7280cbba98efabdd966bd_523430_1024x0_resize_box_3.png 1024w"
+				width="1648"
+				height="1290"
+				loading="lazy"
+				alt="entrypoint">
+		</a>
+		
+		<figcaption>entrypoint</figcaption>
+		
+	</figure></p>
+<h2 id="run">RUN</h2>
+<p>RUN對功能是使用任何base images提供的指令，以上面的base images，把apache serve運行起來（範例內容指令不用記），其中<code>httpd -D FOREGROIND</code>是最後要執行apache server的指令，所以把他放在ENTRYPOINT裡面，即啟動Container運行apache server的概念。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile">cat Dockerfile<span class="err">
+</span><span class="err"></span>docker build -t asce55123/test005 .<span class="err">
+</span><span class="err"></span>docker run -d -p 8081:80 asce55123/test005 //8081本地port，連線到80 apache port<span class="err">
+</span><span class="err"></span>docker container ls<span class="err">
+</span></code></pre></div><p>![](run apadhe.png)</p>
+<p>再到8081看看：</p>
+<p><figure style="flex-grow: 100; flex-basis: 240px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks.png" data-size="438x438"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks_hufe685220fa513272a9325bd3f07ce716_22381_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks_hufe685220fa513272a9325bd3f07ce716_22381_1024x0_resize_box_3.png 1024w"
+				width="438"
+				height="438"
+				loading="lazy"
+				alt="itworks">
+		</a>
+		
+		<figcaption>itworks</figcaption>
+		
+	</figure></p>
+<p>可以看到apache server運行成功了</p>
+<p>以上三個FROM 、ENTRYPOINT、RUN可以完成8-9成的dockerfile，所以要熟練運用</p>
+<p>很重要的一點是**每一次的RUN指令都會產生一個臨時性的container並打包成images，所以兩個RUN之間是互不相通的</p>
+<p>所以下面這個是使用RUN執行的LINUX指令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">RUN</span> <span class="nb">cd</span> /var/www/localhost/htdocs<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> pwd<span class="err">
+</span></code></pre></div><p>但這樣會pwd顯示/根目錄，而不是當下位置，所以可以：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">RUN</span> <span class="nb">cd</span> /var/www/localhost/htdocs <span class="o">&amp;&amp;</span> pwd<span class="err">
+</span></code></pre></div><p>或是要顯示在不同行：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">RUN</span> <span class="nb">cd</span> /var/www/localhost/htdocs <span class="se">\
+</span><span class="se"></span>    <span class="o">&amp;&amp;</span> pwd<span class="err">
+</span></code></pre></div><p>補充LINUX指令：</p>
+<p><a class="link" href="https://ithelp.ithome.com.tw/articles/10235530"  target="_blank" rel="noopener"
+    >https://ithelp.ithome.com.tw/articles/10235530</a></p>
+<p>pwd：取得目前的路徑</p>
+<p>cd：切換目錄</p>
+<ul>
+<li>
+<p>ENTRYPOINT: 預設啟動指令</p>
+</li>
+<li>
+<p>CMD: 給啟動指令的預設參數 會這樣寫，只是官方文件提供一個分出指令定位的東西，ENTRYPOINT + CMD 完全可以用一個ENTRYPOING取代。</p>
+</li>
+<li>
+<p>RUN: 是Dockerfile建立image內部再跑的指令，是跑在Linux裡面的，跟ENTRYPOING與CMD最大的不同就是，他不是作為Image的「啟動指令」，而是作為image的「建造指令」。</p>
+</li>
+</ul>
+<h2 id="env-environment-variables">ENV (environment variables)</h2>
+<p>ENV-環境變數，是在build的時候，可以定義一些變數，讓後面指令在執行時候可以參考</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">ENV</span> myworkdir /var/www/localhost/htdocs<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> apk --update add apache2<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> rm -rf /var/cache/apk/*<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">cd</span> <span class="si">${</span><span class="nv">myworkdir</span><span class="si">}</span><span class="o">}</span><span class="err">
+</span></code></pre></div><p>等同於</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">RUN</span> apk --update add apache2<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> rm -rf /var/cache/apk/*<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">cd</span> /var/www/localhost/htdocs<span class="err">
+</span></code></pre></div><p>這樣之後如果多個RUN都要使用同樣的指令會參數時，可以透過ENV讓程式簡潔也更方便使用。</p>
+<h2 id="workdir">WORKDIR</h2>
+<p>WORKDIR可以改變Container的裡面預設路徑，</p>
+<p>例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">ENV</span> myworkdir /var/www/localhost/htdocs<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">cd</span> <span class="si">${</span><span class="nv">myworkdir</span><span class="si">}</span><span class="o">}</span> <span class="se">\
+</span><span class="se"></span>    <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;&lt;h3&gt;Hello-world&lt;h3&gt;&#34;</span> &gt;&gt;index.html <span class="err">
+</span></code></pre></div><p>等同於</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">ENV</span> workspace /var/www/localhost/htdocs<span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> &amp;{workspace}</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">echo</span> <span class="s2">&#34;&lt;h3&gt;Hello-world&lt;h3&gt;&#34;</span> &gt;&gt;index.html<span class="err">
+</span></code></pre></div><p>就不用再瘋狂CD了</p>
+<h2 id="arg-argument-">ARG (argument )</h2>
+<p>ARG跟ENV不同的是，他可以在docker build的時候改變變數的值，</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">ENV</span> workspace /var/www/localhost/htdocs<span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> &amp;{workspace}</span><span class="err">
+</span><span class="err"></span><span class="k">ARG</span> <span class="nv">namearg</span><span class="o">=</span>Hello-world<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">cd</span> <span class="si">${</span><span class="nv">myworkdir</span><span class="si">}</span><span class="o">}</span> <span class="se">\
+</span><span class="se"></span>    <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;&lt;h3&gt;</span><span class="k">$(</span>namearg<span class="k">)</span><span class="s2">&lt;h3&gt;&#34;</span> &gt;&gt;index.html<span class="err">
+</span></code></pre></div><p>等同於</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">ENV</span> workspace /var/www/localhost/htdocs<span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> &amp;{workspace}</span><span class="err">
+</span><span class="err"></span><span class="k">ARG</span> <span class="nv">namearg</span><span class="o">=</span>Hello-world<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">cd</span> <span class="si">${</span><span class="nv">myworkdir</span><span class="si">}</span><span class="o">}</span> <span class="se">\
+</span><span class="se"></span>    <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;&lt;h3&gt;</span><span class="k">$(</span>namearg<span class="k">)</span><span class="s2">&lt;h3&gt;&#34;</span> &gt;&gt;index.html<span class="err">
+</span></code></pre></div><p>在執行<code>build</code>指令也可以在外部更改ARG參數，使用<code>--build-arg</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker build --build-arg <span class="o">[</span><span class="nv">arg</span><span class="o">=</span>value<span class="o">]</span> -t <span class="o">[</span>imagename<span class="o">]</span> .
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker build --build-arg <span class="nv">namearg</span><span class="o">=</span>TESTworld -t test001 .
+</code></pre></div><h2 id="copy">COPY</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">COPY</span> <span class="nb">source</span> dest<span class="err">
+</span></code></pre></div><p>現在在Docker的資料夾下有一個檔案叫做content.txt</p>
+<p>內容如下：</p>
+<pre><code class="language-html " data-lang="html ">&lt;div&gt;
+&lt;h3&gt;My Book List&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Die Hard&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Secret&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Html 101&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Kubernetes 202&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;AWS 303&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</code></pre><pre><code>➜  dk練習 ls
+Dockerfile  content.txt
+</code></pre><p>注意的是，其中這段</p>
+<pre><code>COPY ./content.txt ./
+</code></pre><p>的意思是前面<code>./context.txt</code>目錄是Linux VM的根目錄空間，複製過去的是Container的<code>./</code>當前的目錄</p>
+<p>FROM alpine:latest</p>
+<p>LABEL name=&ldquo;MyName&rdquo;</p>
+<p>ENV myworkdir /var/www/localhost/htdocs</p>
+<p>WORKDIR ${myworkdir}</p>
+<p>ARG namearg=Hellow-world</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">RUN</span> apk --update add apache2<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> rm -rf /var/cache/apk/*<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">echo</span> <span class="s2">&#34;&lt;h3&gt;</span><span class="k">$(</span>namearg<span class="k">)</span><span class="s2">&lt;h3&gt;&#34;</span> &gt;&gt; index.html<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> ./content.txt ./<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> ls -l ./ //列出當前container 目錄<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> cat ./content.txt &gt;&gt; index.html //用cat叫出content.txt的內容塞到index.html<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;httpd&#34;</span><span class="p">,</span><span class="s2">&#34;-D&#34;</span><span class="p">,</span> <span class="s2">&#34;FOREGROUND&#34;</span><span class="p">]</span><span class="err">
+</span></code></pre></div><p>建立好image之後，</p>
+<p><figure style="flex-grow: 406; flex-basis: 976px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd.png" data-size="1904x468"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd_hu2d62436f04f94d97b45bb406dc2056f1_136720_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd_hu2d62436f04f94d97b45bb406dc2056f1_136720_1024x0_resize_box_3.png 1024w"
+				width="1904"
+				height="468"
+				loading="lazy"
+				alt="copycmd">
+		</a>
+		
+		<figcaption>copycmd</figcaption>
+		
+	</figure></p>
+<p>到瀏覽器查看結果：</p>
+<p><figure style="flex-grow: 77; flex-basis: 186px">
+		<a href="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult.png" data-size="397x512"><img src="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult_hu1d9561dc947f1451a5fe4c0ba71dee33_34779_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult_hu1d9561dc947f1451a5fe4c0ba71dee33_34779_1024x0_resize_box_3.png 1024w"
+				width="397"
+				height="512"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/docker%E7%AD%86%E8%A8%98/">Docker筆記</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記-基本</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#常用linux指令">常用Linux指令</a></li>
+    <li><a href="#重要觀念">重要觀念</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#from">FROM</a></li>
+    <li><a href="#entrypoint">ENTRYPOINT</a></li>
+    <li><a href="#run">RUN</a></li>
+    <li><a href="#env-environment-variables">ENV (environment variables)</a></li>
+    <li><a href="#workdir">WORKDIR</a></li>
+    <li><a href="#arg-argument-">ARG (argument )</a></li>
+    <li><a href="#copy">COPY</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -6,7 +6,372 @@
         <description>Recent content on Yen&#39;s部落格</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-tw</language>
-        <lastBuildDate>Fri, 04 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 05 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Docker筆記-Dockerfile語法使用</title>
+        <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</link>
+        <pubDate>Sat, 05 Feb 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo.png" alt="Featured image of post Docker筆記-Dockerfile語法使用" /&gt;&lt;h1 id=&#34;docekrfile使用觀念&#34;&gt;Docekrfile使用觀念&lt;/h1&gt;
+&lt;h2 id=&#34;常用linux指令&#34;&gt;常用Linux指令&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;MacOS / Linux 指令&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;說明&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;範例&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;exit&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;離開&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;exit&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;pwd&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;取得目前的路徑&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;pwd&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;ls&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;取得當前資料夾與檔案名稱&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;ls&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;cd&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;切換目錄&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;cd ~&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;touch&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;建立檔案&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;touch demo.html&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;mkdir&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;建立資料夾&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;mkdir demo&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;rm&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;刪除檔案&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;rm demo.html&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;cp&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;複製檔案&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;cp demo.html demo1.html&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;scp&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;在不同的 Linux 主機之間複製檔案&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;scp user_name@riverye.com:/home/data/考試100分.pdf ~/Desktop&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;mv&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;移動檔案&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;mv demo1.html ~&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;sudo&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;使用最高權限&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;sudo 欲使用的指令&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;man&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;查看指令說明文件&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;man pwd&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;help&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;查看指令說明&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;mv --help&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;clear&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;清除終端機上的訊息(往上捲看得到)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;clear&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;which&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;查詢指令的來源路徑&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;which sudo&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;find&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;找出符合條件的檔案或資料夾&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;code&gt;find .&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;重要觀念&#34;&gt;重要觀念&lt;/h2&gt;
+&lt;p&gt;圖片的文字解說：&lt;/p&gt;
+&lt;p&gt;Docker Client就是下docker指令的地方&lt;/p&gt;
+&lt;p&gt;Bulid Context就是Docker bulid .指令的時候，當下的目錄就是Bulid Context，也會產生Dockerfile以及其他檔案Other Files&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 93; flex-basis: 223px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1.png&#34; data-size=&#34;233x250&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1_hub1f87b920603ffec725785ec0f843f2d_32922_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1_hub1f87b920603ffec725785ec0f843f2d_32922_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;233&#34;
+				height=&#34;250&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;在Linux OS（VM）上面，會安裝所謂的Docker Engine，Docker Engine會接收&lt;code&gt;Docker build&lt;/code&gt;指令，接收之後的第一個動作就是將Mac OS(主機)上面目錄的檔案全部copy到VM上面，&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 171; flex-basis: 411px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2.png&#34; data-size=&#34;384x224&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2_hu4eaed72f9d1dfe0afb1ee2bac518a02b_52307_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2_hu4eaed72f9d1dfe0afb1ee2bac518a02b_52307_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;384&#34;
+				height=&#34;224&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著Dockerfile的第一個指令一定會是&lt;code&gt;From [images]&lt;/code&gt;，抓到base images之後，就會臨時起用一個Container ，這個臨時的Container叫做tmp Container01，接著Dockerfile裡面重要的指令，例如Run，就會在原本的Container加一個layer，layer就是Dockerfile Commend跟tmp Container01合起來建立出臨時性的tmp image01就是layer，就著Docler Engine就會透過臨時的image01來產生container02&lt;/p&gt;
+&lt;p&gt;這邊到目前為止像這樣：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 69; flex-basis: 167px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3.png&#34; data-size=&#34;156x223&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3_hu852a4caa6ca575a46622b2b996292387_41263_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3_hu852a4caa6ca575a46622b2b996292387_41263_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;156&#34;
+				height=&#34;223&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;下一個Commamd COPY/src/dst，COPY /src指的是在VM的檔案系統，dst是指目前當下的Container02，放進去Container02之中的files就是imported files，再次打包成臨時的image02，image02就會在啟用臨時的tmp container03，最後一個Docker Commend，接著會和最後一個指令&lt;code&gt;(ENTRYPOINT[&amp;quot;httpd&amp;quot;])&lt;/code&gt;和最後的tmp container03產生最後的final image，以上就是image產生的過程。&lt;/p&gt;
+&lt;p&gt;兩個工作者Docker Client，用來執行指令，用來傳送docker指令到Docker Engine。&lt;/p&gt;
+&lt;p&gt;還有三個空間，主機空間、虛擬機空間、臨時的三個虛擬機空間&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 177; flex-basis: 426px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96.png&#34; data-size=&#34;1159x652&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96_hu19f4b0d2a7552fdc40cfe2babf1293e8_300151_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96_hu19f4b0d2a7552fdc40cfe2babf1293e8_300151_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1159&#34;
+				height=&#34;652&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;流程圖&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;流程圖&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h1 id=&#34;dockerfile語法&#34;&gt;Dockerfile語法&lt;/h1&gt;
+&lt;h2 id=&#34;from&#34;&gt;FROM&lt;/h2&gt;
+&lt;p&gt;首先新建一個資料夾並且用終端機到目錄底下，使用touch指令建立空白檔案，檔名叫做Dockerfile（大小寫要一樣），&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;touch Dockerfile&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著打開它（只要是編輯器都可以）&lt;/p&gt;
+&lt;p&gt;FROM指令用來選擇Base image的來源，這邊用alpine image，他是一個輕量的Linux OS&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; alpine:latest&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;存擋後，回到終端機，用&lt;code&gt;cat&lt;/code&gt;指令查看檔案內容&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cat Dockerfile
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;確認之後，就來建立image，&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker build -t [imagename] .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上面的 &lt;code&gt;.&lt;/code&gt;還重要，他的意思就是到當下的目錄找Dockerfile&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;➜  dk練習 docker build -t test001 .
+[+] Building 0.1s (5/5) FINISHED
+ =&amp;gt; [internal] load build definition from Dockerfile                       0.0s
+ =&amp;gt; =&amp;gt; transferring dockerfile: 107B                                       0.0s
+ =&amp;gt; [internal] load .dockerignore                                          0.0s
+ =&amp;gt; =&amp;gt; transferring context: 2B                                            0.0s
+ =&amp;gt; [internal] load metadata for docker.io/library/alpine:latest           0.0s
+ =&amp;gt; [1/1] FROM docker.io/library/alpine:latest                             0.0s
+ =&amp;gt; exporting to image                                                     0.0s
+ =&amp;gt; =&amp;gt; exporting layers                                                    0.0s
+ =&amp;gt; =&amp;gt; writing image sha256:1ad3d6652d7301865db4e7cf5acb4efd2e09631f429f7  0.0s
+ =&amp;gt; =&amp;gt; naming to docker.io/library/test001                                 0.0s
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然後使用docker images就可以看到下載下來的alpine images了&lt;/p&gt;
+&lt;p&gt;查看系統版本&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run [imagesname] cat /etc/os-release
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;figure style=&#34;flex-grow: 247; flex-basis: 592px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4.png&#34; data-size=&#34;1176x476&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4_hucc7a7a55db6a7fdb70229d5fe772645c_180027_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4_hucc7a7a55db6a7fdb70229d5fe772645c_180027_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1176&#34;
+				height=&#34;476&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;執行結果&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;執行結果&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;entrypoint&#34;&gt;ENTRYPOINT&lt;/h2&gt;
+&lt;p&gt;在上面的例子中，還是得手動透過&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;docker run -d &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;imagesname&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; tail -f /dev/null&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;來維持運行，但如果今天想要給別人使用，又不想要求他打上語法才能在背景運行，這時候到Dockerfile編輯，&lt;code&gt;ENTRYPOINT&lt;/code&gt;是Docker run的時候會第一個執行的指令，所以ENTRYPOINT是用來預設在docker run的時候會執行的指令。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENTRYPOINT&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;指令&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;指令&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;....&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENTRYPOINT&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;tail&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;f&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;/dev/null&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再重新建立image-test003並查看ls看看，在run查看ls可以發現test還是在執行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cat Dockerfile //查看dockerfile程式碼
+docker container ls //查看運行中的容器
+docker build -t test003 . //建議images
+docker images //查看images
+docker run -d  test003 . //運行images -d後面不用指令，因為寫在ENTRYPOINT裡面了
+docker container ls //查看運行中容器
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;figure style=&#34;flex-grow: 127; flex-basis: 306px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint.png&#34; data-size=&#34;1648x1290&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint_hu98f7a58bc5a7280cbba98efabdd966bd_523430_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint_hu98f7a58bc5a7280cbba98efabdd966bd_523430_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1648&#34;
+				height=&#34;1290&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;entrypoint&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;entrypoint&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;run&#34;&gt;RUN&lt;/h2&gt;
+&lt;p&gt;RUN對功能是使用任何base images提供的指令，以上面的base images，把apache serve運行起來（範例內容指令不用記），其中&lt;code&gt;httpd -D FOREGROIND&lt;/code&gt;是最後要執行apache server的指令，所以把他放在ENTRYPOINT裡面，即啟動Container運行apache server的概念。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;cat Dockerfile&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;docker build -t asce55123/test005 .&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;docker run -d -p 8081:80 asce55123/test005 //8081本地port，連線到80 apache port&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;docker container ls&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;![](run apadhe.png)&lt;/p&gt;
+&lt;p&gt;再到8081看看：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 100; flex-basis: 240px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks.png&#34; data-size=&#34;438x438&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks_hufe685220fa513272a9325bd3f07ce716_22381_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks_hufe685220fa513272a9325bd3f07ce716_22381_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;438&#34;
+				height=&#34;438&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;itworks&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;itworks&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;可以看到apache server運行成功了&lt;/p&gt;
+&lt;p&gt;以上三個FROM 、ENTRYPOINT、RUN可以完成8-9成的dockerfile，所以要熟練運用&lt;/p&gt;
+&lt;p&gt;很重要的一點是**每一次的RUN指令都會產生一個臨時性的container並打包成images，所以兩個RUN之間是互不相通的&lt;/p&gt;
+&lt;p&gt;所以下面這個是使用RUN執行的LINUX指令：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; pwd&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但這樣會pwd顯示/根目錄，而不是當下位置，所以可以：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /var/www/localhost/htdocs &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; pwd&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或是要顯示在不同行：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /var/www/localhost/htdocs &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; pwd&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;補充LINUX指令：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ithelp.ithome.com.tw/articles/10235530&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://ithelp.ithome.com.tw/articles/10235530&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;pwd：取得目前的路徑&lt;/p&gt;
+&lt;p&gt;cd：切換目錄&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;ENTRYPOINT: 預設啟動指令&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;CMD: 給啟動指令的預設參數 會這樣寫，只是官方文件提供一個分出指令定位的東西，ENTRYPOINT + CMD 完全可以用一個ENTRYPOING取代。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;RUN: 是Dockerfile建立image內部再跑的指令，是跑在Linux裡面的，跟ENTRYPOING與CMD最大的不同就是，他不是作為Image的「啟動指令」，而是作為image的「建造指令」。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;env-environment-variables&#34;&gt;ENV (environment variables)&lt;/h2&gt;
+&lt;p&gt;ENV-環境變數，是在build的時候，可以定義一些變數，讓後面指令在執行時候可以參考&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; myworkdir /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; apk --update add apache2&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; rm -rf /var/cache/apk/*&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;myworkdir&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;等同於&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; apk --update add apache2&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; rm -rf /var/cache/apk/*&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這樣之後如果多個RUN都要使用同樣的指令會參數時，可以透過ENV讓程式簡潔也更方便使用。&lt;/p&gt;
+&lt;h2 id=&#34;workdir&#34;&gt;WORKDIR&lt;/h2&gt;
+&lt;p&gt;WORKDIR可以改變Container的裡面預設路徑，&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; myworkdir /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;myworkdir&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;h3&amp;gt;Hello-world&amp;lt;h3&amp;gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt;index.html &lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;等同於&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; workspace /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WORKDIR&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; &amp;amp;{workspace}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;h3&amp;gt;Hello-world&amp;lt;h3&amp;gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt;index.html&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就不用再瘋狂CD了&lt;/p&gt;
+&lt;h2 id=&#34;arg-argument-&#34;&gt;ARG (argument )&lt;/h2&gt;
+&lt;p&gt;ARG跟ENV不同的是，他可以在docker build的時候改變變數的值，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; workspace /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WORKDIR&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; &amp;amp;{workspace}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ARG&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;namearg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;Hello-world&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;myworkdir&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;h3&amp;gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;namearg&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;lt;h3&amp;gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt;index.html&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;等同於&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; workspace /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WORKDIR&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; &amp;amp;{workspace}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ARG&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;namearg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;Hello-world&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;myworkdir&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;h3&amp;gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;namearg&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;lt;h3&amp;gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt;index.html&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在執行&lt;code&gt;build&lt;/code&gt;指令也可以在外部更改ARG參數，使用&lt;code&gt;--build-arg&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker build --build-arg &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;arg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;value&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; -t &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;imagename&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker build --build-arg &lt;span class=&#34;nv&#34;&gt;namearg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;TESTworld -t test001 .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;copy&#34;&gt;COPY&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;COPY&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; dest&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;現在在Docker的資料夾下有一個檔案叫做content.txt&lt;/p&gt;
+&lt;p&gt;內容如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html &#34; data-lang=&#34;html &#34;&gt;&amp;lt;div&amp;gt;
+&amp;lt;h3&amp;gt;My Book List&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;Die Hard&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;Secret&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;Html 101&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;Kubernetes 202&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;AWS 303&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;➜  dk練習 ls
+Dockerfile  content.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;注意的是，其中這段&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;COPY ./content.txt ./
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;的意思是前面&lt;code&gt;./context.txt&lt;/code&gt;目錄是Linux VM的根目錄空間，複製過去的是Container的&lt;code&gt;./&lt;/code&gt;當前的目錄&lt;/p&gt;
+&lt;p&gt;FROM alpine:latest&lt;/p&gt;
+&lt;p&gt;LABEL name=&amp;ldquo;MyName&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;ENV myworkdir /var/www/localhost/htdocs&lt;/p&gt;
+&lt;p&gt;WORKDIR ${myworkdir}&lt;/p&gt;
+&lt;p&gt;ARG namearg=Hellow-world&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; apk --update add apache2&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; rm -rf /var/cache/apk/*&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;h3&amp;gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;namearg&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;lt;h3&amp;gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; index.html&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;COPY&lt;/span&gt; ./content.txt ./&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; ls -l ./ //列出當前container 目錄&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; cat ./content.txt &amp;gt;&amp;gt; index.html //用cat叫出content.txt的內容塞到index.html&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ENTRYPOINT&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;httpd&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;-D&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;FOREGROUND&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;建立好image之後，&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 406; flex-basis: 976px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd.png&#34; data-size=&#34;1904x468&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd_hu2d62436f04f94d97b45bb406dc2056f1_136720_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd_hu2d62436f04f94d97b45bb406dc2056f1_136720_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1904&#34;
+				height=&#34;468&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;copycmd&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;copycmd&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;到瀏覽器查看結果：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 77; flex-basis: 186px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult.png&#34; data-size=&#34;397x512&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult_hu1d9561dc947f1451a5fe4c0ba71dee33_34779_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult_hu1d9561dc947f1451a5fe4c0ba71dee33_34779_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;397&#34;
+				height=&#34;512&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Docker筆記-基本</title>
         <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/</link>
         <pubDate>Fri, 04 Feb 2022 00:00:00 +0000</pubDate>
