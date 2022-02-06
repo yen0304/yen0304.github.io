@@ -6,14 +6,534 @@
         <description>Recent content on Yen&#39;s部落格</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-tw</language>
-        <lastBuildDate>Sat, 05 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Docker筆記-Dockerfile語法使用</title>
-        <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</link>
+        <lastBuildDate>Sun, 06 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Java筆記(1)泛型、集合與檔案操作</title>
+        <link>https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/</link>
+        <pubDate>Sun, 06 Feb 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/logo.jpeg" alt="Featured image of post Java筆記(1)泛型、集合與檔案操作" /&gt;&lt;h2 id=&#34;泛型generics&#34;&gt;泛型(Generics)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;泛型是多型(polymorphism)的一種技巧&lt;/li&gt;
+&lt;li&gt;當編譯期間無法確定程式碼的撰寫方式，而是依照執行期間的狀況而決定&lt;/li&gt;
+&lt;li&gt;不用因為資料型別的限制而實作多種方法，只需要一種方法即可&lt;/li&gt;
+&lt;li&gt;定義「安全的」泛型類別(Genericsclass)，泛型提供編譯時期檢查&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;泛型用&amp;lt;參數(自定義)&amp;gt;表示，也可以像一般變數一樣傳進多個參數進去，&lt;/p&gt;
+&lt;p&gt;泛型通常最常使用的情況是，當不確定使用的參數的時候，不用因為資料型別的限制而實作許多方法。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;{&lt;/span&gt;
+  &lt;span class=&#34;kd&#34;&gt;private&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;{&lt;/span&gt;
+  &lt;span class=&#34;kd&#34;&gt;private&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T1&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+  &lt;span class=&#34;kd&#34;&gt;private&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T2&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt; 
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;通配字元wildcard&#34;&gt;通配字元(Wildcard)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;共變性&lt;/li&gt;
+&lt;li&gt;繼承於List的子類別或實作List介面的類別&lt;/li&gt;
+&lt;li&gt;List的父類別&lt;/li&gt;
+&lt;li&gt;通配字元(?)不能當作宣告方法的型別，必須是變數名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用方式比泛型&lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt;多了一個&lt;code&gt;?&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;使用範例：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Doo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;extends&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;List&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 代表?的類別必須是繼承於List的子型別或是實作List介面的類別
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Doo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;super&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;List&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;//必須是List的父類別
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;extends&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;List&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fooObj&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ArrrayList&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//因為ArrayList是List子型別，才可以這樣使用。
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;super&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ArrayList&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fooObj&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;List&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//代表要是Array的父類別才可以使用
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;figure style=&#34;flex-grow: 189; flex-basis: 453px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/ArrayList.png&#34; data-size=&#34;768x406&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/ArrayList.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/ArrayList_hu179cec388ee9a2b867e73c145495bda8_36951_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/ArrayList_hu179cec388ee9a2b867e73c145495bda8_36951_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;768&#34;
+				height=&#34;406&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;ArrayList&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;ArrayList&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;集合collections&#34;&gt;集合(COLLECTIONS)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;將許多同⼀種資料型態的物件集合在⼀起&lt;/li&gt;
+&lt;li&gt;比陣列更有彈性好處理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;list有序集合&#34;&gt;List(有序集合)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;將物件依序存放，並依序取出&lt;/li&gt;
+&lt;li&gt;可以存放重複的物件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;官方API文件：https://docs.oracle.com/javase/8/docs/api/java/util/List.html&lt;/p&gt;
+&lt;p&gt;可以看到了副類別是Collection&lt;!-- raw HTML omitted --&gt;，且用了泛型&lt;code&gt;Interface List&amp;lt;E&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;常用方法：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;返回值&lt;/th&gt;
+&lt;th&gt;說明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add(E e)&lt;/code&gt;將指定元素加到此列表的尾端&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;void&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add(int index, E element)&lt;/code&gt;在此列表中的指定位置插入指定元&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;void&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;clear()&lt;/code&gt;刪除所有元素。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;contains(Object o)&lt;/code&gt;如果此列表包含指定元素，則返回&lt;code&gt;true 。&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;boolean&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;isEmpty()&lt;/code&gt;如果此列表不包含任何元素，則返回&lt;code&gt;true 。&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;size()&lt;/code&gt;返回此列表中的元素數。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;E&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;get(int index)&lt;/code&gt;返回列表中指定位置的元素。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;E&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;remove(int index)&lt;/code&gt;移除指定位置的元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;練習：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;TestDemo&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;str1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;test1&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;str2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;test2&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;str3&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;test3&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		
+		&lt;span class=&#34;n&#34;&gt;List&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ArrayList&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;();&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		
+		
+    &lt;span class=&#34;c1&#34;&gt;//下面進行遍歷
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;結果：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;test1
+test1
+test2
+test3
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;set無序集合&#34;&gt;Set(無序集合)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不依序存放物件&lt;/li&gt;
+&lt;li&gt;存放物件不可以重複&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;也因為他是無序的關係，導致了存放物件不可重複，也比List少了幾個方法，例如get。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;TestSetDemo&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;Set&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;set&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HashSet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;();&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;set&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test1&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;set&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test2&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;set&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test3&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		
+		&lt;span class=&#34;n&#34;&gt;set&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;remove&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test2&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;set&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;//執行結果：2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;map&#34;&gt;Map&lt;/h3&gt;
+&lt;p&gt;API：https://docs.oracle.com/javase/8/docs/api/java/util/Map.html&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;將物件以key, value的儲存⽅式，放置於Map物件中&lt;/li&gt;
+&lt;li&gt;使⽤key取得存放的物件&lt;/li&gt;
+&lt;li&gt;資料的操作都是透過Key操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;Map(key, value)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;範例：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;Map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Integer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;map&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HashMap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Integer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;TestMapDemo&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;Map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Integer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;map&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HashMap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Integer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;();&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;put&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test1&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;put&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test2&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;put&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test3&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		
+		&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test2&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;));&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;//執行結果：2
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;n&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;remove&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;test2&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;key&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;keySet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()){&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;key&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;));&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;//執行結果:3 1
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;java-io&#34;&gt;JAVA I/O&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.oracle.com/javase/7/docs/api/java/io/File.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://docs.oracle.com/javase/7/docs/api/java/io/File.html&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;檔案操作&#34;&gt;檔案操作&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//fileName路徑名稱
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;mkdir&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//建立檔案
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;mkdirs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//建立檔案，如果路徑上沒有資料夾會一起建立
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//讀取目錄
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;delete&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//刪除檔案
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;建立IOUtil工具類例子：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;IOUtil&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;createFolder&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//路經參數，所以如果要在home資料夾新增test資料夾，就要傳進&amp;#34;/home/test&amp;#34;
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;mkdirs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;readFolder&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//回傳資料夾下面有哪些檔案
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;deleteFolder&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//刪除檔案
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;delete&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;讀取檔案內容&#34;&gt;讀取檔案內容&lt;/h3&gt;
+&lt;h4 id=&#34;讀取文字檔&#34;&gt;讀取文字檔&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;FileReader： 以Char, String的⽅方式讀取檔案&lt;/li&gt;
+&lt;li&gt;BufferedReader：BifferedReader有一個建構子，就是放入FileReader之後其他任務就可以交由BifferedReader處理。&lt;/li&gt;
+&lt;li&gt;BufferedReader.readLine()：透過readLine()讀取文字，readLine()會回傳String&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;IOUtil&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;	
+  &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;readTxtFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+      &lt;span class=&#34;n&#34;&gt;FileReader&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+      &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileReader&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//1.新增FileReader
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;FileNotFoundException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+      &lt;span class=&#34;n&#34;&gt;BufferedReader&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;br&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BufferedReader&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//2.FileReader交給BufferedReader
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+      &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;br&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;readLine&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//讀取到沒有資料為止
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;          &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//讀出來的資料會放在tmp一行一行列印出來
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;finally&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;//在IO裡面，要關掉IO，所以在最後關閉
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;br&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; 
+          &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;寫入文字檔案&#34;&gt;寫入文字檔案&lt;/h3&gt;
+&lt;h4 id=&#34;寫入文字檔&#34;&gt;寫入文字檔&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;FileWriter：確認檔案寫入的位置&lt;/li&gt;
+&lt;li&gt;BufferedWriter
+&lt;ol&gt;
+&lt;li&gt;BufferedWriter. write(String str)：將字串寫進去&lt;/li&gt;
+&lt;li&gt;BufferedWriter. newLine()：跳行&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;IOUtil&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;writeTxtFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;List&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+      &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;FileWriter&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fw&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileWriter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;BufferedWriter&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BufferedWriter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;str&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;newLine&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//繼續往下寫
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flush&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//將記憶體裡面的資料清空
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt; &lt;span class=&#34;cm&#34;&gt;/*BufferedWriter是緩衝輸入流，意思是調用BufferedWriter的write方法時候。數據是先寫入到緩衝區裡，並沒有直接寫入到目的文件裡。必須用BufferedWriter的flush()方法。這個方法會刷新一下該緩衝流，也就是會把數據寫入到目的文件裡。或者你可以調用BufferedWriter的close()方法，該方法會在關閉該輸入流之前先刷新一下該緩衝流。也會把數據寫入到目的文件裡。原文链接：https://blog.csdn.net/appleml/article/details/41721365*/&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; 
+    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;copyPictureFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+      &lt;span class=&#34;n&#34;&gt;FileInputStream&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+      &lt;span class=&#34;n&#34;&gt;FileOutputStream&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+      &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileInputStream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileOutputStream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+
+        &lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1024&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;];&lt;/span&gt;
+        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+
+        &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;len&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;read&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flush&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;finally&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;fileinputstream--fileoutputstream&#34;&gt;FileInputStream &amp;amp; FileOutputStream&lt;/h4&gt;
+&lt;p&gt;前面介紹的FileReader以及FileWriter都是透過字串類型來讀取或寫入內容，而FileInputStream &amp;amp; FileOutputStream是透過Byte來做讀取以及寫入&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FileInputStream read(byte[] b)：read(讀進來的byte陣列)&lt;/li&gt;
+&lt;li&gt;FileOutputStream
+&lt;ol&gt;
+&lt;li&gt;write(byte[] b, int off, int len) ：write(將讀進來的byte陣列,起始位置,長度)&lt;/li&gt;
+&lt;li&gt;flush()：寫入&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;IOUtil&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;copyPictureFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//讀取圖檔
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;n&#34;&gt;FileInputStream&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt; 
+      &lt;span class=&#34;n&#34;&gt;FileOutputStream&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+      &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileInputStream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//取得資料位置
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileOutputStream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//寫入位置
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+        &lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1024&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;];&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//暫存（可以設定更高）
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//起始位置
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt; 	&lt;span class=&#34;c1&#34;&gt;//長度
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;len&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;read&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//長度= -1代表讀取結束
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;          &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//寫入檔案
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flush&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//將緩存寫入
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;finally&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+          &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;ioutil實作&#34;&gt;IOUtil實作&lt;/h3&gt;
+&lt;p&gt;結合了上面的完成了較實用的Util類別，檔案目錄結構如下，post.txt要自己隨便加個內容&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 91; flex-basis: 220px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E6%AA%94%E6%A1%88%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B.png&#34; data-size=&#34;538x586&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E6%AA%94%E6%A1%88%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E6%AA%94%E6%A1%88%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B_huc3849d8e630f692fc9c83f7267427ac7_32631_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E6%AA%94%E6%A1%88%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B_huc3849d8e630f692fc9c83f7267427ac7_32631_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;538&#34;
+				height=&#34;586&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;檔案目錄結構&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;檔案目錄結構&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;IOUtil&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;createFolder&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;mkdirs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()){&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;新建檔案成功&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;新建檔案失敗，檔案有可能已存在&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;readFolder&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;NullPointerException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;exception&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;exception&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//把拋出的expection 全部印出來
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; 
+		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;deleteFolder&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;delete&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()){&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;刪除檔案成功&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;刪除檔案失敗，檔案有可能不存在&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;List&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;readTxtFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;FileReader&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;List&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ArrayList&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;fr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileReader&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;FileNotFoundException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;找不到檔案&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		
+		&lt;span class=&#34;n&#34;&gt;BufferedReader&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;br&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BufferedReader&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;br&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;readLine&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+			&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;finally&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;br&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+			&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+			&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;writeTxtFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;List&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;	
+		&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;FileWriter&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fw&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileWriter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;BufferedWriter&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BufferedWriter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+			
+			&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;str&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;newLine&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+			&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flush&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+      &lt;span class=&#34;n&#34;&gt;bw&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; 
+				
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	
+	&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;copyPictureFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;FileInputStream&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;FileOutputStream&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileInputStream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FileOutputStream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+			
+			&lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1024&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;];&lt;/span&gt;
+			&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+			&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+			
+			&lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;len&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;read&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+			&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flush&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+			
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;finally&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;fis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;fos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+			&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IOException&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+				&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;printStackTrace&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+			&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		
+	&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;測試程式：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+
+		&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;./testFolder&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;//建立資料夾
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;n&#34;&gt;IOUtil&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;createFolder&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+	
+		&lt;span class=&#34;c1&#34;&gt;//讀取資料夾目錄
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;c1&#34;&gt;// &amp;#34;../&amp;#34;代表當前目錄前前一級 &amp;#34;./代表目前目錄得前一級&amp;#34;
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	    &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;files&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;IOUtil&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;readFolder&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;./codegym&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;files&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;//刪除檔案
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;c1&#34;&gt;//IOUtil.deleteFolder(fileName);
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;c1&#34;&gt;//System.out.println(&amp;#34;deleteFolder(fileName)執行結束&amp;#34;);
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		
+		&lt;span class=&#34;c1&#34;&gt;//檔案讀取
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;n&#34;&gt;List&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;IOUtil&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;readTxtFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;./codegym/post.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;str&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//遍歷
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;			&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+	
+		&lt;span class=&#34;c1&#34;&gt;//檔案寫入
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;n&#34;&gt;IOUtil&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;writeTxtFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/textpost.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+		
+		
+		&lt;span class=&#34;c1&#34;&gt;//複製圖片
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;source&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;./codegym/testImg.png&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dest&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fileName&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/textImg.png&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+		&lt;span class=&#34;n&#34;&gt;IOUtil&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;copyPictureFile&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;File&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;));&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;完成結果：&lt;/p&gt;
+&lt;p&gt;終端機輸出：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;新建檔案成功
+.DS_Store
+TestDemo.java
+IOUtil.java
+post.txt
+testImg.png
+今天清晨持續受大陸冷氣團影響，各地天氣偏冷，西半部及東北部低溫普遍約11至14℃，其中新竹到雲林、南投及金門有局部10℃以下低溫發生機率，氣象局針對9縣市發布低溫特報。今晨最低溫在嘉義嘉義9.6℃，雲林10℃、彰化、苗栗10.3℃。
+
+
+中央氣象局預報員張承傳指出，今清晨受大陸冷氣團影響，各地天氣偏冷，西半部及東北部低溫普遍約11至14℃。白天起冷氣團稍微減弱，不過溫度回升幅度不多，北部及東北部高溫只有15至18℃，其他地區20至24℃；基隆北海岸及東北部降雨機率偏高，仍容易有短暫雨，而花東及大台北也偶有零星降雨。
+
+張承傳指出，明天下半天鋒面接近，西半部水氣增多，明晚到周二清晨降雨最明顯，全台都有陣雨機率，周二白天降雨逐漸趨緩，轉為迎風面北部、東北部為主。
+
+
+周二東北季風增強，屆時北台灣再轉涼，高溫剩下16、17℃。這波東北風從周二影響至周四，不過周三、四水氣較少，僅東半部及北部山區有局部短暫雨，其他地區多雲到晴。周五、周六東北季風減弱，北台灣溫度回升。
+
+中央大學大氣系兼任副教授吳德榮在「三立準氣象· 老大洩天機」專欄撰文指出，今晨強冷空氣及「輻射冷卻」加成，本島平地最低氣溫出現在中部：嘉義民雄鄉9.6℃，雲林虎尾、斗南鎮10℃。今晨迎風面雲層仍多，北海岸、東北部有局部降雨，大台北東側則有零星少量飄雨。
+
+最新模式模擬顯示，今日白天起強冷空氣稍減弱、氣溫微升，北台偏冷、中南部白天舒適晚仍偏冷；桃園以南晴時多雲，北海岸、大台北東側及東半部偶有零星降雨。今日各地氣溫：北部11至17℃，中部10至24℃，南部11至26℃，東部12至24℃。
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;執行後檔案目錄結構：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 70; flex-basis: 168px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E5%9F%B7%E8%A1%8C%E5%BE%8C%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B.png&#34; data-size=&#34;546x776&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E5%9F%B7%E8%A1%8C%E5%BE%8C%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E5%9F%B7%E8%A1%8C%E5%BE%8C%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B_hue79a5683ae69cde4a661858e2e12f7d2_45996_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E5%9F%B7%E8%A1%8C%E5%BE%8C%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B_hue79a5683ae69cde4a661858e2e12f7d2_45996_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;546&#34;
+				height=&#34;776&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;執行後目錄結構&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;執行後目錄結構&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Docker筆記(2)-Dockerfile語法使用</title>
+        <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</link>
         <pubDate>Sat, 05 Feb 2022 00:00:00 +0000</pubDate>
         
-        <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</guid>
-        <description>&lt;img src="https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo.png" alt="Featured image of post Docker筆記-Dockerfile語法使用" /&gt;&lt;h1 id=&#34;docekrfile使用觀念&#34;&gt;Docekrfile使用觀念&lt;/h1&gt;
-&lt;h2 id=&#34;常用linux指令&#34;&gt;常用Linux指令&lt;/h2&gt;
+        <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo.png" alt="Featured image of post Docker筆記(2)-Dockerfile語法使用" /&gt;&lt;h2 id=&#34;docekrfile使用觀念&#34;&gt;Docekrfile使用觀念&lt;/h2&gt;
+&lt;h3 id=&#34;常用linux指令&#34;&gt;常用Linux指令&lt;/h3&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -105,13 +625,13 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h2 id=&#34;重要觀念&#34;&gt;重要觀念&lt;/h2&gt;
+&lt;h3 id=&#34;重要觀念&#34;&gt;重要觀念&lt;/h3&gt;
 &lt;p&gt;圖片的文字解說：&lt;/p&gt;
 &lt;p&gt;Docker Client就是下docker指令的地方&lt;/p&gt;
 &lt;p&gt;Bulid Context就是Docker bulid .指令的時候，當下的目錄就是Bulid Context，也會產生Dockerfile以及其他檔案Other Files&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 93; flex-basis: 223px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1.png&#34; data-size=&#34;233x250&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1_hub1f87b920603ffec725785ec0f843f2d_32922_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1_hub1f87b920603ffec725785ec0f843f2d_32922_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1.png&#34; data-size=&#34;233x250&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1_hub1f87b920603ffec725785ec0f843f2d_32922_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/1_hub1f87b920603ffec725785ec0f843f2d_32922_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;233&#34;
 				height=&#34;250&#34;
 				loading=&#34;lazy&#34;
@@ -121,8 +641,8 @@
 	&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;在Linux OS（VM）上面，會安裝所謂的Docker Engine，Docker Engine會接收&lt;code&gt;Docker build&lt;/code&gt;指令，接收之後的第一個動作就是將Mac OS(主機)上面目錄的檔案全部copy到VM上面，&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 171; flex-basis: 411px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2.png&#34; data-size=&#34;384x224&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2_hu4eaed72f9d1dfe0afb1ee2bac518a02b_52307_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2_hu4eaed72f9d1dfe0afb1ee2bac518a02b_52307_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2.png&#34; data-size=&#34;384x224&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2_hu4eaed72f9d1dfe0afb1ee2bac518a02b_52307_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/2_hu4eaed72f9d1dfe0afb1ee2bac518a02b_52307_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;384&#34;
 				height=&#34;224&#34;
 				loading=&#34;lazy&#34;
@@ -133,8 +653,8 @@
 &lt;p&gt;接著Dockerfile的第一個指令一定會是&lt;code&gt;From [images]&lt;/code&gt;，抓到base images之後，就會臨時起用一個Container ，這個臨時的Container叫做tmp Container01，接著Dockerfile裡面重要的指令，例如Run，就會在原本的Container加一個layer，layer就是Dockerfile Commend跟tmp Container01合起來建立出臨時性的tmp image01就是layer，就著Docler Engine就會透過臨時的image01來產生container02&lt;/p&gt;
 &lt;p&gt;這邊到目前為止像這樣：&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 69; flex-basis: 167px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3.png&#34; data-size=&#34;156x223&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3_hu852a4caa6ca575a46622b2b996292387_41263_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3_hu852a4caa6ca575a46622b2b996292387_41263_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3.png&#34; data-size=&#34;156x223&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3_hu852a4caa6ca575a46622b2b996292387_41263_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/3_hu852a4caa6ca575a46622b2b996292387_41263_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;156&#34;
 				height=&#34;223&#34;
 				loading=&#34;lazy&#34;
@@ -146,8 +666,8 @@
 &lt;p&gt;兩個工作者Docker Client，用來執行指令，用來傳送docker指令到Docker Engine。&lt;/p&gt;
 &lt;p&gt;還有三個空間，主機空間、虛擬機空間、臨時的三個虛擬機空間&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 177; flex-basis: 426px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96.png&#34; data-size=&#34;1159x652&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96_hu19f4b0d2a7552fdc40cfe2babf1293e8_300151_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96_hu19f4b0d2a7552fdc40cfe2babf1293e8_300151_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96.png&#34; data-size=&#34;1159x652&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96_hu19f4b0d2a7552fdc40cfe2babf1293e8_300151_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/%E6%B5%81%E7%A8%8B%E5%9C%96_hu19f4b0d2a7552fdc40cfe2babf1293e8_300151_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1159&#34;
 				height=&#34;652&#34;
 				loading=&#34;lazy&#34;
@@ -157,8 +677,8 @@
 		&lt;figcaption&gt;流程圖&lt;/figcaption&gt;
 		
 	&lt;/figure&gt;&lt;/p&gt;
-&lt;h1 id=&#34;dockerfile語法&#34;&gt;Dockerfile語法&lt;/h1&gt;
-&lt;h2 id=&#34;from&#34;&gt;FROM&lt;/h2&gt;
+&lt;h2 id=&#34;dockerfile語法&#34;&gt;Dockerfile語法&lt;/h2&gt;
+&lt;h3 id=&#34;from&#34;&gt;FROM&lt;/h3&gt;
 &lt;p&gt;首先新建一個資料夾並且用終端機到目錄底下，使用touch指令建立空白檔案，檔名叫做Dockerfile（大小寫要一樣），&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;touch Dockerfile&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著打開它（只要是編輯器都可以）&lt;/p&gt;
@@ -185,8 +705,8 @@
 &lt;p&gt;查看系統版本&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker run [imagesname] cat /etc/os-release
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;figure style=&#34;flex-grow: 247; flex-basis: 592px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4.png&#34; data-size=&#34;1176x476&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4_hucc7a7a55db6a7fdb70229d5fe772645c_180027_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4_hucc7a7a55db6a7fdb70229d5fe772645c_180027_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4.png&#34; data-size=&#34;1176x476&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4_hucc7a7a55db6a7fdb70229d5fe772645c_180027_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/4_hucc7a7a55db6a7fdb70229d5fe772645c_180027_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1176&#34;
 				height=&#34;476&#34;
 				loading=&#34;lazy&#34;
@@ -196,7 +716,7 @@
 		&lt;figcaption&gt;執行結果&lt;/figcaption&gt;
 		
 	&lt;/figure&gt;&lt;/p&gt;
-&lt;h2 id=&#34;entrypoint&#34;&gt;ENTRYPOINT&lt;/h2&gt;
+&lt;h3 id=&#34;entrypoint&#34;&gt;ENTRYPOINT&lt;/h3&gt;
 &lt;p&gt;在上面的例子中，還是得手動透過&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;docker run -d &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;imagesname&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; tail -f /dev/null&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;來維持運行，但如果今天想要給別人使用，又不想要求他打上語法才能在背景運行，這時候到Dockerfile編輯，&lt;code&gt;ENTRYPOINT&lt;/code&gt;是Docker run的時候會第一個執行的指令，所以ENTRYPOINT是用來預設在docker run的時候會執行的指令。&lt;/p&gt;
@@ -210,8 +730,8 @@ docker images //查看images
 docker run -d  test003 . //運行images -d後面不用指令，因為寫在ENTRYPOINT裡面了
 docker container ls //查看運行中容器
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;figure style=&#34;flex-grow: 127; flex-basis: 306px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint.png&#34; data-size=&#34;1648x1290&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint_hu98f7a58bc5a7280cbba98efabdd966bd_523430_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint_hu98f7a58bc5a7280cbba98efabdd966bd_523430_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint.png&#34; data-size=&#34;1648x1290&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint_hu98f7a58bc5a7280cbba98efabdd966bd_523430_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/entrypoint_hu98f7a58bc5a7280cbba98efabdd966bd_523430_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1648&#34;
 				height=&#34;1290&#34;
 				loading=&#34;lazy&#34;
@@ -221,7 +741,7 @@ docker container ls //查看運行中容器
 		&lt;figcaption&gt;entrypoint&lt;/figcaption&gt;
 		
 	&lt;/figure&gt;&lt;/p&gt;
-&lt;h2 id=&#34;run&#34;&gt;RUN&lt;/h2&gt;
+&lt;h3 id=&#34;run&#34;&gt;RUN&lt;/h3&gt;
 &lt;p&gt;RUN對功能是使用任何base images提供的指令，以上面的base images，把apache serve運行起來（範例內容指令不用記），其中&lt;code&gt;httpd -D FOREGROIND&lt;/code&gt;是最後要執行apache server的指令，所以把他放在ENTRYPOINT裡面，即啟動Container運行apache server的概念。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;cat Dockerfile&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;docker build -t asce55123/test005 .&lt;span class=&#34;err&#34;&gt;
@@ -230,8 +750,8 @@ docker container ls //查看運行中容器
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;![](run apadhe.png)&lt;/p&gt;
 &lt;p&gt;再到8081看看：&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 100; flex-basis: 240px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks.png&#34; data-size=&#34;438x438&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks_hufe685220fa513272a9325bd3f07ce716_22381_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks_hufe685220fa513272a9325bd3f07ce716_22381_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks.png&#34; data-size=&#34;438x438&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks_hufe685220fa513272a9325bd3f07ce716_22381_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/itworks_hufe685220fa513272a9325bd3f07ce716_22381_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;438&#34;
 				height=&#34;438&#34;
 				loading=&#34;lazy&#34;
@@ -268,7 +788,7 @@ docker container ls //查看運行中容器
 &lt;p&gt;RUN: 是Dockerfile建立image內部再跑的指令，是跑在Linux裡面的，跟ENTRYPOING與CMD最大的不同就是，他不是作為Image的「啟動指令」，而是作為image的「建造指令」。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;env-environment-variables&#34;&gt;ENV (environment variables)&lt;/h2&gt;
+&lt;h3 id=&#34;env-environment-variables&#34;&gt;ENV (environment variables)&lt;/h3&gt;
 &lt;p&gt;ENV-環境變數，是在build的時候，可以定義一些變數，讓後面指令在執行時候可以參考&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; myworkdir /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; apk --update add apache2&lt;span class=&#34;err&#34;&gt;
@@ -281,7 +801,7 @@ docker container ls //查看運行中容器
 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;這樣之後如果多個RUN都要使用同樣的指令會參數時，可以透過ENV讓程式簡潔也更方便使用。&lt;/p&gt;
-&lt;h2 id=&#34;workdir&#34;&gt;WORKDIR&lt;/h2&gt;
+&lt;h3 id=&#34;workdir&#34;&gt;WORKDIR&lt;/h3&gt;
 &lt;p&gt;WORKDIR可以改變Container的裡面預設路徑，&lt;/p&gt;
 &lt;p&gt;例如：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; myworkdir /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
@@ -292,7 +812,7 @@ docker container ls //查看運行中容器
 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WORKDIR&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; &amp;amp;{workspace}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;h3&amp;gt;Hello-world&amp;lt;h3&amp;gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt;index.html&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;就不用再瘋狂CD了&lt;/p&gt;
-&lt;h2 id=&#34;arg-argument-&#34;&gt;ARG (argument )&lt;/h2&gt;
+&lt;h3 id=&#34;arg-argument-&#34;&gt;ARG (argument )&lt;/h3&gt;
 &lt;p&gt;ARG跟ENV不同的是，他可以在docker build的時候改變變數的值，&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; workspace /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WORKDIR&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; &amp;amp;{workspace}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
@@ -308,7 +828,7 @@ docker container ls //查看運行中容器
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在執行&lt;code&gt;build&lt;/code&gt;指令也可以在外部更改ARG參數，使用&lt;code&gt;--build-arg&lt;/code&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker build --build-arg &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;arg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;value&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; -t &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;imagename&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; .
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker build --build-arg &lt;span class=&#34;nv&#34;&gt;namearg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;TESTworld -t test001 .
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;copy&#34;&gt;COPY&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;copy&#34;&gt;COPY&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;COPY&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; dest&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;現在在Docker的資料夾下有一個檔案叫做content.txt&lt;/p&gt;
 &lt;p&gt;內容如下：&lt;/p&gt;
@@ -347,8 +867,8 @@ Dockerfile  content.txt
 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ENTRYPOINT&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;httpd&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;-D&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;FOREGROUND&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;建立好image之後，&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 406; flex-basis: 976px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd.png&#34; data-size=&#34;1904x468&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd_hu2d62436f04f94d97b45bb406dc2056f1_136720_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd_hu2d62436f04f94d97b45bb406dc2056f1_136720_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd.png&#34; data-size=&#34;1904x468&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd_hu2d62436f04f94d97b45bb406dc2056f1_136720_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copycmd_hu2d62436f04f94d97b45bb406dc2056f1_136720_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1904&#34;
 				height=&#34;468&#34;
 				loading=&#34;lazy&#34;
@@ -360,8 +880,8 @@ Dockerfile  content.txt
 	&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;到瀏覽器查看結果：&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 77; flex-basis: 186px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult.png&#34; data-size=&#34;397x512&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult_hu1d9561dc947f1451a5fe4c0ba71dee33_34779_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult_hu1d9561dc947f1451a5fe4c0ba71dee33_34779_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult.png&#34; data-size=&#34;397x512&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult_hu1d9561dc947f1451a5fe4c0ba71dee33_34779_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/copyresult_hu1d9561dc947f1451a5fe4c0ba71dee33_34779_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;397&#34;
 				height=&#34;512&#34;
 				loading=&#34;lazy&#34;
@@ -372,12 +892,12 @@ Dockerfile  content.txt
 </description>
         </item>
         <item>
-        <title>Docker筆記-基本</title>
-        <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/</link>
+        <title>Docker筆記(1)-基本</title>
+        <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/</link>
         <pubDate>Fri, 04 Feb 2022 00:00:00 +0000</pubDate>
         
-        <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/</guid>
-        <description>&lt;img src="https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/logo.png" alt="Featured image of post Docker筆記-基本" /&gt;&lt;h1 id=&#34;docker基本&#34;&gt;Docker基本&lt;/h1&gt;
+        <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/logo.png" alt="Featured image of post Docker筆記(1)-基本" /&gt;&lt;h2 id=&#34;docker基本&#34;&gt;Docker基本&lt;/h2&gt;
 &lt;p&gt;參考來源：&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://hahow.in/courses/5df27f1fa5ee510022a08500/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://hahow.in/courses/5df27f1fa5ee510022a08500/&lt;/a&gt;&lt;/p&gt;
@@ -385,11 +905,11 @@ Dockerfile  content.txt
     &gt;https://blog.csdn.net/qq_21197507/article/details/115071715&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/twtrubiks/docker-tutorial&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://github.com/twtrubiks/docker-tutorial&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;什麼是docker&#34;&gt;什麼是Docker&lt;/h2&gt;
+&lt;h3 id=&#34;什麼是docker&#34;&gt;什麼是Docker&lt;/h3&gt;
 &lt;p&gt;docker是一種容器化技術，問題的起源在於在多個APP在同一台主機的同一個系統上運行，只要有問題發生，所有APP會受影響，所有演變成了使用多個主機來完成（傳統模式），但這樣耗費量還是很大，所以就出現了虛擬機（VM模式），就可以達到保護功能，同時用一個主機就可以完成，但這些虛擬機在系統資源（VM、OS）的耗費量還是非常大，所以出現了Docker（容器模式），使用軟體的虛擬的空間來完成。&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 175; flex-basis: 421px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2.png&#34; data-size=&#34;946x539&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2_hu4ffc4645e1ce4ac42870a51d33ced0bc_207291_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2_hu4ffc4645e1ce4ac42870a51d33ced0bc_207291_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2.png&#34; data-size=&#34;946x539&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2_hu4ffc4645e1ce4ac42870a51d33ced0bc_207291_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2_hu4ffc4645e1ce4ac42870a51d33ced0bc_207291_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;946&#34;
 				height=&#34;539&#34;
 				loading=&#34;lazy&#34;
@@ -397,7 +917,7 @@ Dockerfile  content.txt
 		&lt;/a&gt;
 		
 	&lt;/figure&gt;&lt;/p&gt;
-&lt;h2 id=&#34;docker三大功用&#34;&gt;Docker三大功用&lt;/h2&gt;
+&lt;h3 id=&#34;docker三大功用&#34;&gt;Docker三大功用&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;簡化部署流程&lt;/li&gt;
 &lt;/ul&gt;
@@ -412,8 +932,8 @@ Dockerfile  content.txt
 &lt;p&gt;將測試資料、資料庫安裝、安裝指令打包成資料庫部署包&lt;/p&gt;
 &lt;p&gt;當有了城市以及資料庫部署包之後，就可以快速運行全新的環境，也可以做安靜的安裝跟清空，不用擔心有殘留檔案的問題&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 177; flex-basis: 426px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8.png&#34; data-size=&#34;936x527&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8_hua6f97e172b0701fcc587fe567a022063_320939_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8_hua6f97e172b0701fcc587fe567a022063_320939_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8.png&#34; data-size=&#34;936x527&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8_hua6f97e172b0701fcc587fe567a022063_320939_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8_hua6f97e172b0701fcc587fe567a022063_320939_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;936&#34;
 				height=&#34;527&#34;
 				loading=&#34;lazy&#34;
@@ -421,7 +941,7 @@ Dockerfile  content.txt
 		&lt;/a&gt;
 		
 	&lt;/figure&gt;&lt;/p&gt;
-&lt;h2 id=&#34;名詞解釋&#34;&gt;名詞解釋&lt;/h2&gt;
+&lt;h3 id=&#34;名詞解釋&#34;&gt;名詞解釋&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;鏡像（image）&lt;/p&gt;
@@ -441,7 +961,7 @@ Docker利用容器技術，獨立運行一個或者一組應用， 通過鏡像�
     &gt;Docker Hub&lt;/a&gt; 中查看。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;安裝docker&#34;&gt;安裝Docker&lt;/h2&gt;
+&lt;h3 id=&#34;安裝docker&#34;&gt;安裝Docker&lt;/h3&gt;
 &lt;p&gt;直接到官網無腦安裝docker-desktop（也可以安裝Docker ToolBox）：&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.docker.com/products/docker-desktop&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://www.docker.com/products/docker-desktop&lt;/a&gt;&lt;/p&gt;
@@ -455,8 +975,8 @@ Docker version 20.10.12, build e91ed57
 docker-compose version 1.29.2, build 5becea4c
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在右上角的設定可以調整分配的資源(Docker Desktop)：&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 174; flex-basis: 419px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8.png&#34; data-size=&#34;2526x1444&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8_hu7b20f49b7837aeb8251c2e8611aca3b1_210016_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8_hu7b20f49b7837aeb8251c2e8611aca3b1_210016_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8.png&#34; data-size=&#34;2526x1444&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8_hu7b20f49b7837aeb8251c2e8611aca3b1_210016_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8_hu7b20f49b7837aeb8251c2e8611aca3b1_210016_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;2526&#34;
 				height=&#34;1444&#34;
 				loading=&#34;lazy&#34;
@@ -466,8 +986,8 @@ docker-compose version 1.29.2, build 5becea4c
 	&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;其實MAC、WINDOWS安裝這些軟體都是為了在Linux底下運行，因為Docker的底層是Linux，如圖：&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 177; flex-basis: 426px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF.png&#34; data-size=&#34;1052x592&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF_hu4c9a8288ab48308d1a678f0d7e59e1ba_175965_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF_hu4c9a8288ab48308d1a678f0d7e59e1ba_175965_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF.png&#34; data-size=&#34;1052x592&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF_hu4c9a8288ab48308d1a678f0d7e59e1ba_175965_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF_hu4c9a8288ab48308d1a678f0d7e59e1ba_175965_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1052&#34;
 				height=&#34;592&#34;
 				loading=&#34;lazy&#34;
@@ -475,19 +995,19 @@ docker-compose version 1.29.2, build 5becea4c
 		&lt;/a&gt;
 		
 	&lt;/figure&gt;&lt;/p&gt;
-&lt;h1 id=&#34;建立與使用docker-images&#34;&gt;建立與使用Docker Images&lt;/h1&gt;
+&lt;h2 id=&#34;建立與使用docker-images&#34;&gt;建立與使用Docker Images&lt;/h2&gt;
 &lt;p&gt;首先要註冊&lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Docker hub&lt;/a&gt;帳號，完成之後可以到首頁上方的搜尋案件搜尋&lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/_/hello-world&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;hello-world&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;可以看到下面相關指令：&lt;/p&gt;
-&lt;h2 id=&#34;docker-hello-word&#34;&gt;docker hello-word&lt;/h2&gt;
+&lt;h3 id=&#34;docker-hello-word&#34;&gt;docker hello-word&lt;/h3&gt;
 &lt;p&gt;先到遠端（Docker hub）下載hello-world檔案&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker pull hello-world
 &lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;docker run hello-world
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這個&lt;code&gt;docker run&lt;/code&gt;等同於&lt;code&gt;docker container runˊ&lt;/code&gt;指令&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 125; flex-basis: 301px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/helloworld.png&#34; data-size=&#34;577x459&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/helloworld.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/helloworld_hu5a003e91672af9cd49d517a45eabd09b_63792_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/helloworld_hu5a003e91672af9cd49d517a45eabd09b_63792_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/helloworld.png&#34; data-size=&#34;577x459&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/helloworld.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/helloworld_hu5a003e91672af9cd49d517a45eabd09b_63792_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/helloworld_hu5a003e91672af9cd49d517a45eabd09b_63792_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;577&#34;
 				height=&#34;459&#34;
 				loading=&#34;lazy&#34;
@@ -500,7 +1020,7 @@ docker-compose version 1.29.2, build 5becea4c
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;查看本地有哪些image&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
 hello-world   latest    18e5af790473   4 months ago   9.14kB
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;docker-hub雲端下載&#34;&gt;Docker hub雲端下載&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;docker-hub雲端下載&#34;&gt;Docker hub雲端下載&lt;/h3&gt;
 &lt;p&gt;透過pull指令可以指定版本號「tag」，只要是透過&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker pull [名稱]]:[版本號]
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;範例如下：&lt;/p&gt;
@@ -509,8 +1029,8 @@ hello-world   latest    18e5af790473   4 months ago   9.14kB
 &lt;pre&gt;&lt;code&gt;docker pull uopsdod/course-image-first:latest
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在查看目前有哪些images，tag就會顯示images的版本&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 257; flex-basis: 619px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/tag.png&#34; data-size=&#34;1140x442&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/tag.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/tag_hud02e18a8007577c35e8223efddfea34b_101772_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/tag_hud02e18a8007577c35e8223efddfea34b_101772_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/tag.png&#34; data-size=&#34;1140x442&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/tag.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/tag_hud02e18a8007577c35e8223efddfea34b_101772_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/tag_hud02e18a8007577c35e8223efddfea34b_101772_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1140&#34;
 				height=&#34;442&#34;
 				loading=&#34;lazy&#34;
@@ -520,7 +1040,7 @@ hello-world   latest    18e5af790473   4 months ago   9.14kB
 		&lt;figcaption&gt;tag&lt;/figcaption&gt;
 		
 	&lt;/figure&gt;&lt;/p&gt;
-&lt;h2 id=&#34;建立images&#34;&gt;建立images&lt;/h2&gt;
+&lt;h3 id=&#34;建立images&#34;&gt;建立images&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;docker create [OPTIONS] IMAGE [COMMAND] [ARG...]
 &lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
 &lt;li&gt;建立資料夾&lt;/li&gt;
@@ -529,14 +1049,14 @@ hello-world   latest    18e5af790473   4 months ago   9.14kB
 &lt;/ol&gt;
 &lt;pre&gt;&lt;code&gt;docker bulid -t [帳號名稱]/[images名稱] .
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中.的意思就是到目錄搜尋Dockerfile的檔案&lt;/p&gt;
-&lt;h2 id=&#34;上傳images&#34;&gt;上傳images&lt;/h2&gt;
+&lt;h3 id=&#34;上傳images&#34;&gt;上傳images&lt;/h3&gt;
 &lt;p&gt;透過以下指令登入或登出：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker login
 docker logout
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;接著&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker push [帳號名稱]/[images名稱] 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;即可上傳&lt;/p&gt;
-&lt;h2 id=&#34;刪除images&#34;&gt;刪除images&lt;/h2&gt;
+&lt;h3 id=&#34;刪除images&#34;&gt;刪除images&lt;/h3&gt;
 &lt;p&gt;指令&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Docker rmi [帳號名稱]/[images名稱] 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果跳出訊息是有container在使用的話，就先移除container&lt;/p&gt;
@@ -544,7 +1064,7 @@ docker logout
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果想要強制刪除（連同contaier）&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker rmi -f [帳號名稱]/[images名稱] 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;可以透過docker images查看&lt;/p&gt;
-&lt;h1 id=&#34;docker基本指令&#34;&gt;Docker基本指令&lt;/h1&gt;
+&lt;h2 id=&#34;docker基本指令&#34;&gt;Docker基本指令&lt;/h2&gt;
 &lt;p&gt;查看目前所有container&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Docker container ls
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;先抓取一個image下來&lt;/p&gt;
@@ -567,8 +1087,8 @@ docker.io/library/alpine:latest
 &lt;pre&gt;&lt;code&gt;docker container run --name test01 alpine ls/ 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;成功後可以到docker desktop看到in use&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 176; flex-basis: 423px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/inuse.png&#34; data-size=&#34;2532x1434&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/inuse.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/inuse_hua67f6c58dc4d4b11e7d63b69b17d354a_225479_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/inuse_hua67f6c58dc4d4b11e7d63b69b17d354a_225479_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/inuse.png&#34; data-size=&#34;2532x1434&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/inuse.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/inuse_hua67f6c58dc4d4b11e7d63b69b17d354a_225479_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/inuse_hua67f6c58dc4d4b11e7d63b69b17d354a_225479_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;2532&#34;
 				height=&#34;1434&#34;
 				loading=&#34;lazy&#34;
@@ -581,14 +1101,14 @@ docker.io/library/alpine:latest
 &lt;p&gt;接著透過ls指令查看運行中的container&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://yen0304.github.io/Users/yen/Desktop/docker%e7%ad%86%e8%a8%98/containerls.png&#34; alt=&#34;containerls&#34;  /&gt;&lt;/p&gt;
 &lt;p&gt;可以看到沒有，是因為container的運作機制是，當沒有程序一直運作，他會自動停止，所以要透過&lt;/p&gt;
-&lt;h2 id=&#34;interactive-mode&#34;&gt;Interactive mode&lt;/h2&gt;
+&lt;h3 id=&#34;interactive-mode&#34;&gt;Interactive mode&lt;/h3&gt;
 &lt;p&gt;使用-it建造Interactive mode，讓程序持續運作某一個程序&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker run -it --name [container] [images] /[需要的指令]
 &lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;docker run -it --name test02 /bin/sh
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看到#代表成功進去container，可以再透過ls查看哪些可用的Linux指令， 在使用exit離開&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 560; flex-basis: 1345px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/it.png&#34; data-size=&#34;1256x224&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/it.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/it_hu0bc4223790e94a247320746aae649bfa_37381_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/it_hu0bc4223790e94a247320746aae649bfa_37381_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/it.png&#34; data-size=&#34;1256x224&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/it.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/it_hu0bc4223790e94a247320746aae649bfa_37381_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/it_hu0bc4223790e94a247320746aae649bfa_37381_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1256&#34;
 				height=&#34;224&#34;
 				loading=&#34;lazy&#34;
@@ -599,7 +1119,7 @@ docker.io/library/alpine:latest
 		
 	&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Interactive mode 在exit時，也會因為沒有事情做而運行關閉，所以要讓他在背景運行，就使用-d 像是daemon服務&lt;/p&gt;
-&lt;h2 id=&#34;container背景運行--d&#34;&gt;Container背景運行 -d&lt;/h2&gt;
+&lt;h3 id=&#34;container背景運行--d&#34;&gt;Container背景運行 -d&lt;/h3&gt;
 &lt;p&gt;tail可以幫我們持續追蹤某個docker file的log，印到console上面&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker run -d --name [container] [images] tail -f [/運行目的地]
 &lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;docker run -d --name test03 alpine tail -f /dev/null
@@ -608,8 +1128,8 @@ docker.io/library/alpine:latest
 &lt;pre&gt;&lt;code&gt;docker exec -it [containerID] /bin/sh
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;接著不論在裡面做什麼事情，exit後container還是持續的在運行&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 304; flex-basis: 730px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C.png&#34; data-size=&#34;1882x618&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C_hua088ce7abafaddf292c68ca171245df1_136741_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C_hua088ce7abafaddf292c68ca171245df1_136741_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C.png&#34; data-size=&#34;1882x618&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C_hua088ce7abafaddf292c68ca171245df1_136741_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C_hua088ce7abafaddf292c68ca171245df1_136741_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1882&#34;
 				height=&#34;618&#34;
 				loading=&#34;lazy&#34;
@@ -620,8 +1140,8 @@ docker.io/library/alpine:latest
 		
 	&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 344; flex-basis: 826px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/running.png&#34; data-size=&#34;2038x592&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/running.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/running_hu4f4e11f4e568423924e055d2b82556fa_71602_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/running_hu4f4e11f4e568423924e055d2b82556fa_71602_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/running.png&#34; data-size=&#34;2038x592&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/running.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/running_hu4f4e11f4e568423924e055d2b82556fa_71602_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/running_hu4f4e11f4e568423924e055d2b82556fa_71602_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;2038&#34;
 				height=&#34;592&#34;
 				loading=&#34;lazy&#34;
@@ -631,18 +1151,18 @@ docker.io/library/alpine:latest
 		&lt;figcaption&gt;docker desktop畫面&lt;/figcaption&gt;
 		
 	&lt;/figure&gt;&lt;/p&gt;
-&lt;h2 id=&#34;port指令&#34;&gt;port指令&lt;/h2&gt;
+&lt;h3 id=&#34;port指令&#34;&gt;port指令&lt;/h3&gt;
 &lt;p&gt;首先下載nginx這個websever的images&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker pull nginx:latest
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;port-mapping--p&#34;&gt;port mapping -p&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;port-mapping--p&#34;&gt;port mapping -p&lt;/h4&gt;
 &lt;p&gt;-p的意思就是port mapping&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;-p [VM linux port]:[對應container的port]
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;所以這邊寫成：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker run -d -p 8081:80 --name nginxtest  nginx
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;再透過ls指令可以看到port已經建立了&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 796; flex-basis: 1910px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/nginxrun.png&#34; data-size=&#34;1688x212&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/nginxrun.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/nginxrun_hu2390570ffb2fd336752951f834c326bd_63517_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/nginxrun_hu2390570ffb2fd336752951f834c326bd_63517_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/nginxrun.png&#34; data-size=&#34;1688x212&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/nginxrun.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/nginxrun_hu2390570ffb2fd336752951f834c326bd_63517_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/nginxrun_hu2390570ffb2fd336752951f834c326bd_63517_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1688&#34;
 				height=&#34;212&#34;
 				loading=&#34;lazy&#34;
@@ -654,8 +1174,8 @@ docker.io/library/alpine:latest
 &lt;pre&gt;&lt;code&gt;echo $(docker-machine ip)
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;接著到瀏覽器輸入http://localhost:8081&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 99; flex-basis: 239px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/welcomenginx.png&#34; data-size=&#34;1040x1044&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/welcomenginx.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/welcomenginx_hu421e13c57f02a8806714524724cc5d6d_92574_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/welcomenginx_hu421e13c57f02a8806714524724cc5d6d_92574_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/welcomenginx.png&#34; data-size=&#34;1040x1044&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/welcomenginx.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/welcomenginx_hu421e13c57f02a8806714524724cc5d6d_92574_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/welcomenginx_hu421e13c57f02a8806714524724cc5d6d_92574_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1040&#34;
 				height=&#34;1044&#34;
 				loading=&#34;lazy&#34;
@@ -666,16 +1186,16 @@ docker.io/library/alpine:latest
 		
 	&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;使用結束後，&lt;/p&gt;
-&lt;h2 id=&#34;停止container&#34;&gt;停止container&lt;/h2&gt;
+&lt;h3 id=&#34;停止container&#34;&gt;停止container&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;docker container stop [containerID]
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;列出所有container(不管有無運行)&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;docker container ls -a
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;清除container&#34;&gt;清除container&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;清除container&#34;&gt;清除container&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;docker container rm [containerID]
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;範例：&lt;/p&gt;
 &lt;p&gt;&lt;figure style=&#34;flex-grow: 235; flex-basis: 564px&#34;&gt;
-		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/cmd1.png&#34; data-size=&#34;1852x788&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/cmd1.png&#34;
-				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/cmd1_hu35fdd381545e8b44a7e2697168958e40_224417_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%98-%E5%9F%BA%E6%9C%AC/cmd1_hu35fdd381545e8b44a7e2697168958e40_224417_1024x0_resize_box_3.png 1024w&#34;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/cmd1.png&#34; data-size=&#34;1852x788&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/cmd1.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/cmd1_hu35fdd381545e8b44a7e2697168958e40_224417_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/cmd1_hu35fdd381545e8b44a7e2697168958e40_224417_1024x0_resize_box_3.png 1024w&#34;
 				width=&#34;1852&#34;
 				height=&#34;788&#34;
 				loading=&#34;lazy&#34;

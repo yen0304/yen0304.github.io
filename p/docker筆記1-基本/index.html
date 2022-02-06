@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='認識Docker，名詞以及基本使用container還有images'><title>Docker筆記(1)-基本</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Docker筆記(1)-基本'>
+<meta property='og:description' content='認識Docker，名詞以及基本使用container還有images'>
+<meta property='og:url' content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Docker筆記' /><meta property='article:published_time' content='2022-02-04'/><meta property='article:modified_time' content='2022-02-04'/><meta property='og:image' content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/logo.png' />
+<meta name="twitter:title" content="Docker筆記(1)-基本">
+<meta name="twitter:description" content="認識Docker，名詞以及基本使用container還有images"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/logo.png' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/">
+                <img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_800x0_resize_box_3.png"
+                        srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_800x0_resize_box_3.png 800w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post Docker筆記(1)-基本" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/docker%E7%AD%86%E8%A8%98/" >
+                Docker筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/">Docker筆記(1)-基本</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        認識Docker，名詞以及基本使用container還有images
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-02-04</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h2 id="docker基本">Docker基本</h2>
+<p>參考來源：</p>
+<p><a class="link" href="https://hahow.in/courses/5df27f1fa5ee510022a08500/"  target="_blank" rel="noopener"
+    >https://hahow.in/courses/5df27f1fa5ee510022a08500/</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_21197507/article/details/115071715"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/qq_21197507/article/details/115071715</a></p>
+<p><a class="link" href="https://github.com/twtrubiks/docker-tutorial"  target="_blank" rel="noopener"
+    >https://github.com/twtrubiks/docker-tutorial</a></p>
+<h3 id="什麼是docker">什麼是Docker</h3>
+<p>docker是一種容器化技術，問題的起源在於在多個APP在同一台主機的同一個系統上運行，只要有問題發生，所有APP會受影響，所有演變成了使用多個主機來完成（傳統模式），但這樣耗費量還是很大，所以就出現了虛擬機（VM模式），就可以達到保護功能，同時用一個主機就可以完成，但這些虛擬機在系統資源（VM、OS）的耗費量還是非常大，所以出現了Docker（容器模式），使用軟體的虛擬的空間來完成。</p>
+<p><figure style="flex-grow: 175; flex-basis: 421px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2.png" data-size="946x539"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2_hu4ffc4645e1ce4ac42870a51d33ced0bc_207291_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E6%BC%94%E8%AE%8A%E5%8F%B2_hu4ffc4645e1ce4ac42870a51d33ced0bc_207291_1024x0_resize_box_3.png 1024w"
+				width="946"
+				height="539"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h3 id="docker三大功用">Docker三大功用</h3>
+<ul>
+<li>簡化部署流程</li>
+</ul>
+<p>在部署運行環境時，常常要進行環境安安裝，或是安裝指令，耗時又常常出錯，Docker可以把這些用指令變成程式部署包</p>
+<ul>
+<li>跨平台部署</li>
+</ul>
+<p>無論在什麼系統下使用Docker的部署包都可以運行</p>
+<ul>
+<li>建立乾淨測試環境</li>
+</ul>
+<p>將測試資料、資料庫安裝、安裝指令打包成資料庫部署包</p>
+<p>當有了城市以及資料庫部署包之後，就可以快速運行全新的環境，也可以做安靜的安裝跟清空，不用擔心有殘留檔案的問題</p>
+<p><figure style="flex-grow: 177; flex-basis: 426px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8.png" data-size="936x527"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8_hua6f97e172b0701fcc587fe567a022063_320939_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E4%B8%89%E5%A4%A7%E5%8A%9F%E7%94%A8_hua6f97e172b0701fcc587fe567a022063_320939_1024x0_resize_box_3.png 1024w"
+				width="936"
+				height="527"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h3 id="名詞解釋">名詞解釋</h3>
+<ul>
+<li>
+<p>鏡像（image）</p>
+<p>映像檔，可以把它想成是以前我們在玩 VM 的 Guest OS（ 安裝在虛擬機上的作業系統 ）。</p>
+<p>Image 是唯讀（ R\O ）</p>
+</li>
+<li>
+<p>容器（container）
+Docker利用容器技術，獨立運行一個或者一組應用， 通過鏡像來創建的
+啟動，停止，刪除，基本命令！
+就目前可以把這個容器理解為一個建議的linux系統</p>
+</li>
+<li>
+<p>倉庫（repository）
+存放鏡像(image)的地方，可以把它想成類似 <a class="link" href="https://github.com/"  target="_blank" rel="noopener"
+    >GitHub</a>，裡面存放了非常多的 Image ，可在 <a class="link" href="https://hub.docker.com/"  target="_blank" rel="noopener"
+    >Docker Hub</a> 中查看。</p>
+</li>
+</ul>
+<h3 id="安裝docker">安裝Docker</h3>
+<p>直接到官網無腦安裝docker-desktop（也可以安裝Docker ToolBox）：</p>
+<p><a class="link" href="https://www.docker.com/products/docker-desktop"  target="_blank" rel="noopener"
+    >https://www.docker.com/products/docker-desktop</a></p>
+<p>確認安裝</p>
+<pre><code>docker --version
+docker-compose --version
+</code></pre><p>終端機結果</p>
+<pre><code>➜  ~ docker --version
+docker-compose --version
+Docker version 20.10.12, build e91ed57
+docker-compose version 1.29.2, build 5becea4c
+</code></pre><p>在右上角的設定可以調整分配的資源(Docker Desktop)：</p>
+<p><figure style="flex-grow: 174; flex-basis: 419px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8.png" data-size="2526x1444"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8_hu7b20f49b7837aeb8251c2e8611aca3b1_210016_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E5%8F%83%E6%95%B8_hu7b20f49b7837aeb8251c2e8611aca3b1_210016_1024x0_resize_box_3.png 1024w"
+				width="2526"
+				height="1444"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>其實MAC、WINDOWS安裝這些軟體都是為了在Linux底下運行，因為Docker的底層是Linux，如圖：</p>
+<p><figure style="flex-grow: 177; flex-basis: 426px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF.png" data-size="1052x592"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF_hu4c9a8288ab48308d1a678f0d7e59e1ba_175965_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E9%9A%8E%E5%B1%A4%E9%97%9C%E8%A5%BF_hu4c9a8288ab48308d1a678f0d7e59e1ba_175965_1024x0_resize_box_3.png 1024w"
+				width="1052"
+				height="592"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h2 id="建立與使用docker-images">建立與使用Docker Images</h2>
+<p>首先要註冊<a class="link" href="https://hub.docker.com/"  target="_blank" rel="noopener"
+    >Docker hub</a>帳號，完成之後可以到首頁上方的搜尋案件搜尋<a class="link" href="https://hub.docker.com/_/hello-world"  target="_blank" rel="noopener"
+    >hello-world</a></p>
+<p>可以看到下面相關指令：</p>
+<h3 id="docker-hello-word">docker hello-word</h3>
+<p>先到遠端（Docker hub）下載hello-world檔案</p>
+<pre><code>docker pull hello-world
+</code></pre><pre><code>docker run hello-world
+</code></pre><p>這個<code>docker run</code>等同於<code>docker container runˊ</code>指令</p>
+<p><figure style="flex-grow: 125; flex-basis: 301px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/helloworld.png" data-size="577x459"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/helloworld.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/helloworld_hu5a003e91672af9cd49d517a45eabd09b_63792_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/helloworld_hu5a003e91672af9cd49d517a45eabd09b_63792_1024x0_resize_box_3.png 1024w"
+				width="577"
+				height="459"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>可以透過</p>
+<pre><code>docker images
+</code></pre><p>查看本地有哪些image</p>
+<pre><code>REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+hello-world   latest    18e5af790473   4 months ago   9.14kB
+</code></pre><h3 id="docker-hub雲端下載">Docker hub雲端下載</h3>
+<p>透過pull指令可以指定版本號「tag」，只要是透過</p>
+<pre><code>docker pull [名稱]]:[版本號]
+</code></pre><p>範例如下：</p>
+<p>到https://hub.docker.com/r/uopsdod/course-image-first/tags可以看到有很多版本號，</p>
+<p>下載最新的話依照網址的指示</p>
+<pre><code>docker pull uopsdod/course-image-first:latest
+</code></pre><p>在查看目前有哪些images，tag就會顯示images的版本</p>
+<p><figure style="flex-grow: 257; flex-basis: 619px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/tag.png" data-size="1140x442"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/tag.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/tag_hud02e18a8007577c35e8223efddfea34b_101772_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/tag_hud02e18a8007577c35e8223efddfea34b_101772_1024x0_resize_box_3.png 1024w"
+				width="1140"
+				height="442"
+				loading="lazy"
+				alt="tag">
+		</a>
+		
+		<figcaption>tag</figcaption>
+		
+	</figure></p>
+<h3 id="建立images">建立images</h3>
+<pre><code>docker create [OPTIONS] IMAGE [COMMAND] [ARG...]
+</code></pre><ol>
+<li>建立資料夾</li>
+<li>資料夾裡面的Dockerfile名稱一定要是Dockerfile(大小寫要一樣)</li>
+<li>在終端機到資料夾目錄後，輸入</li>
+</ol>
+<pre><code>docker bulid -t [帳號名稱]/[images名稱] .
+</code></pre><p>其中.的意思就是到目錄搜尋Dockerfile的檔案</p>
+<h3 id="上傳images">上傳images</h3>
+<p>透過以下指令登入或登出：</p>
+<pre><code>docker login
+docker logout
+</code></pre><p>接著</p>
+<pre><code>docker push [帳號名稱]/[images名稱] 
+</code></pre><p>即可上傳</p>
+<h3 id="刪除images">刪除images</h3>
+<p>指令</p>
+<pre><code>Docker rmi [帳號名稱]/[images名稱] 
+</code></pre><p>如果跳出訊息是有container在使用的話，就先移除container</p>
+<pre><code>docker rmi [container編號]
+</code></pre><p>如果想要強制刪除（連同contaier）</p>
+<pre><code>docker rmi -f [帳號名稱]/[images名稱] 
+</code></pre><p>可以透過docker images查看</p>
+<h2 id="docker基本指令">Docker基本指令</h2>
+<p>查看目前所有container</p>
+<pre><code>Docker container ls
+</code></pre><p>先抓取一個image下來</p>
+<pre><code>docker pull alpine
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  ~ clear
+➜  ~ docker container ls
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+➜  ~ docker pull alpine
+Using default tag: latest
+latest: Pulling from library/alpine
+9b3977197b4f: Pull <span class="nb">complete</span>
+Digest: sha256:21a3deaa0d32a8057914f36584b5288d2e5ecc984380bc0118285c70fa8c9300
+Status: Downloaded newer image <span class="k">for</span> alpine:latest
+docker.io/library/alpine:latest
+</code></pre></div><p>接著啟用container運行剛剛抓的alpine image</p>
+<pre><code>docker container run --name [container] [images]
+</code></pre><p>範例：</p>
+<pre><code>docker container run --name test01 alpine
+</code></pre><p>或是加上 ls / 可以顯示出可以使用的指令</p>
+<pre><code>docker container run --name test01 alpine ls/ 
+</code></pre><p>成功後可以到docker desktop看到in use</p>
+<p><figure style="flex-grow: 176; flex-basis: 423px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/inuse.png" data-size="2532x1434"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/inuse.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/inuse_hua67f6c58dc4d4b11e7d63b69b17d354a_225479_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/inuse_hua67f6c58dc4d4b11e7d63b69b17d354a_225479_1024x0_resize_box_3.png 1024w"
+				width="2532"
+				height="1434"
+				loading="lazy"
+				alt="docker desktop畫面">
+		</a>
+		
+		<figcaption>docker desktop畫面</figcaption>
+		
+	</figure></p>
+<p>接著透過ls指令查看運行中的container</p>
+<p><img src="/Users/yen/Desktop/docker%e7%ad%86%e8%a8%98/containerls.png" alt="containerls"  /></p>
+<p>可以看到沒有，是因為container的運作機制是，當沒有程序一直運作，他會自動停止，所以要透過</p>
+<h3 id="interactive-mode">Interactive mode</h3>
+<p>使用-it建造Interactive mode，讓程序持續運作某一個程序</p>
+<pre><code>docker run -it --name [container] [images] /[需要的指令]
+</code></pre><pre><code>docker run -it --name test02 /bin/sh
+</code></pre><p>看到#代表成功進去container，可以再透過ls查看哪些可用的Linux指令， 在使用exit離開</p>
+<p><figure style="flex-grow: 560; flex-basis: 1345px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/it.png" data-size="1256x224"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/it.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/it_hu0bc4223790e94a247320746aae649bfa_37381_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/it_hu0bc4223790e94a247320746aae649bfa_37381_1024x0_resize_box_3.png 1024w"
+				width="1256"
+				height="224"
+				loading="lazy"
+				alt="結果">
+		</a>
+		
+		<figcaption>結果</figcaption>
+		
+	</figure></p>
+<p>Interactive mode 在exit時，也會因為沒有事情做而運行關閉，所以要讓他在背景運行，就使用-d 像是daemon服務</p>
+<h3 id="container背景運行--d">Container背景運行 -d</h3>
+<p>tail可以幫我們持續追蹤某個docker file的log，印到console上面</p>
+<pre><code>docker run -d --name [container] [images] tail -f [/運行目的地]
+</code></pre><pre><code>docker run -d --name test03 alpine tail -f /dev/null
+</code></pre><p>在使用ls指令就可以看到剛剛啟用的container還在運行，</p>
+<p>也可以透過指令進入container</p>
+<pre><code>docker exec -it [containerID] /bin/sh
+</code></pre><p>接著不論在裡面做什麼事情，exit後container還是持續的在運行</p>
+<p><figure style="flex-grow: 304; flex-basis: 730px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C.png" data-size="1882x618"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C_hua088ce7abafaddf292c68ca171245df1_136741_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/%E8%83%8C%E6%99%AF%E9%81%8B%E8%A1%8C_hua088ce7abafaddf292c68ca171245df1_136741_1024x0_resize_box_3.png 1024w"
+				width="1882"
+				height="618"
+				loading="lazy"
+				alt="背景運行">
+		</a>
+		
+		<figcaption>背景運行</figcaption>
+		
+	</figure></p>
+<p><figure style="flex-grow: 344; flex-basis: 826px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/running.png" data-size="2038x592"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/running.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/running_hu4f4e11f4e568423924e055d2b82556fa_71602_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/running_hu4f4e11f4e568423924e055d2b82556fa_71602_1024x0_resize_box_3.png 1024w"
+				width="2038"
+				height="592"
+				loading="lazy"
+				alt="docker desktop畫面">
+		</a>
+		
+		<figcaption>docker desktop畫面</figcaption>
+		
+	</figure></p>
+<h3 id="port指令">port指令</h3>
+<p>首先下載nginx這個websever的images</p>
+<pre><code>docker pull nginx:latest
+</code></pre><h4 id="port-mapping--p">port mapping -p</h4>
+<p>-p的意思就是port mapping</p>
+<pre><code>-p [VM linux port]:[對應container的port]
+</code></pre><p>所以這邊寫成：</p>
+<pre><code>docker run -d -p 8081:80 --name nginxtest  nginx
+</code></pre><p>再透過ls指令可以看到port已經建立了</p>
+<p><figure style="flex-grow: 796; flex-basis: 1910px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/nginxrun.png" data-size="1688x212"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/nginxrun.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/nginxrun_hu2390570ffb2fd336752951f834c326bd_63517_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/nginxrun_hu2390570ffb2fd336752951f834c326bd_63517_1024x0_resize_box_3.png 1024w"
+				width="1688"
+				height="212"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>可以透過</p>
+<pre><code>echo $(docker-machine ip)
+</code></pre><p>接著到瀏覽器輸入http://localhost:8081</p>
+<p><figure style="flex-grow: 99; flex-basis: 239px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/welcomenginx.png" data-size="1040x1044"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/welcomenginx.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/welcomenginx_hu421e13c57f02a8806714524724cc5d6d_92574_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/welcomenginx_hu421e13c57f02a8806714524724cc5d6d_92574_1024x0_resize_box_3.png 1024w"
+				width="1040"
+				height="1044"
+				loading="lazy"
+				alt="welcome">
+		</a>
+		
+		<figcaption>welcome</figcaption>
+		
+	</figure></p>
+<p>使用結束後，</p>
+<h3 id="停止container">停止container</h3>
+<pre><code>docker container stop [containerID]
+</code></pre><p>列出所有container(不管有無運行)</p>
+<pre><code>docker container ls -a
+</code></pre><h3 id="清除container">清除container</h3>
+<pre><code>docker container rm [containerID]
+</code></pre><p>範例：</p>
+<p><figure style="flex-grow: 235; flex-basis: 564px">
+		<a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/cmd1.png" data-size="1852x788"><img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/cmd1.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/cmd1_hu35fdd381545e8b44a7e2697168958e40_224417_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/cmd1_hu35fdd381545e8b44a7e2697168958e40_224417_1024x0_resize_box_3.png 1024w"
+				width="1852"
+				height="788"
+				loading="lazy"
+				alt="範例">
+		</a>
+		
+		<figcaption>範例</figcaption>
+		
+	</figure></p>
+<p>從開剛始到最後就可以看到container真的被清空了</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/docker%E7%AD%86%E8%A8%98/">Docker筆記</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記(2)-Dockerfile語法使用</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#docker基本">Docker基本</a>
+      <ol>
+        <li><a href="#什麼是docker">什麼是Docker</a></li>
+        <li><a href="#docker三大功用">Docker三大功用</a></li>
+        <li><a href="#名詞解釋">名詞解釋</a></li>
+        <li><a href="#安裝docker">安裝Docker</a></li>
+      </ol>
+    </li>
+    <li><a href="#建立與使用docker-images">建立與使用Docker Images</a>
+      <ol>
+        <li><a href="#docker-hello-word">docker hello-word</a></li>
+        <li><a href="#docker-hub雲端下載">Docker hub雲端下載</a></li>
+        <li><a href="#建立images">建立images</a></li>
+        <li><a href="#上傳images">上傳images</a></li>
+        <li><a href="#刪除images">刪除images</a></li>
+      </ol>
+    </li>
+    <li><a href="#docker基本指令">Docker基本指令</a>
+      <ol>
+        <li><a href="#interactive-mode">Interactive mode</a></li>
+        <li><a href="#container背景運行--d">Container背景運行 -d</a></li>
+        <li><a href="#port指令">port指令</a>
+          <ol>
+            <li><a href="#port-mapping--p">port mapping -p</a></li>
+          </ol>
+        </li>
+        <li><a href="#停止container">停止container</a></li>
+        <li><a href="#清除container">清除container</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

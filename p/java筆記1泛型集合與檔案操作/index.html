@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='惡補Java基礎：）'><title>Java筆記(1)泛型、集合與檔案操作</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Java筆記(1)泛型、集合與檔案操作'>
+<meta property='og:description' content='惡補Java基礎：）'>
+<meta property='og:url' content='https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java筆記' /><meta property='article:published_time' content='2022-02-06'/><meta property='article:modified_time' content='2022-02-06'/><meta property='og:image' content='https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/logo.jpeg' />
+<meta name="twitter:title" content="Java筆記(1)泛型、集合與檔案操作">
+<meta name="twitter:description" content="惡補Java基礎：）"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/">
+                <img src="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/logo_hucf43d8104db9fe4781d7af2e52bc2a5c_37158_800x0_resize_q75_box.jpeg"
+                        srcset="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/logo_hucf43d8104db9fe4781d7af2e52bc2a5c_37158_800x0_resize_q75_box.jpeg 800w, /p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/logo_hucf43d8104db9fe4781d7af2e52bc2a5c_37158_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="492" 
+                        loading="lazy"
+                        alt="Featured image of post Java筆記(1)泛型、集合與檔案操作" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/java%E7%AD%86%E8%A8%98/" >
+                Java筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/">Java筆記(1)泛型、集合與檔案操作</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        惡補Java基礎：）
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-02-06</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h2 id="泛型generics">泛型(Generics)</h2>
+<ul>
+<li>泛型是多型(polymorphism)的一種技巧</li>
+<li>當編譯期間無法確定程式碼的撰寫方式，而是依照執行期間的狀況而決定</li>
+<li>不用因為資料型別的限制而實作多種方法，只需要一種方法即可</li>
+<li>定義「安全的」泛型類別(Genericsclass)，泛型提供編譯時期檢查</li>
+</ul>
+<p>泛型用&lt;參數(自定義)&gt;表示，也可以像一般變數一樣傳進多個參數進去，</p>
+<p>泛型通常最常使用的情況是，當不確定使用的參數的時候，不用因為資料型別的限制而實作許多方法。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;{</span>
+  <span class="kd">private</span> <span class="n">T</span> <span class="n">f</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span><span class="o">&lt;</span><span class="n">T1</span><span class="o">,</span><span class="n">T2</span><span class="o">&gt;{</span>
+  <span class="kd">private</span> <span class="n">T1</span> <span class="n">fl</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="n">T2</span> <span class="n">f2</span><span class="o">;</span> 
+<span class="o">}</span>
+</code></pre></div><h2 id="通配字元wildcard">通配字元(Wildcard)</h2>
+<ul>
+<li>共變性</li>
+<li>繼承於List的子類別或實作List介面的類別</li>
+<li>List的父類別</li>
+<li>通配字元(?)不能當作宣告方法的型別，必須是變數名稱</li>
+</ul>
+<p>使用方式比泛型<code>&lt;&gt;</code>多了一個<code>?</code></p>
+<p>使用範例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Doo</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">List</span> <span class="o">&gt;</span>  <span class="c1">// 代表?的類別必須是繼承於List的子型別或是實作List介面的類別
+</span><span class="c1"></span><span class="n">Doo</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">List</span> <span class="o">&gt;</span>    <span class="c1">//必須是List的父類別
+</span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Foo</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">List</span><span class="o">&gt;</span> <span class="n">fooObj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="n">ArrrayList</span><span class="o">&gt;();</span> <span class="c1">//因為ArrayList是List子型別，才可以這樣使用。
+</span><span class="c1"></span>
+<span class="n">Foo</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">ArrayList</span><span class="o">&gt;</span> <span class="n">fooObj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&gt;();</span> <span class="c1">//代表要是Array的父類別才可以使用
+</span></code></pre></div><p><figure style="flex-grow: 189; flex-basis: 453px">
+		<a href="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/ArrayList.png" data-size="768x406"><img src="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/ArrayList.png"
+				srcset="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/ArrayList_hu179cec388ee9a2b867e73c145495bda8_36951_480x0_resize_box_3.png 480w, /p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/ArrayList_hu179cec388ee9a2b867e73c145495bda8_36951_1024x0_resize_box_3.png 1024w"
+				width="768"
+				height="406"
+				loading="lazy"
+				alt="ArrayList">
+		</a>
+		
+		<figcaption>ArrayList</figcaption>
+		
+	</figure></p>
+<h2 id="集合collections">集合(COLLECTIONS)</h2>
+<ul>
+<li>將許多同⼀種資料型態的物件集合在⼀起</li>
+<li>比陣列更有彈性好處理</li>
+</ul>
+<h3 id="list有序集合">List(有序集合)</h3>
+<ul>
+<li>將物件依序存放，並依序取出</li>
+<li>可以存放重複的物件</li>
+</ul>
+<p>官方API文件：https://docs.oracle.com/javase/8/docs/api/java/util/List.html</p>
+<p>可以看到了副類別是Collection<!-- raw HTML omitted -->，且用了泛型<code>Interface List&lt;E&gt;</code></p>
+<p>常用方法：</p>
+<table>
+<thead>
+<tr>
+<th>返回值</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>boolean</code></td>
+<td><code>add(E e)</code>將指定元素加到此列表的尾端</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td><code>add(int index, E element)</code>在此列表中的指定位置插入指定元</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td><code>clear()</code>刪除所有元素。</td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td><code>contains(Object o)</code>如果此列表包含指定元素，則返回<code>true 。</code></td>
+</tr>
+<tr>
+<td>boolean</td>
+<td><code>isEmpty()</code>如果此列表不包含任何元素，則返回<code>true 。</code></td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td><code>size()</code>返回此列表中的元素數。</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td><code>get(int index)</code>返回列表中指定位置的元素。</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td><code>remove(int index)</code>移除指定位置的元素</td>
+</tr>
+</tbody>
+</table>
+<p>練習：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestDemo</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">&#34;test1&#34;</span><span class="o">;</span>
+		<span class="n">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="s">&#34;test2&#34;</span><span class="o">;</span>
+		<span class="n">String</span> <span class="n">str3</span> <span class="o">=</span> <span class="s">&#34;test3&#34;</span><span class="o">;</span>
+		
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+		<span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">str1</span><span class="o">);</span>
+		<span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">str1</span><span class="o">);</span>
+		<span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">str2</span><span class="o">);</span>
+		<span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">str3</span><span class="o">);</span>
+		
+		
+    <span class="c1">//下面進行遍歷
+</span><span class="c1"></span>		<span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span> <span class="o">:</span> <span class="n">list</span><span class="o">){</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+	<span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><p>結果：</p>
+<pre><code>test1
+test1
+test2
+test3
+</code></pre><h3 id="set無序集合">Set(無序集合)</h3>
+<ul>
+<li>不依序存放物件</li>
+<li>存放物件不可以重複</li>
+</ul>
+<p>也因為他是無序的關係，導致了存放物件不可重複，也比List少了幾個方法，例如get。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestSetDemo</span> <span class="o">{</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+		<span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">set</span>  <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+		<span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&#34;test1&#34;</span><span class="o">);</span>
+		<span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&#34;test2&#34;</span><span class="o">);</span>
+		<span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&#34;test3&#34;</span><span class="o">);</span>
+		
+		<span class="n">set</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="s">&#34;test2&#34;</span><span class="o">);</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+
+	<span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">//執行結果：2
+</span></code></pre></div><h3 id="map">Map</h3>
+<p>API：https://docs.oracle.com/javase/8/docs/api/java/util/Map.html</p>
+<ul>
+<li>將物件以key, value的儲存⽅式，放置於Map物件中</li>
+<li>使⽤key取得存放的物件</li>
+<li>資料的操作都是透過Key操作</li>
+</ul>
+<pre><code>Map(key, value)
+</code></pre><p>範例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span><span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;();</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestMapDemo</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;();</span>
+		<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;test1&#34;</span><span class="o">,</span> <span class="n">1</span><span class="o">);</span>
+		<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;test2&#34;</span><span class="o">,</span> <span class="n">2</span><span class="o">);</span>
+		<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;test3&#34;</span><span class="o">,</span> <span class="n">3</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;test2&#34;</span><span class="o">));</span>
+    <span class="c1">//執行結果：2
+</span><span class="c1"></span>		<span class="n">map</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="s">&#34;test2&#34;</span><span class="o">);</span>
+
+		<span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">keySet</span><span class="o">()){</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+		<span class="o">}</span>
+		<span class="c1">//執行結果:3 1
+</span><span class="c1"></span>	<span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><h2 id="java-io">JAVA I/O</h2>
+<p><a class="link" href="https://docs.oracle.com/javase/7/docs/api/java/io/File.html"  target="_blank" rel="noopener"
+    >https://docs.oracle.com/javase/7/docs/api/java/io/File.html</a></p>
+<h3 id="檔案操作">檔案操作</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span> <span class="c1">//fileName路徑名稱
+</span><span class="c1"></span><span class="n">file</span><span class="o">.</span><span class="na">mkdir</span><span class="o">();</span> <span class="c1">//建立檔案
+</span><span class="c1"></span><span class="n">file</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">();</span> <span class="c1">//建立檔案，如果路徑上沒有資料夾會一起建立
+</span><span class="c1"></span><span class="n">file</span><span class="o">.</span><span class="na">list</span><span class="o">();</span> <span class="c1">//讀取目錄
+</span><span class="c1"></span><span class="n">file</span><span class="o">.</span><span class="na">delete</span><span class="o">();</span> <span class="c1">//刪除檔案
+</span></code></pre></div><p>建立IOUtil工具類例子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">IOUtil</span> <span class="o">{</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">createFolder</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">){</span> <span class="c1">//路經參數，所以如果要在home資料夾新增test資料夾，就要傳進&#34;/home/test&#34;
+</span><span class="c1"></span>		<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+		<span class="n">file</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">();</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span><span class="o">[]</span> <span class="nf">readFolder</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">){</span> <span class="c1">//回傳資料夾下面有哪些檔案
+</span><span class="c1"></span>		<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="na">list</span><span class="o">();</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">deleteFolder</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">){</span> <span class="c1">//刪除檔案
+</span><span class="c1"></span>		<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+		<span class="n">file</span><span class="o">.</span><span class="na">delete</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="讀取檔案內容">讀取檔案內容</h3>
+<h4 id="讀取文字檔">讀取文字檔</h4>
+<ul>
+<li>FileReader： 以Char, String的⽅方式讀取檔案</li>
+<li>BufferedReader：BifferedReader有一個建構子，就是放入FileReader之後其他任務就可以交由BifferedReader處理。</li>
+<li>BufferedReader.readLine()：透過readLine()讀取文字，readLine()會回傳String</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">IOUtil</span> <span class="o">{</span>	
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">readTxtFile</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">FileReader</span> <span class="n">fr</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+      <span class="k">try</span> <span class="o">{</span>
+        <span class="n">fr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileReader</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span> <span class="c1">//1.新增FileReader
+</span><span class="c1"></span>      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+
+      <span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="n">fr</span><span class="o">);</span> <span class="c1">//2.FileReader交給BufferedReader
+</span><span class="c1"></span>      <span class="n">String</span> <span class="n">tmp</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+      <span class="k">try</span><span class="o">{</span>
+        <span class="k">while</span><span class="o">((</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span> <span class="c1">//讀取到沒有資料為止
+</span><span class="c1"></span>          <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">tmp</span><span class="o">);</span> <span class="c1">//讀出來的資料會放在tmp一行一行列印出來
+</span><span class="c1"></span>        <span class="o">}</span>
+      <span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">){</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span><span class="k">finally</span><span class="o">{</span>   <span class="c1">//在IO裡面，要關掉IO，所以在最後關閉
+</span><span class="c1"></span>        <span class="k">try</span> <span class="o">{</span>
+          <span class="n">br</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span> 
+          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="寫入文字檔案">寫入文字檔案</h3>
+<h4 id="寫入文字檔">寫入文字檔</h4>
+<ul>
+<li>FileWriter：確認檔案寫入的位置</li>
+<li>BufferedWriter
+<ol>
+<li>BufferedWriter. write(String str)：將字串寫進去</li>
+<li>BufferedWriter. newLine()：跳行</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">IOUtil</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">writeTxtFile</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">,</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">){</span>
+      <span class="k">try</span> <span class="o">{</span>
+        <span class="n">FileWriter</span> <span class="n">fw</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+        <span class="n">BufferedWriter</span> <span class="n">bw</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedWriter</span><span class="o">(</span><span class="n">fw</span><span class="o">);</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">list</span><span class="o">){</span>
+          <span class="n">bw</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+          <span class="n">bw</span><span class="o">.</span><span class="na">newLine</span><span class="o">();</span> <span class="c1">//繼續往下寫
+</span><span class="c1"></span>        <span class="o">}</span>
+        <span class="n">bw</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span> <span class="c1">//將記憶體裡面的資料清空
+</span><span class="c1"></span> <span class="cm">/*BufferedWriter是緩衝輸入流，意思是調用BufferedWriter的write方法時候。數據是先寫入到緩衝區裡，並沒有直接寫入到目的文件裡。必須用BufferedWriter的flush()方法。這個方法會刷新一下該緩衝流，也就是會把數據寫入到目的文件裡。或者你可以調用BufferedWriter的close()方法，該方法會在關閉該輸入流之前先刷新一下該緩衝流。也會把數據寫入到目的文件裡。原文链接：https://blog.csdn.net/appleml/article/details/41721365*/</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span> 
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">copyPictureFile</span><span class="o">(</span><span class="n">File</span> <span class="n">source</span><span class="o">,</span> <span class="n">File</span> <span class="n">dest</span><span class="o">){</span>
+      <span class="n">FileInputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+      <span class="n">FileOutputStream</span> <span class="n">fos</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+      <span class="k">try</span><span class="o">{</span>
+        <span class="n">fis</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileInputStream</span><span class="o">(</span><span class="n">source</span><span class="o">);</span>
+        <span class="n">fos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileOutputStream</span><span class="o">(</span><span class="n">dest</span><span class="o">);</span>
+
+        <span class="kt">byte</span><span class="o">[]</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="n">1024</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">off</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+
+        <span class="k">while</span><span class="o">((</span><span class="n">len</span> <span class="o">=</span> <span class="n">fis</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">buffer</span><span class="o">))</span> <span class="o">!=</span> <span class="o">-</span><span class="n">1</span><span class="o">){</span>
+          <span class="n">fos</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">buffer</span><span class="o">,</span> <span class="n">off</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">fos</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+      <span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">){</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span><span class="k">finally</span><span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+          <span class="n">fis</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+          <span class="n">fos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="fileinputstream--fileoutputstream">FileInputStream &amp; FileOutputStream</h4>
+<p>前面介紹的FileReader以及FileWriter都是透過字串類型來讀取或寫入內容，而FileInputStream &amp; FileOutputStream是透過Byte來做讀取以及寫入</p>
+<ul>
+<li>FileInputStream read(byte[] b)：read(讀進來的byte陣列)</li>
+<li>FileOutputStream
+<ol>
+<li>write(byte[] b, int off, int len) ：write(將讀進來的byte陣列,起始位置,長度)</li>
+<li>flush()：寫入</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">IOUtil</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">copyPictureFile</span><span class="o">(</span><span class="n">File</span> <span class="n">source</span><span class="o">,</span> <span class="n">File</span> <span class="n">dest</span><span class="o">){</span> <span class="c1">//讀取圖檔
+</span><span class="c1"></span>      <span class="n">FileInputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span> 
+      <span class="n">FileOutputStream</span> <span class="n">fos</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+      <span class="k">try</span><span class="o">{</span>
+        <span class="n">fis</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileInputStream</span><span class="o">(</span><span class="n">source</span><span class="o">);</span> <span class="c1">//取得資料位置
+</span><span class="c1"></span>        <span class="n">fos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileOutputStream</span><span class="o">(</span><span class="n">dest</span><span class="o">);</span>  <span class="c1">//寫入位置
+</span><span class="c1"></span>
+        <span class="kt">byte</span><span class="o">[]</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="n">1024</span><span class="o">];</span> <span class="c1">//暫存（可以設定更高）
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">off</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="c1">//起始位置
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> 	<span class="c1">//長度
+</span><span class="c1"></span>
+        <span class="k">while</span><span class="o">((</span><span class="n">len</span> <span class="o">=</span> <span class="n">fis</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">buffer</span><span class="o">))</span> <span class="o">!=</span> <span class="o">-</span><span class="n">1</span><span class="o">){</span> <span class="c1">//長度= -1代表讀取結束
+</span><span class="c1"></span>          <span class="n">fos</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">buffer</span><span class="o">,</span> <span class="n">off</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span> <span class="c1">//寫入檔案
+</span><span class="c1"></span>        <span class="o">}</span>
+        <span class="n">fos</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span> <span class="c1">//將緩存寫入
+</span><span class="c1"></span>      <span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">){</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span><span class="k">finally</span><span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+          <span class="n">fis</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+          <span class="n">fos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="ioutil實作">IOUtil實作</h3>
+<p>結合了上面的完成了較實用的Util類別，檔案目錄結構如下，post.txt要自己隨便加個內容</p>
+<p><figure style="flex-grow: 91; flex-basis: 220px">
+		<a href="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E6%AA%94%E6%A1%88%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B.png" data-size="538x586"><img src="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E6%AA%94%E6%A1%88%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B.png"
+				srcset="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E6%AA%94%E6%A1%88%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B_huc3849d8e630f692fc9c83f7267427ac7_32631_480x0_resize_box_3.png 480w, /p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E6%AA%94%E6%A1%88%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B_huc3849d8e630f692fc9c83f7267427ac7_32631_1024x0_resize_box_3.png 1024w"
+				width="538"
+				height="586"
+				loading="lazy"
+				alt="檔案目錄結構">
+		</a>
+		
+		<figcaption>檔案目錄結構</figcaption>
+		
+	</figure></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">IOUtil</span> <span class="o">{</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">createFolder</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">){</span>
+		<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">file</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">()){</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;新建檔案成功&#34;</span><span class="o">);</span>
+		<span class="o">}</span><span class="k">else</span><span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;新建檔案失敗，檔案有可能已存在&#34;</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span><span class="o">[]</span> <span class="nf">readFolder</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">){</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+			<span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="na">list</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">NullPointerException</span> <span class="n">exception</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">exception</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span> <span class="c1">//把拋出的expection 全部印出來
+</span><span class="c1"></span>		<span class="o">}</span> 
+		<span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">deleteFolder</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">){</span>
+		<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">file</span><span class="o">.</span><span class="na">delete</span><span class="o">()){</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;刪除檔案成功&#34;</span><span class="o">);</span>
+		<span class="o">}</span><span class="k">else</span><span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;刪除檔案失敗，檔案有可能不存在&#34;</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">readTxtFile</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">FileReader</span> <span class="n">fr</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">fr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileReader</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;找不到檔案&#34;</span><span class="o">);</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+			<span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="o">}</span>
+		
+		<span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="n">fr</span><span class="o">);</span>
+		<span class="n">String</span> <span class="n">tmp</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">try</span><span class="o">{</span>
+			<span class="k">while</span><span class="o">((</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+				<span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">tmp</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">){</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+		<span class="o">}</span><span class="k">finally</span><span class="o">{</span>
+			<span class="k">try</span> <span class="o">{</span>
+				<span class="n">br</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+		
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">writeTxtFile</span><span class="o">(</span><span class="n">String</span> <span class="n">fileName</span><span class="o">,</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">){</span>	
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">FileWriter</span> <span class="n">fw</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+			<span class="n">BufferedWriter</span> <span class="n">bw</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedWriter</span><span class="o">(</span><span class="n">fw</span><span class="o">);</span>
+			
+			<span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">list</span><span class="o">){</span>
+				<span class="n">bw</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+				<span class="n">bw</span><span class="o">.</span><span class="na">newLine</span><span class="o">();</span>
+			<span class="o">}</span>
+			<span class="n">bw</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+      <span class="n">bw</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+		<span class="o">}</span> 
+				
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">copyPictureFile</span><span class="o">(</span><span class="n">File</span> <span class="n">source</span><span class="o">,</span> <span class="n">File</span> <span class="n">dest</span><span class="o">){</span>
+		<span class="n">FileInputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="n">FileOutputStream</span> <span class="n">fos</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">try</span><span class="o">{</span>
+			<span class="n">fis</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileInputStream</span><span class="o">(</span><span class="n">source</span><span class="o">);</span>
+			<span class="n">fos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileOutputStream</span><span class="o">(</span><span class="n">dest</span><span class="o">);</span>
+			
+			<span class="kt">byte</span><span class="o">[]</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="n">1024</span><span class="o">];</span>
+			<span class="kt">int</span> <span class="n">off</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+			<span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+			
+			<span class="k">while</span><span class="o">((</span><span class="n">len</span> <span class="o">=</span> <span class="n">fis</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">buffer</span><span class="o">))</span> <span class="o">!=</span> <span class="o">-</span><span class="n">1</span><span class="o">){</span>
+				<span class="n">fos</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">buffer</span><span class="o">,</span> <span class="n">off</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="n">fos</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+			
+		<span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">){</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+		<span class="o">}</span><span class="k">finally</span><span class="o">{</span>
+			<span class="k">try</span> <span class="o">{</span>
+				<span class="n">fis</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+				<span class="n">fos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		
+	<span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div><p>測試程式：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="n">String</span> <span class="n">fileName</span> <span class="o">=</span> <span class="s">&#34;./testFolder&#34;</span><span class="o">;</span>
+		<span class="c1">//建立資料夾
+</span><span class="c1"></span>		<span class="n">IOUtil</span><span class="o">.</span><span class="na">createFolder</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+	
+		<span class="c1">//讀取資料夾目錄
+</span><span class="c1"></span>		<span class="c1">// &#34;../&#34;代表當前目錄前前一級 &#34;./代表目前目錄得前一級&#34;
+</span><span class="c1"></span>	    <span class="n">String</span><span class="o">[]</span> <span class="n">files</span> <span class="o">=</span> <span class="n">IOUtil</span><span class="o">.</span><span class="na">readFolder</span><span class="o">(</span><span class="s">&#34;./codegym&#34;</span><span class="o">);</span>
+		<span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span> <span class="o">:</span> <span class="n">files</span><span class="o">){</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="c1">//刪除檔案
+</span><span class="c1"></span>		<span class="c1">//IOUtil.deleteFolder(fileName);
+</span><span class="c1"></span>		<span class="c1">//System.out.println(&#34;deleteFolder(fileName)執行結束&#34;);
+</span><span class="c1"></span>		
+		<span class="c1">//檔案讀取
+</span><span class="c1"></span>		<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">=</span> <span class="n">IOUtil</span><span class="o">.</span><span class="na">readTxtFile</span><span class="o">(</span><span class="s">&#34;./codegym/post.txt&#34;</span><span class="o">);</span>
+		<span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">list</span><span class="o">){</span> <span class="c1">//遍歷
+</span><span class="c1"></span>			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+		<span class="o">}</span>
+	
+		<span class="c1">//檔案寫入
+</span><span class="c1"></span>		<span class="n">IOUtil</span><span class="o">.</span><span class="na">writeTxtFile</span><span class="o">(</span><span class="n">fileName</span> <span class="o">+</span> <span class="s">&#34;/textpost.txt&#34;</span><span class="o">,</span><span class="n">list</span><span class="o">);</span>
+		
+		
+		<span class="c1">//複製圖片
+</span><span class="c1"></span>		<span class="n">String</span> <span class="n">source</span> <span class="o">=</span> <span class="s">&#34;./codegym/testImg.png&#34;</span><span class="o">;</span>
+		<span class="n">String</span> <span class="n">dest</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s">&#34;/textImg.png&#34;</span><span class="o">;</span>
+		<span class="n">IOUtil</span><span class="o">.</span><span class="na">copyPictureFile</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">source</span><span class="o">),</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">dest</span><span class="o">));</span>
+		<span class="o">}</span>
+</code></pre></div><p>完成結果：</p>
+<p>終端機輸出：</p>
+<pre><code>新建檔案成功
+.DS_Store
+TestDemo.java
+IOUtil.java
+post.txt
+testImg.png
+今天清晨持續受大陸冷氣團影響，各地天氣偏冷，西半部及東北部低溫普遍約11至14℃，其中新竹到雲林、南投及金門有局部10℃以下低溫發生機率，氣象局針對9縣市發布低溫特報。今晨最低溫在嘉義嘉義9.6℃，雲林10℃、彰化、苗栗10.3℃。
+
+
+中央氣象局預報員張承傳指出，今清晨受大陸冷氣團影響，各地天氣偏冷，西半部及東北部低溫普遍約11至14℃。白天起冷氣團稍微減弱，不過溫度回升幅度不多，北部及東北部高溫只有15至18℃，其他地區20至24℃；基隆北海岸及東北部降雨機率偏高，仍容易有短暫雨，而花東及大台北也偶有零星降雨。
+
+張承傳指出，明天下半天鋒面接近，西半部水氣增多，明晚到周二清晨降雨最明顯，全台都有陣雨機率，周二白天降雨逐漸趨緩，轉為迎風面北部、東北部為主。
+
+
+周二東北季風增強，屆時北台灣再轉涼，高溫剩下16、17℃。這波東北風從周二影響至周四，不過周三、四水氣較少，僅東半部及北部山區有局部短暫雨，其他地區多雲到晴。周五、周六東北季風減弱，北台灣溫度回升。
+
+中央大學大氣系兼任副教授吳德榮在「三立準氣象· 老大洩天機」專欄撰文指出，今晨強冷空氣及「輻射冷卻」加成，本島平地最低氣溫出現在中部：嘉義民雄鄉9.6℃，雲林虎尾、斗南鎮10℃。今晨迎風面雲層仍多，北海岸、東北部有局部降雨，大台北東側則有零星少量飄雨。
+
+最新模式模擬顯示，今日白天起強冷空氣稍減弱、氣溫微升，北台偏冷、中南部白天舒適晚仍偏冷；桃園以南晴時多雲，北海岸、大台北東側及東半部偶有零星降雨。今日各地氣溫：北部11至17℃，中部10至24℃，南部11至26℃，東部12至24℃。
+</code></pre><p>執行後檔案目錄結構：</p>
+<p><figure style="flex-grow: 70; flex-basis: 168px">
+		<a href="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E5%9F%B7%E8%A1%8C%E5%BE%8C%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B.png" data-size="546x776"><img src="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E5%9F%B7%E8%A1%8C%E5%BE%8C%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B.png"
+				srcset="/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E5%9F%B7%E8%A1%8C%E5%BE%8C%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B_hue79a5683ae69cde4a661858e2e12f7d2_45996_480x0_resize_box_3.png 480w, /p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/%E5%9F%B7%E8%A1%8C%E5%BE%8C%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B_hue79a5683ae69cde4a661858e2e12f7d2_45996_1024x0_resize_box_3.png 1024w"
+				width="546"
+				height="776"
+				loading="lazy"
+				alt="執行後目錄結構">
+		</a>
+		
+		<figcaption>執行後目錄結構</figcaption>
+		
+	</figure></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/java%E7%AD%86%E8%A8%98/">Java筆記</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/">
+        
+        
+            <div class="article-image">
+                <img src="/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/logo.24b51bbb4a8699a90fe9ae3d0807cd19_hu0e3d24c70667b48af76446875ccb292a_51785_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-JLUbu0qGmakP6a49CAfNGQ==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">JWT(JSON Web Token)原理介紹&amp;實作JWS</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#泛型generics">泛型(Generics)</a></li>
+    <li><a href="#通配字元wildcard">通配字元(Wildcard)</a></li>
+    <li><a href="#集合collections">集合(COLLECTIONS)</a>
+      <ol>
+        <li><a href="#list有序集合">List(有序集合)</a></li>
+        <li><a href="#set無序集合">Set(無序集合)</a></li>
+        <li><a href="#map">Map</a></li>
+      </ol>
+    </li>
+    <li><a href="#java-io">JAVA I/O</a>
+      <ol>
+        <li><a href="#檔案操作">檔案操作</a></li>
+        <li><a href="#讀取檔案內容">讀取檔案內容</a>
+          <ol>
+            <li><a href="#讀取文字檔">讀取文字檔</a></li>
+          </ol>
+        </li>
+        <li><a href="#寫入文字檔案">寫入文字檔案</a>
+          <ol>
+            <li><a href="#寫入文字檔">寫入文字檔</a></li>
+            <li><a href="#fileinputstream--fileoutputstream">FileInputStream &amp; FileOutputStream</a></li>
+          </ol>
+        </li>
+        <li><a href="#ioutil實作">IOUtil實作</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

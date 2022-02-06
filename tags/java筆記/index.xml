@@ -6,7 +6,21 @@
     <description>Recent content in Java筆記 on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Wed, 02 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/java%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/java%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java筆記(1)泛型、集合與檔案操作</title>
+      <link>https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/</link>
+      <pubDate>Sun, 06 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/</guid>
+      <description>泛型(Generics)  泛型是多型(polymorphism)的一種技巧 當編譯期間無法確定程式碼的撰寫方式，而是依照執行期間的狀況而決定 不用因為資料型別的限制而實作多種方法，只需要一種方法即可 定義「安全的」泛型類別(Genericsclass)，泛型提供編譯時期檢查  泛型用&amp;lt;參數(自定義)&amp;gt;表示，也可以像一般變數一樣傳進多個參數進去，
+泛型通常最常使用的情況是，當不確定使用的參數的時候，不用因為資料型別的限制而實作許多方法。
+public class Foo&amp;lt;T&amp;gt;{ private T f; } public class Foo&amp;lt;T1,T2&amp;gt;{ private T1 fl; private T2 f2; } 通配字元(Wildcard)  共變性 繼承於List的子類別或實作List介面的類別 List的父類別 通配字元(?)不能當作宣告方法的型別，必須是變數名稱  使用方式比泛型&amp;lt;&amp;gt;多了一個?
+使用範例：
+Doo&amp;lt;? extends List &amp;gt; // 代表?的類別必須是繼承於List的子型別或是實作List介面的類別 Doo&amp;lt;? super List &amp;gt; //必須是List的父類別 Foo&amp;lt;? extends List&amp;gt; fooObj = new Foo&amp;lt;ArrrayList&amp;gt;(); //因為ArrayList是List子型別，才可以這樣使用。  Foo&amp;lt;? super ArrayList&amp;gt; fooObj = new Foo&amp;lt;List&amp;gt;(); //代表要是Array的父類別才可以使用  ArrayList 
+集合(COLLECTIONS)  將許多同⼀種資料型態的物件集合在⼀起 比陣列更有彈性好處理  List(有序集合)  將物件依序存放，並依序取出 可以存放重複的物件  官方API文件：https://docs.</description>
+    </item>
+    
     <item>
       <title>JWT(JSON Web Token)原理介紹&amp;實作JWS</title>
       <link>https://yen0304.github.io/p/jwtjson-web-token%E5%8E%9F%E7%90%86%E4%BB%8B%E7%B4%B9%E5%AF%A6%E4%BD%9Cjws/</link>
