@@ -6,7 +6,28 @@
     <description>Recent content in Docker筆記 on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Sat, 05 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/docker%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 07 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/docker%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker筆記(3)-Docker Network &amp; Docker Volume</title>
+      <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/</link>
+      <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/</guid>
+      <description>Docker Network &amp;amp; Docker Volume 知識來源：https://hahow.in/courses/5df27f1fa5ee510022a08500
+Docker Network Mode介紹 有四種模式：
+下面的圖片分別代表從Host-&amp;gt;VM-&amp;gt;Docker Engine裡面各個還有的NetWork空間，而Docker空過可能會有多個Bridge NetWork
+ base 
+None模式： None模式容器不會與外界接觸，外部與容器互相不能連線，是一個封閉的網路空間
+Bridge模式： Bridge在容器啟動的時候，會把容器放在某個Bridge容器放在Bridge Network裡面，這些Network空間就會把IP分給容器，而不同的Network空間網路是互不相通的，如下圖，A1以及B1來自不同的網路空間，所以下面的兩個容器網路無法相通。 
+Container模式 Container模式會把容器對應的現形的Container，他會與對應的容器拿到相同的IP
+Host模式 Host模式會與VM network索取IP，所以他可以跟Linux VM的應用程式相通
+所以以上會變成這樣子：
+ 
+Docker Network實作 列出目前所有的網路模式：
+docker network ls ➜ ~ docker network ls NETWORK ID NAME DRIVER SCOPE 9e5d8527e2f5 bridge bridge local a21823e2ef89 host host local 7f054863856c none null local None模式 指定Container的網路模式：
+docker run -d --network none --name none-mode alpine tail -f /dev/null 上面的格式解釋：</description>
+    </item>
+    
     <item>
       <title>Docker筆記(2)-Dockerfile語法使用</title>
       <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/</link>

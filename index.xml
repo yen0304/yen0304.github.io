@@ -6,7 +6,348 @@
         <description>Recent content on Yen&#39;s部落格</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-tw</language>
-        <lastBuildDate>Sun, 06 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 07 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Docker筆記(3)-Docker Network &amp; Docker Volume</title>
+        <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/</link>
+        <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/logo.png" alt="Featured image of post Docker筆記(3)-Docker Network &amp; Docker Volume" /&gt;&lt;h1 id=&#34;docker-network--docker-volume&#34;&gt;Docker Network &amp;amp; Docker Volume&lt;/h1&gt;
+&lt;p&gt;知識來源：https://hahow.in/courses/5df27f1fa5ee510022a08500&lt;/p&gt;
+&lt;h2 id=&#34;docker-network-mode介紹&#34;&gt;Docker Network Mode介紹&lt;/h2&gt;
+&lt;p&gt;有四種模式：&lt;/p&gt;
+&lt;p&gt;下面的圖片分別代表從Host-&amp;gt;VM-&amp;gt;Docker Engine裡面各個還有的NetWork空間，而Docker空過可能會有多個Bridge NetWork&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 158; flex-basis: 380px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/base.png&#34; data-size=&#34;1480x934&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/base.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/base_hu1cd2f8f09a74fec5c568b9db6eeb3789_213828_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/base_hu1cd2f8f09a74fec5c568b9db6eeb3789_213828_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1480&#34;
+				height=&#34;934&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;base&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;base&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id=&#34;none模式&#34;&gt;None模式：&lt;/h3&gt;
+&lt;p&gt;None模式容器不會與外界接觸，外部與容器互相不能連線，是一個封閉的網路空間&lt;/p&gt;
+&lt;h3 id=&#34;bridge模式&#34;&gt;Bridge模式：&lt;/h3&gt;
+&lt;p&gt;Bridge在容器啟動的時候，會把容器放在某個Bridge容器放在Bridge Network裡面，這些Network空間就會把IP分給容器，而不同的Network空間網路是互不相通的，如下圖，A1以及B1來自不同的網路空間，所以下面的兩個容器網路無法相通。&lt;figure style=&#34;flex-grow: 96; flex-basis: 232px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridgemode.png&#34; data-size=&#34;754x778&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridgemode.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridgemode_huc2e8b1f1c7a37d5224446ccacd83f30d_136770_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridgemode_huc2e8b1f1c7a37d5224446ccacd83f30d_136770_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;754&#34;
+				height=&#34;778&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id=&#34;container模式&#34;&gt;Container模式&lt;/h3&gt;
+&lt;p&gt;Container模式會把容器對應的現形的Container，他會與對應的容器拿到相同的IP&lt;/p&gt;
+&lt;h3 id=&#34;host模式&#34;&gt;Host模式&lt;/h3&gt;
+&lt;p&gt;Host模式會與VM network索取IP，所以他可以跟Linux VM的應用程式相通&lt;/p&gt;
+&lt;p&gt;所以以上會變成這樣子：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 162; flex-basis: 389px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/nwtworkmode.png&#34; data-size=&#34;2482x1530&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/nwtworkmode.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/nwtworkmode_hua76695575e38c98728ab8b416c228e0a_734592_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/nwtworkmode_hua76695575e38c98728ab8b416c228e0a_734592_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;2482&#34;
+				height=&#34;1530&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;docker-network實作&#34;&gt;Docker Network實作&lt;/h2&gt;
+&lt;p&gt;列出目前所有的網路模式：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker network ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  ~ docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+9e5d8527e2f5   bridge    bridge    &lt;span class=&#34;nb&#34;&gt;local&lt;/span&gt;
+a21823e2ef89   host      host      &lt;span class=&#34;nb&#34;&gt;local&lt;/span&gt;
+7f054863856c   none      null      &lt;span class=&#34;nb&#34;&gt;local&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;none模式-1&#34;&gt;None模式&lt;/h3&gt;
+&lt;p&gt;指定Container的網路模式：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d --network none --name none-mode alpine tail -f /dev/null
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;上面的格式解釋：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run -d --network [網路模式] --name [Container名稱] [image名城] [運作模式]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;複習&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;docker run&lt;/code&gt;：運行容器&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-d&lt;/code&gt;：於背景執行&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;--network none &lt;/code&gt;：選擇的網路模式&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;--name none-mode alpine&lt;/code&gt;：容器名稱以及選擇的image&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;alpine tail -f /dev/null&lt;/code&gt;：讓他持續運行&lt;/p&gt;
+&lt;p&gt;接著透過下面指令查看網路空間內容&lt;/p&gt;
+&lt;h4 id=&#34;查看網路空間內容&#34;&gt;查看網路空間內容&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker network inspect none
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看none網路介面：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  ~ docker network inspect none
+&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;
+    &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;none&amp;#34;&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Id&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;7f054863856ce266e9181809fe53682d71a31b63c209999bc184de3ddf32bcf6&amp;#34;&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Created&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;2022-01-17T15:16:51.594572759Z&amp;#34;&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Scope&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;local&amp;#34;&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Driver&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;null&amp;#34;&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;EnableIPv6&amp;#34;&lt;/span&gt;: false,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;IPAM&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;Driver&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;default&amp;#34;&lt;/span&gt;,
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;Options&amp;#34;&lt;/span&gt;: null,
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;Config&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Internal&amp;#34;&lt;/span&gt;: false,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Attachable&amp;#34;&lt;/span&gt;: false,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Ingress&amp;#34;&lt;/span&gt;: false,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;ConfigFrom&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;Network&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;ConfigOnly&amp;#34;&lt;/span&gt;: false,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Containers&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;0e1ce29952566a295dc8ad10c37ceab4d31e5a1c86934662bca414fe9307ea96&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+                &lt;span class=&#34;s2&#34;&gt;&amp;#34;Name&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;none-mode&amp;#34;&lt;/span&gt;,
+                &lt;span class=&#34;s2&#34;&gt;&amp;#34;EndpointID&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;233eea660f30731fb98954c61b7ff99e13b2408acc73c7fdf111ed68ad2435de&amp;#34;&lt;/span&gt;,
+                &lt;span class=&#34;s2&#34;&gt;&amp;#34;MacAddress&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;,
+                &lt;span class=&#34;s2&#34;&gt;&amp;#34;IPv4Address&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;,
+                &lt;span class=&#34;s2&#34;&gt;&amp;#34;IPv6Address&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+            &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Options&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{}&lt;/span&gt;,
+        &lt;span class=&#34;s2&#34;&gt;&amp;#34;Labels&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{}&lt;/span&gt;
+    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;透過這個指令，其中的Containers就可以知道是否有真的對應到Container之中&lt;figure style=&#34;flex-grow: 126; flex-basis: 303px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/none.png&#34; data-size=&#34;1584x1254&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/none.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/none_huc1cff41e940bd18fdef9d6c7764385c6_194610_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/none_huc1cff41e940bd18fdef9d6c7764385c6_194610_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1584&#34;
+				height=&#34;1254&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著實測看看：&lt;/p&gt;
+&lt;p&gt;透過&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;containerID&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; /bin/sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;進入container並啟用shell模式&lt;/p&gt;
+&lt;p&gt;進去查看擁有的ip&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;ip addr ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然後ping google server看看&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ping 8.8.8.8
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;就會看到Netwrok unreachable沒有回應&lt;/p&gt;
+&lt;p&gt;執行結果：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  ~ docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it 0e1ce2995256 /bin/sh
+/ &lt;span class=&#34;c1&#34;&gt;# ip addr ls&lt;/span&gt;
+1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu &lt;span class=&#34;m&#34;&gt;65536&lt;/span&gt; qdisc noqueue state UNKNOWN qlen &lt;span class=&#34;m&#34;&gt;1000&lt;/span&gt;
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: tunl0@NONE: &amp;lt;NOARP&amp;gt; mtu &lt;span class=&#34;m&#34;&gt;1480&lt;/span&gt; qdisc noop state DOWN qlen &lt;span class=&#34;m&#34;&gt;1000&lt;/span&gt;
+    link/ipip 0.0.0.0 brd 0.0.0.0
+3: ip6tnl0@NONE: &amp;lt;NOARP&amp;gt; mtu &lt;span class=&#34;m&#34;&gt;1452&lt;/span&gt; qdisc noop state DOWN qlen &lt;span class=&#34;m&#34;&gt;1000&lt;/span&gt;
+    link/tunnel6 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00 brd 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00
+/ &lt;span class=&#34;c1&#34;&gt;# ping 8.8.8.8&lt;/span&gt;
+PING 8.8.8.8 &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;8.8.8.8&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;: &lt;span class=&#34;m&#34;&gt;56&lt;/span&gt; data bytes
+ping: sendto: Network unreachable
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;bridge模式-1&#34;&gt;Bridge模式&lt;/h3&gt;
+&lt;p&gt;首先要建立網路空間&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker network create --driver &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;哪一種diver&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;drivername&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker network create --driver bridge my-bridge
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;藉著輸入&lt;code&gt;docker network ls&lt;/code&gt;查看有的目前網路空間&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;➜  ~ docker network ls
+NETWORK ID     NAME        DRIVER    SCOPE
+9e5d8527e2f5   bridge      bridge    &lt;span class=&#34;nb&#34;&gt;local&lt;/span&gt;
+a21823e2ef89   host        host      &lt;span class=&#34;nb&#34;&gt;local&lt;/span&gt;
+eaadd419454a   my-bridge   bridge    &lt;span class=&#34;nb&#34;&gt;local&lt;/span&gt;
+7f054863856c   none        null      &lt;span class=&#34;nb&#34;&gt;local&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著&lt;code&gt;docker network inspect my-bridge&lt;/code&gt;查看網路空間內容&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 123; flex-basis: 297px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridge.png&#34; data-size=&#34;1434x1158&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridge.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridge_hudd187ddbe43ed27478e729e189b93a93_225650_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridge_hudd187ddbe43ed27478e729e189b93a93_225650_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1434&#34;
+				height=&#34;1158&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;截圖 2022-02-07 下午6.40.29&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;截圖 2022-02-07 下午6.40.29&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;這時候網路空間的&lt;a class=&#34;link&#34; href=&#34;https://www.netadmin.com.tw/netadmin/zh-tw/technology/D5162EE38674405EADB022E0802A05B2&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Subnet&lt;/a&gt;可以注意一下，接著將容器放到此網路空間：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d --network my-bridge --name bridge-001  alpine tail -f /dev/null
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;成功後再次查看使用&lt;code&gt;docker network inspect my-bridge&lt;/code&gt;查看網路空間內容&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 127; flex-basis: 305px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridge2.png&#34; data-size=&#34;1698x1332&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridge2.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridge2_hue8fa498073b390ebe0b540a771cd5291_327206_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/bridge2_hue8fa498073b390ebe0b540a771cd5291_327206_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1698&#34;
+				height=&#34;1332&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;接著進入Container，並使用ip addr ls 可以看到成功從網路空間拿到ip(172.18.0.2)，且成功ping到google server外部網路，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;➜  ~ docker container ls
+CONTAINER ID   IMAGE     COMMAND               CREATED         STATUS         PORTS     NAMES
+9853efb87483   alpine    &lt;span class=&#34;s2&#34;&gt;&amp;#34;tail -f /dev/null&amp;#34;&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;4&lt;/span&gt; minutes ago   Up &lt;span class=&#34;m&#34;&gt;4&lt;/span&gt; minutes             bridge-001
+0e1ce2995256   alpine    &lt;span class=&#34;s2&#34;&gt;&amp;#34;tail -f /dev/null&amp;#34;&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;20&lt;/span&gt; hours ago    Up &lt;span class=&#34;m&#34;&gt;20&lt;/span&gt; hours              none-mode
+➜  ~ docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it 9853efb87483 /bin/sh
+/ &lt;span class=&#34;c1&#34;&gt;# ip addr ls&lt;/span&gt;
+1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu &lt;span class=&#34;m&#34;&gt;65536&lt;/span&gt; qdisc noqueue state UNKNOWN qlen &lt;span class=&#34;m&#34;&gt;1000&lt;/span&gt;
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: tunl0@NONE: &amp;lt;NOARP&amp;gt; mtu &lt;span class=&#34;m&#34;&gt;1480&lt;/span&gt; qdisc noop state DOWN qlen &lt;span class=&#34;m&#34;&gt;1000&lt;/span&gt;
+    link/ipip 0.0.0.0 brd 0.0.0.0
+3: ip6tnl0@NONE: &amp;lt;NOARP&amp;gt; mtu &lt;span class=&#34;m&#34;&gt;1452&lt;/span&gt; qdisc noop state DOWN qlen &lt;span class=&#34;m&#34;&gt;1000&lt;/span&gt;
+    link/tunnel6 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00 brd 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00
+61: eth0@if62: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&amp;gt; mtu &lt;span class=&#34;m&#34;&gt;1500&lt;/span&gt; qdisc noqueue state UP
+    link/ether 02:42:ac:12:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.2/16 brd 172.18.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+/ &lt;span class=&#34;c1&#34;&gt;# ping 8.8.8.8&lt;/span&gt;
+PING 8.8.8.8 &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;8.8.8.8&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;: &lt;span class=&#34;m&#34;&gt;56&lt;/span&gt; data bytes
+&lt;span class=&#34;m&#34;&gt;64&lt;/span&gt; bytes from 8.8.8.8: &lt;span class=&#34;nv&#34;&gt;seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ttl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;37&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;46.825 ms
+&lt;span class=&#34;m&#34;&gt;64&lt;/span&gt; bytes from 8.8.8.8: &lt;span class=&#34;nv&#34;&gt;seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ttl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;37&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;68.009 ms
+&lt;span class=&#34;m&#34;&gt;64&lt;/span&gt; bytes from 8.8.8.8: &lt;span class=&#34;nv&#34;&gt;seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ttl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;37&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;52.666 ms
+&lt;span class=&#34;m&#34;&gt;64&lt;/span&gt; bytes from 8.8.8.8: &lt;span class=&#34;nv&#34;&gt;seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;3&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ttl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;37&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;56.660 ms
+&lt;span class=&#34;m&#34;&gt;64&lt;/span&gt; bytes from 8.8.8.8: &lt;span class=&#34;nv&#34;&gt;seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;4&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ttl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;37&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;43.702 ms
+&lt;span class=&#34;m&#34;&gt;64&lt;/span&gt; bytes from 8.8.8.8: &lt;span class=&#34;nv&#34;&gt;seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;5&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ttl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;37&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;54.996 ms
+^C 
+--- 8.8.8.8 ping statistics ---
+&lt;span class=&#34;m&#34;&gt;6&lt;/span&gt; packets transmitted, &lt;span class=&#34;m&#34;&gt;6&lt;/span&gt; packets received, 0% packet loss
+round-trip min/avg/max &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; 43.702/53.809/68.009 ms
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果之後建立相同的Container都在my-bridge網路空間，可以互相ping成功，反之在不同的bridge網路空間，就不同互相ping，&lt;strong&gt;但這些使用Birdge網路模式的Container都可以向外部連接&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;container模式-1&#34;&gt;Container模式&lt;/h3&gt;
+&lt;p&gt;Container模式會把容器對應的現形的Container，他會與對應的容器拿到相同的IP，所以要複製的是container的名稱&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run -d --network container：[要copy的container名稱] --name [Container名稱] [image名城] [運作模式]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;所以如果要複製上面容器birdge-001的網路空間的話：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d --network container:bridge-001 --name container-mode001 alpine tail -f /dev/null
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;完成指令後用&lt;code&gt;docker network inspect my-bridge&lt;/code&gt;進入到my-bridge網路空間查看，會發現剛剛建立的這個container-mode001容器並沒有在Containers的結果裡，但&lt;strong&gt;之後進入Container之後還是可以看到他拿到與容器bridge-001相同的ip，只是不能向外部連接。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;container mode 主要特點，&lt;strong&gt;即是它並不與外界網路進行溝通，只與所複製的網路進行交流&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;如果在container mode建立一個container是去複製bridge container的ip，這樣就會有兩個container共用一組ip&lt;/p&gt;
+&lt;p&gt;那麼如果去ping那組ip是誰會回應呢?&lt;/p&gt;
+&lt;p&gt;**container mode 的目的是讓一個 container 可以在 docker 內部網路互相溝通。**同時，container mode 也有所限制；第二個啟動的 container 有著很多不能使用的功能，比如對外進行 port mapping (ex. -p 8080:80)。所以這個 container mode 下的 container ，只能對內行動，不能對外開放，所以也就不會對外擔任回應 ip 的角色！&lt;/p&gt;
+&lt;h3 id=&#34;host-模式&#34;&gt;Host 模式&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Host Mode 消息更新&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Host mode 僅存在於 Linux 中直接安裝 Docker 的環境。&lt;/p&gt;
+&lt;p&gt;Desktop for Windows/macOS 因為不再讓我們進入到內層 VM Linux，所以不再有 host mode 可以運用。&lt;/p&gt;
+&lt;h2 id=&#34;docker-network相關語法整理&#34;&gt;Docker Network相關語法整理&lt;/h2&gt;
+&lt;p&gt;列出目前擁有的網路空間：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;docker network ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;docker network ls&lt;/p&gt;
+&lt;p&gt;創建容器並指定網路空間：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;docker run -d --network &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;網路空間名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; --name &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Container名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;image名城&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;運作模式&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;ContainerMode的話&lt;/p&gt;
+&lt;p&gt;查看網路空間內容：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;docker network inspect &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;網路空間名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;進入容器並使用shell模式：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;containerID&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; /bin/sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;docker-volume-介紹&#34;&gt;Docker Volume 介紹&lt;/h2&gt;
+&lt;h3 id=&#34;docker的三個空間&#34;&gt;Docker的三個空間&lt;/h3&gt;
+&lt;p&gt;在使用Docker Volume之前，要先知道Docker總共有三個空間可以使用，一個是主機是的Disk空間，另一個是Linux VM的空間，第三個則是Docker Engine的容器空間，其中VM空間與容器空間最大的差別在於，VM的資料不會隨著容器消失而不見，還是會留在Linux VM Disk上面，反之，Container Disk是暫時的空間，如果有容器裡面從TMP要了空間（如圖），那如果這個容器刪除了，TMP也回隨著他而消失。&lt;/p&gt;
+&lt;p&gt;示意圖：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 109; flex-basis: 263px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/docker%E7%A9%BA%E9%96%93%E4%BB%8B%E7%B4%B9.png&#34; data-size=&#34;1704x1554&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/docker%E7%A9%BA%E9%96%93%E4%BB%8B%E7%B4%B9.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/docker%E7%A9%BA%E9%96%93%E4%BB%8B%E7%B4%B9_hu801804a63faaf8edac90291c5942814e_647662_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/docker%E7%A9%BA%E9%96%93%E4%BB%8B%E7%B4%B9_hu801804a63faaf8edac90291c5942814e_647662_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1704&#34;
+				height=&#34;1554&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id=&#34;為何要使用docker-volume&#34;&gt;為何要使用Docker Volume&lt;/h3&gt;
+&lt;p&gt;Docker file檔案如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; alpine:latest&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; myworkdir /var/www/localhost/htdocs&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WORKDIR&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; ${myworkdir}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ARG&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;namearg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;Hellow-world&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; apk --update add apache2&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; rm -rf /var/cache/apk/*&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;h3&amp;gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;namearg&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;lt;h3&amp;gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; index.html&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;COPY&lt;/span&gt; ./content.txt ./&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; ls -l ./&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; cat ./content.txt &amp;gt;&amp;gt; index.html&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ENTRYPOINT&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;httpd&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;-D&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;FOREGROUND&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;建立image，&lt;code&gt;docker build -t [帳號/image名稱]&lt;/code&gt;，&lt;/p&gt;
+&lt;p&gt;在使用&lt;code&gt;docker run -d -p 8080:80 [帳號/image名稱]&lt;/code&gt;，&lt;/p&gt;
+&lt;p&gt;目前&lt;code&gt;docker container ls&lt;/code&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 894; flex-basis: 2146px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/containerls.png&#34; data-size=&#34;1914x214&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/containerls.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/containerls_huc6c626ed4e17973fa73026dd86d776ad_75996_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/containerls_huc6c626ed4e17973fa73026dd86d776ad_75996_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1914&#34;
+				height=&#34;214&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;目前docker container ls&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;目前docker container ls&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;目前locathost8080結果：
+&lt;figure style=&#34;flex-grow: 84; flex-basis: 202px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/localhost.png&#34; data-size=&#34;672x796&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/localhost.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/localhost_hu88f8fbf41a25811bcddf110b2052e78c_67160_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/localhost_hu88f8fbf41a25811bcddf110b2052e78c_67160_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;672&#34;
+				height=&#34;796&#34;
+				loading=&#34;lazy&#34;
+				&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;containerID:d64f8f1470fd&lt;/p&gt;
+&lt;p&gt;接著輸入&lt;code&gt;docker exec -it d64f8f1470fd /bin/sh&lt;/code&gt;進入container，並使用shell模式輸入&lt;code&gt;echo &amp;quot;test-context&amp;quot;&amp;gt;&amp;gt; index.html&lt;/code&gt;加入一段html，之後再打開瀏覽器，會發現確實更新了，之後再輸入&lt;code&gt;exit&lt;/code&gt;離開container，並且使用&lt;code&gt;docker stop d64f8f1470fd&lt;/code&gt;容器，在使用&lt;code&gt;docker rm d64f8f1470fd&lt;/code&gt;清理容器再重新啟動，在進入到localhost8080，會發現剛剛加入的html字串不見了，&lt;strong&gt;代表了Container啟動完畢並且清空之後，disk空間資料都會被清除&lt;/strong&gt;，所以就必須使用Docker volume的功能。&lt;/p&gt;
+&lt;h3 id=&#34;如何使用docker-volume&#34;&gt;如何使用Docker Volume&lt;/h3&gt;
+&lt;p&gt;建立docker volume&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker volume create &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;volume名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看目前的volume&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker volume ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看volume細節&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker volume inspect &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;volume名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接著可以看到Mountpoint，他就是linux VM的路徑：&lt;/p&gt;
+&lt;p&gt;&lt;figure style=&#34;flex-grow: 173; flex-basis: 416px&#34;&gt;
+		&lt;a href=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/mountpoint.png&#34; data-size=&#34;1214x700&#34;&gt;&lt;img src=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/mountpoint.png&#34;
+				srcset=&#34;https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/mountpoint_hu1fb54fe3ff3f6e1b98abee00405da0d9_110074_480x0_resize_box_3.png 480w, https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/mountpoint_hu1fb54fe3ff3f6e1b98abee00405da0d9_110074_1024x0_resize_box_3.png 1024w&#34;
+				width=&#34;1214&#34;
+				height=&#34;700&#34;
+				loading=&#34;lazy&#34;
+				alt=&#34;Linux VM的路徑&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;Linux VM的路徑&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;待會就要把它mapping到Container的路徑，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d -p &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;本機port&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;:&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;VMport&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; -v &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;vol空間名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;:&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Container裡面的folder&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;images&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;名稱
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;vol空間可以不填，會隨機產生&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;範例：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d -p 8080:80 -v mainpage-vol:/var/www/localhost/htdocs  asce55123/apache001
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;1.mainpage-vol 是VM的disk空間&lt;/p&gt;
+&lt;p&gt;2.上面Container裡面Folder路徑/var/www/localhost/htdocs的路徑是根據 apache 這個伺服器軟體來設定的，在 apache server 中，首頁目錄位置預設就在此目錄中&lt;/p&gt;
+&lt;p&gt;完成之後執行以下操作：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;docker run -d -p [本機port]:[VMport] -v [vol空間名稱]:[Container裡面的folder] [images名稱]&lt;/code&gt;建立ContainerA完畢之後，查看ContaierA的ID，使用&lt;code&gt;container exec&lt;/code&gt;加上shell模式進入ContainerA。&lt;/li&gt;
+&lt;li&gt;加入一段html&lt;/li&gt;
+&lt;li&gt;關閉ContainerA&lt;/li&gt;
+&lt;li&gt;移除ContainerA&lt;/li&gt;
+&lt;li&gt;使用(1)步驟建立Container B&lt;/li&gt;
+&lt;li&gt;開啟localhost8080，會發現剛剛第(2)點加入的html還在。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;docker-volume語法整理&#34;&gt;Docker Volume語法整理&lt;/h2&gt;
+&lt;p&gt;建立docker volume&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker volume create &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;volume名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看目前的volume&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker volume ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看volume細節&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker volume inspect &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;volume名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用Docker Volume空間與Contaier裡面的空間做mapping：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d -p &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;本機port&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;:&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;VMport&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; -v &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;vol空間名稱&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;:&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Container裡面的folder&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;images&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;名稱
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;vol空間可以不填，會隨機產生&lt;/strong&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Java筆記(1)泛型、集合與檔案操作</title>
         <link>https://yen0304.github.io/p/java%E7%AD%86%E8%A8%981%E6%B3%9B%E5%9E%8B%E9%9B%86%E5%90%88%E8%88%87%E6%AA%94%E6%A1%88%E6%93%8D%E4%BD%9C/</link>
         <pubDate>Sun, 06 Feb 2022 00:00:00 +0000</pubDate>
