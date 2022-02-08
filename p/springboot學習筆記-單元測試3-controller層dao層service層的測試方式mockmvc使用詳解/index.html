@@ -147,8 +147,8 @@ if (!doNotTrack) {
     <section class="article-content">
     <h1 id="springboot學習筆記-單元測試3-controller層dao層service層的測試方式mockmvc使用詳解">SpringBoot學習筆記-單元測試(3)-Controller層、Dao層、Service層的測試方式，MockMvc使用詳解</h1>
 <h2 id="dao層以及service層的測試方式">Dao層以及Service層的測試方式</h2>
-<h4 id="使用junit5測試springboot程式">使用JUnit5測試SpringBoot程式</h4>
-<h5 id="springboottest註解">@SpringBootTest註解</h5>
+<h3 id="使用junit5測試springboot程式">使用JUnit5測試SpringBoot程式</h3>
+<h4 id="springboottest註解">@SpringBootTest註解</h4>
 <ul>
 <li>只要在測試用的class上面加上@SpringBootTest，就會在單元測試時啟動Spring容器，也會創建Bean出來</li>
 <li>這個@SpringBootTest的註解的功能非常完善，除了創建Bean之外，@Configuration或是攔截器Interceptor都會被生效，也就是等同於運行SpringBoot程式。</li>
@@ -180,7 +180,7 @@ if (!doNotTrack) {
 		</a>
 		
 	</figure></p>
-<h5 id="transactional註解">@Transactional註解</h5>
+<h4 id="transactional註解">@Transactional註解</h4>
 <p>假設今天我們透過@Test想測試deleteById的方法時，實際上是會去真實刪除資料庫裡面的數據的，所以如果先執行了測試deleteById，在執行測試getById，這時候如果Id是一樣的情況下，就會影響到測試結果，雖然可以透過測試不同的Id來避免此情況，但在越複雜的專案時此方法很不適合，所以我們可以透過加上@Transactional註解，在單元測試結束之後，SpringBoot會去rollback（回滾）這個單元測試裡面所有的資料庫操作。</p>
 <p>使用範例：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Transactional</span>
@@ -190,7 +190,7 @@ if (!doNotTrack) {
     <span class="n">Student</span> <span class="n">student</span> <span class="o">=</span><span class="n">studentDao</span><span class="o">.</span><span class="na">getById</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
     <span class="n">assertNull</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre></div><h6 id="不同的transactional註解">不同的@Transactional註解</h6>
+</code></pre></div><h4 id="不同的transactional註解">不同的@Transactional註解</h4>
 <p>@Transactional在不同的資料夾下，有不同的差異，</p>
 <table>
 <thead>
@@ -212,10 +212,10 @@ if (!doNotTrack) {
 </table>
 <h2 id="controller層的測試">Controller層的測試</h2>
 <p>Controller層的測試目的在於，要模擬前端呼叫真實API CAll的行為，看API是否能運行正確，並且不能透過注入Bean的方式來測試，意思就是模擬http request</p>
-<h4 id="mockmvc">MockMvc</h4>
+<h3 id="mockmvc">MockMvc</h3>
 <p>MockMvc的用途在於模擬真實的API call，</p>
 <p>所以除了在測試用的class上面加上@SpringBootTest之外，要另外加上註解@AutoConfigureMockMvc這個註解，再注入MockMvc這項Bean。</p>
-<h4 id="mockmvc使用範例mockmvc使用詳解">MockMvc使用範例、MockMvc使用詳解</h4>
+<h3 id="mockmvc使用範例mockmvc使用詳解">MockMvc使用範例、MockMvc使用詳解</h3>
 <p>這邊附上Controller層程式碼：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">StudentController</span> <span class="o">{</span>
@@ -306,20 +306,20 @@ if (!doNotTrack) {
 
 <span class="o">}</span>
 </code></pre></div><p>執行後如果驗證正確的話，就會看到成功的畫面，也完成了透過MockMvc去完成測試</p>
-<h4 id="ｍockmvc常用寫法">ＭockMvc常用寫法</h4>
-<h6 id="設計者模式builder">設計者模式（Builder）</h6>
+<h3 id="ｍockmvc常用寫法">ＭockMvc常用寫法</h3>
+<h4 id="設計者模式builder">設計者模式（Builder）</h4>
 <p>Perform方法寫法，以及所謂的Builder設計模式，這個模式的核心概念就是可以無限「.」下去</p>
 <p>範例：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">mockMvc</span><span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="n">requestBuilder</span><span class="o">)</span>
   	<span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">MockMvcResultMatchers</span><span class="o">.</span><span class="na">status</span><span class="o">().</span><span class="na">is</span><span class="o">(</span><span class="n">200</span><span class="o">))</span>
   	<span class="o">.</span><span class="na">andExpect</span><span class="o">()</span>
   	<span class="o">.</span><span class="na">andExpect</span><span class="o">()</span>
-</code></pre></div><h6 id="驗證json格式資料-jsonpath方法">驗證Json格式資料-jsonPath方法</h6>
+</code></pre></div><h4 id="驗證json格式資料-jsonpath方法">驗證Json格式資料-jsonPath方法</h4>
 <p>如果要驗證Json格式資料的話，我們就需要用jsonPath方法，</p>
 <p>在jsonPath方法裡第一個參數就是想要取得json object的key，第二個則是要驗證的方式。</p>
 <p>其中特別的是第一個參數，他設計了使用者如果要使用的話，要用代表最外層json object的&quot;$&ldquo;符號，還有「.」符號來取的我們想要的數據。
 那對於jsonPath的這種方式，這邊提供了</p>
-<h6 id="jsonpath練習網站-jsonpath-online-evaluator">jsonpath練習網站-JSONPath Online Evaluator</h6>
+<h4 id="jsonpath練習網站-jsonpath-online-evaluator">jsonpath練習網站-JSONPath Online Evaluator</h4>
 <p>來幫助我們練習，這個網站叫做<a class="link" href="https://jsonpath.com/"  target="_blank" rel="noopener"
     >JSONPath Online Evaluator</a>，使用方式很簡單，如下圖：</p>
 <p><figure style="flex-grow: 166; flex-basis: 400px">
@@ -334,7 +334,7 @@ if (!doNotTrack) {
 		<figcaption>jsonpath</figcaption>
 		
 	</figure></p>
-<h6 id="anddo">.andDo()</h6>
+<h4 id="anddo">.andDo()</h4>
 <p>其實在撰寫jsonpath時，要一邊撰寫jsonpath時還要一邊查看json數據其實是有點麻煩的事情，因為在測時前要先去的json數據，所以我們可以透過.andDo先來輸出.perform的API執行結果當執行測試單元時，其中會長這樣：</p>
 <p>部分java程式碼：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
@@ -393,7 +393,7 @@ if (!doNotTrack) {
     <span class="n">Forwarded</span> <span class="n">URL</span> <span class="o">=</span> <span class="kc">null</span>
    <span class="n">Redirected</span> <span class="n">URL</span> <span class="o">=</span> <span class="kc">null</span>
           <span class="n">Cookies</span> <span class="o">=</span> <span class="o">[]</span>
-</code></pre></div><h6 id="andreturn">.andReturn</h6>
+</code></pre></div><h4 id="andreturn">.andReturn</h4>
 <p>在上面.andDo()的程式裡面，還可以透過andReturn來驗證結果，但他只能加在最後一行，他的用途是取得完整的API執行結果出來，一般在比較複雜的test case才會使用，不然在except加上jsonpath就夠用了，所以我們將上面的程式碼改版後會變成這樣：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Test</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getById</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
@@ -414,7 +414,7 @@ if (!doNotTrack) {
 </span><span class="c1"></span>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;返回的responseBody為：&#34;</span><span class="o">+</span> <span class="n">body</span><span class="o">);</span>
 
 <span class="o">}</span>
-</code></pre></div><h4 id="mockmvc-post方法">MockMvc POST方法</h4>
+</code></pre></div><h3 id="mockmvc-post方法">MockMvc POST方法</h3>
 <p>上面示範了使用MockMvc來寫出GET方法的http request，
 接下來要學習使用POST，用程式碼來解說</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Test</span>
@@ -742,23 +742,29 @@ if (!doNotTrack) {
   <ol>
     <li><a href="#dao層以及service層的測試方式">Dao層以及Service層的測試方式</a>
       <ol>
-        <li>
+        <li><a href="#使用junit5測試springboot程式">使用JUnit5測試SpringBoot程式</a>
           <ol>
-            <li><a href="#使用junit5測試springboot程式">使用JUnit5測試SpringBoot程式</a></li>
+            <li><a href="#springboottest註解">@SpringBootTest註解</a></li>
+            <li><a href="#transactional註解">@Transactional註解</a></li>
+            <li><a href="#不同的transactional註解">不同的@Transactional註解</a></li>
           </ol>
         </li>
       </ol>
     </li>
     <li><a href="#controller層的測試">Controller層的測試</a>
       <ol>
-        <li>
+        <li><a href="#mockmvc">MockMvc</a></li>
+        <li><a href="#mockmvc使用範例mockmvc使用詳解">MockMvc使用範例、MockMvc使用詳解</a></li>
+        <li><a href="#ｍockmvc常用寫法">ＭockMvc常用寫法</a>
           <ol>
-            <li><a href="#mockmvc">MockMvc</a></li>
-            <li><a href="#mockmvc使用範例mockmvc使用詳解">MockMvc使用範例、MockMvc使用詳解</a></li>
-            <li><a href="#ｍockmvc常用寫法">ＭockMvc常用寫法</a></li>
-            <li><a href="#mockmvc-post方法">MockMvc POST方法</a></li>
+            <li><a href="#設計者模式builder">設計者模式（Builder）</a></li>
+            <li><a href="#驗證json格式資料-jsonpath方法">驗證Json格式資料-jsonPath方法</a></li>
+            <li><a href="#jsonpath練習網站-jsonpath-online-evaluator">jsonpath練習網站-JSONPath Online Evaluator</a></li>
+            <li><a href="#anddo">.andDo()</a></li>
+            <li><a href="#andreturn">.andReturn</a></li>
           </ol>
         </li>
+        <li><a href="#mockmvc-post方法">MockMvc POST方法</a></li>
       </ol>
     </li>
     <li><a href="#github">Github</a></li>

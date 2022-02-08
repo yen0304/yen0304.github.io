@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='認識Docker Compose &amp; 規模化部署比較'><title>Docker筆記(4)-Docker Compose &amp; 規模化部署比較</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Docker筆記(4)-Docker Compose &amp; 規模化部署比較'>
+<meta property='og:description' content='認識Docker Compose &amp; 規模化部署比較'>
+<meta property='og:url' content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Docker筆記' /><meta property='article:published_time' content='2022-02-08'/><meta property='article:modified_time' content='2022-02-08'/><meta property='og:image' content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/logo.png' />
+<meta name="twitter:title" content="Docker筆記(4)-Docker Compose &amp; 規模化部署比較">
+<meta name="twitter:description" content="認識Docker Compose &amp; 規模化部署比較"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/logo.png' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/">
+                <img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_800x0_resize_box_3.png"
+                        srcset="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_800x0_resize_box_3.png 800w, /p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post Docker筆記(4)-Docker Compose &amp; 規模化部署比較" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/docker%E7%AD%86%E8%A8%98/" >
+                Docker筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/">Docker筆記(4)-Docker Compose &amp; 規模化部署比較</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        認識Docker Compose &amp; 規模化部署比較
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-02-08</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h2 id="docker-資源管理">Docker 資源管理</h2>
+<h3 id="何謂docker-compose">何謂Docker Compose</h3>
+<p>Compose 是用於定義和運行多容器 Docker 應用程序的工具，可以透過YAML語法把三大要素進行管理。</p>
+<p>￼￼<figure style="flex-grow: 165; flex-basis: 396px">
+		<a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/Dockercose.png" data-size="2014x1218"><img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/Dockercose.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/Dockercose_hu43f6a96a124d2a1f13d844612ede61da_531439_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/Dockercose_hu43f6a96a124d2a1f13d844612ede61da_531439_1024x0_resize_box_3.png 1024w"
+				width="2014"
+				height="1218"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h2 id="docker-compose寫法">Docker Compose寫法</h2>
+<h3 id="service">Service</h3>
+<p>Service就是Container：</p>
+<p>首先進入到Dockerfile資料夾目錄，並創建一個Docker-compose的設定檔</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">touch docker-compose.yml
+</code></pre></div><p>進入編輯器之後(推薦VScode)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.7&#39;</span><span class="w"> </span><span class="c">#指定的Docker-compose版本</span><span class="w">
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">  </span><span class="c">#Container管理</span><span class="w">
+</span><span class="w">  </span><span class="nt">myweb</span><span class="p">:</span><span class="w">   </span><span class="c">#新增的Container名稱</span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">. </span><span class="w"> </span><span class="c">#代表當前目錄的Dockerfile的位置</span><span class="w">
+</span><span class="w">      </span><span class="c">#args: 可以使用args參數</span><span class="w">
+</span><span class="w">        </span><span class="c">#key: &#34;value&#34; 參數名稱：要改變的值</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/myweb:latest</span><span class="w"> </span><span class="c">#要建立image的名稱</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w"> </span><span class="c">#設定連線資訊</span><span class="w">
+</span><span class="w">     </span>- <span class="s2">&#34;8080:80&#34;</span><span class="w">
+</span></code></pre></div><p>回到終端機：</p>
+<p>運行Docker compose</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker-compose build --no-cache
+</code></pre></div><p><code>--no-cache</code> 是清除快取，避免有東西沒有更新到，結果如下圖：</p>
+<p><figure style="flex-grow: 184; flex-basis: 443px">
+		<a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/teminal.png" data-size="1586x858"><img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/teminal.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/teminal_hucebf570536205861f24bf983003164fc_350379_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/teminal_hucebf570536205861f24bf983003164fc_350379_1024x0_resize_box_3.png 1024w"
+				width="1586"
+				height="858"
+				loading="lazy"
+				alt="終端機輸出">
+		</a>
+		
+		<figcaption>終端機輸出</figcaption>
+		
+	</figure></p>
+<p>有了images之後，透過docker compose運行container</p>
+<pre><code>docker-compose up -d
+</code></pre><p><code>-d</code> 是在背景執行</p>
+<p>終端機輸出：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  dk練習 docker-compose up -d
+Creating network <span class="s2">&#34;dk_default&#34;</span> with the default driver
+Creating dk_myweb_1 ... <span class="k">done</span>
+</code></pre></div><p>執行之後，就可以看到container正在執行，如果要關閉container的話，透過</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker-compose down
+</code></pre></div><p>，所以往後可以在docker-compose底下一次起多動個container。</p>
+<p>範例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.7&#39;</span><span class="w"> 
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span><span class="nt">myweb</span><span class="p">:</span><span class="w">
+</span><span class="w">  	</span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">.  </span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/myweb:latest </span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">     </span>- <span class="s2">&#34;8080:80&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">myweb2</span><span class="p">:</span><span class="w">   
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">.  </span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/myweb2:latest </span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">     </span>- <span class="s2">&#34;8081:80&#34;</span><span class="w">
+</span><span class="w">  </span><span class="c">##也可以用現有的images建立Container</span><span class="w">
+</span><span class="w">  </span><span class="nt">myweb3</span><span class="p">:</span><span class="w">   
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">.  </span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/myweb2:latest </span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">     </span>- <span class="s2">&#34;8082:80&#34;</span><span class="w">
+</span></code></pre></div><h3 id="network">Network</h3>
+<p>在執行Docker compose時，預設的情況下會建立一個新的birdge網路空間，可以在yaml檔案下使用<code>networks</code>參數做設定：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.7&#39;</span><span class="w"> </span><span class="c">#指定的Docker-compose版本</span><span class="w">
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w"> </span><span class="c">#Container管理</span><span class="w">
+</span><span class="w">  </span><span class="nt">myweb</span><span class="p">:</span><span class="w">   </span><span class="c">#新增的Container名稱</span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">. </span><span class="w"> </span><span class="c">#代表當前目錄的Dockerfile的位置</span><span class="w">
+</span><span class="w">      </span><span class="c">#args: 可以使用args參數</span><span class="w">
+</span><span class="w">        </span><span class="c">#key: &#34;value&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/myweb:latest</span><span class="w"> </span><span class="c">#要建立image的名稱</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">     </span>- <span class="s2">&#34;8080:80&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">mybridge001</span><span class="w">
+</span><span class="w">  </span><span class="nt">myweb2</span><span class="p">:</span><span class="w">   </span><span class="c">#新增的Container名稱</span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">. </span><span class="w"> </span><span class="c">#代表當前目錄的Dockerfile的位置</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/myweb:latest</span><span class="w"> </span><span class="c">#要建立image的名稱</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">     </span>- <span class="s2">&#34;8081:80&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="l">mybridge001</span><span class="w">
+</span><span class="w">  </span><span class="c">##也可以用現有的images建立Container</span><span class="w">
+</span><span class="w">  </span><span class="nt">myweb3</span><span class="p">:</span><span class="w">   
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">.  </span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/myweb2:latest </span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">     </span>- <span class="s2">&#34;8082:80&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="l">mybridge002</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">mybridge001</span><span class="p">:</span><span class="w">  </span><span class="c">#網路空間名稱，模式預設都會是birdge</span><span class="w">
+</span><span class="w">  </span><span class="nt">mybridge002</span><span class="p">:</span><span class="w">  </span><span class="c">#網路空間名稱</span><span class="w">
+</span><span class="w"></span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">mybridge001</span><span class="p">:</span><span class="w">  </span><span class="c">#網路空間名稱，模式都會是birdge</span><span class="w">
+</span><span class="w">  </span><span class="nt">mybridge002</span><span class="p">:</span><span class="w">  </span><span class="c">#網路空間名稱</span><span class="w">
+</span><span class="w">  </span><span class="nt">myhost001</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l">host</span><span class="w"> </span><span class="c">#網路空間類型</span><span class="w">
+</span></code></pre></div><p>查看網路空間：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  dk練習 docker network ls
+NETWORK ID     NAME             DRIVER    SCOPE
+9e5d8527e2f5   bridge           bridge    <span class="nb">local</span>
+3f2dd0a5528a   dk_mybridge001   bridge    <span class="nb">local</span>
+828e8ccbcd74   dk_mybridge002   bridge    <span class="nb">local</span>
+a21823e2ef89   host             host      <span class="nb">local</span>
+eaadd419454a   my-bridge        bridge    <span class="nb">local</span>
+7f054863856c   none             null      <span class="nb">local</span>
+</code></pre></div><h3 id="volume">Volume</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.7&#39;</span><span class="w"> </span><span class="c">#指定的Docker-compose版本</span><span class="w">
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w"> </span><span class="c">#Container管理</span><span class="w">
+</span><span class="w">  </span><span class="c">#使用Volume範例</span><span class="w">
+</span><span class="w">  </span><span class="nt">myweb4</span><span class="p">:</span><span class="w">   
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">.  </span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/myweb4:latest </span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="s2">&#34;8084:80&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">mybridge002</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">mainpage-vol002:/var/www/locahost/htdocs/</span><span class="w">
+</span><span class="w"></span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">mybridge001</span><span class="p">:</span><span class="w">  </span><span class="c">#網路空間名稱，模式都會是birdge</span><span class="w">
+</span><span class="w">  </span><span class="nt">mybridge002</span><span class="p">:</span><span class="w">  </span><span class="c">#網路空間名稱</span><span class="w">
+</span><span class="w">  </span><span class="nt">myhost001</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l">host</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">mainpage-vol002</span><span class="p">:</span><span class="w"> </span><span class="c">#volume名稱</span><span class="w">
+</span></code></pre></div><p>就完成了volume的設定方式。</p>
+<h2 id="語法整理">語法整理</h2>
+<ol>
+<li>建立docker compose（應該不算語法）</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">touch docker-compose.yml
+</code></pre></div><ol start="2">
+<li>使用docker compose 建立image</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker-compose build --no-cache
+</code></pre></div><blockquote>
+<p>額外說明-docker-compose build &ndash;no-cache:</p>
+</blockquote>
+<p><code>--no-cache</code>指令會跟docker daemon說不要使用本地已經有的image，而是去根據Dockerfile去製作全新的image來用。</p>
+<ol start="3">
+<li>使用docker compose 運行Container們</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker-compose up -d
+</code></pre></div><ol start="4">
+<li>使用docker compose 下架Container們</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker-compose down
+</code></pre></div><h2 id="簡化專案佈版流程">簡化專案佈版流程</h2>
+<h3 id="架構圖">架構圖</h3>
+<p><figure style="flex-grow: 130; flex-basis: 314px">
+		<a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E4%BD%88%E7%89%88%E6%B5%81%E7%A8%8B%E6%9E%B6%E6%A7%8B%E5%9C%96.png" data-size="1898x1450"><img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E4%BD%88%E7%89%88%E6%B5%81%E7%A8%8B%E6%9E%B6%E6%A7%8B%E5%9C%96.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E4%BD%88%E7%89%88%E6%B5%81%E7%A8%8B%E6%9E%B6%E6%A7%8B%E5%9C%96_huac84527e8d81b3692d8978d00bd3dd89_783646_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E4%BD%88%E7%89%88%E6%B5%81%E7%A8%8B%E6%9E%B6%E6%A7%8B%E5%9C%96_huac84527e8d81b3692d8978d00bd3dd89_783646_1024x0_resize_box_3.png 1024w"
+				width="1898"
+				height="1450"
+				loading="lazy"
+				alt="佈版流程架構圖">
+		</a>
+		
+		<figcaption>佈版流程架構圖</figcaption>
+		
+	</figure></p>
+<p>3000對應到的是首頁，8080則是API，3306則是mysql server</p>
+<p><figure style="flex-grow: 160; flex-basis: 385px">
+		<a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E8%AC%9B%E8%A7%A3.png" data-size="1000x622"><img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E8%AC%9B%E8%A7%A3.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E8%AC%9B%E8%A7%A3_hu5c7c6d9ed420e99c822662dc56562087_361316_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E8%AC%9B%E8%A7%A3_hu5c7c6d9ed420e99c822662dc56562087_361316_1024x0_resize_box_3.png 1024w"
+				width="1000"
+				height="622"
+				loading="lazy"
+				alt="講解">
+		</a>
+		
+		<figcaption>講解</figcaption>
+		
+	</figure></p>
+<h3 id="目錄架構">目錄架構</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  ~ <span class="nb">cd</span> /Users/yen/Downloads/docker-course-grand-demo-compose-master
+➜  docker-course-grand-demo-compose-master ls
+app                db                 docker-compose.yml web
+➜  docker-course-grand-demo-compose-master
+</code></pre></div><p>總共有三個資料夾，APP、DB、web，還有docker-compose.yaml設定檔，其中還有一個.env的隱藏檔案，（使用<code>ls -a</code>）查看環境參數</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  docker-course-grand-demo-compose-master ls -a
+.                  .env               db                 web
+..                 app                docker-compose.yml
+➜  docker-course-grand-demo-compose-master cat .env
+<span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">1234</span>
+<span class="nv">MYSQL_USER</span><span class="o">=</span>demo_java
+<span class="nv">MYSQL_PASSWORD</span><span class="o">=</span><span class="m">1234</span>
+<span class="nv">MYSQL_DATABASE</span><span class="o">=</span>demo_db
+
+<span class="nv">API_HOST_IP</span><span class="o">=</span>localhost
+</code></pre></div><p>API_HOST_IP，MAC/WINDOWS使用=localhost，Toolbox使用192.168.99.100</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.7&#34;</span><span class="w">
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span><span class="nt">mysql-db</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c">#設定容器名稱</span><span class="w">
+</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">mydb </span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c">#dockerfile的位置在目錄的db資料夾子目錄</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">./db</span><span class="w">
+</span><span class="w">    </span><span class="c">#產生的image</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">uopsdod/mysql-db-01</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w"> 
+</span><span class="w">      </span>- <span class="s2">&#34;3306:3306&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c">#這四個變數會被 .env的值取代掉</span><span class="w">
+</span><span class="w">      </span>- <span class="l">MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}</span><span class="w">
+</span><span class="w">      </span>- <span class="l">MYSQL_USER=${MYSQL_USER}</span><span class="w">
+</span><span class="w">      </span>- <span class="l">MYSQL_PASSWORD=${MYSQL_PASSWORD}</span><span class="w">
+</span><span class="w">      </span>- <span class="l">MYSQL_DATABASE=${MYSQL_DATABASE}</span><span class="w">
+</span><span class="w">    </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">my-bridge-001</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">db-data:/var/lib/mysql</span><span class="w">
+</span><span class="w">  </span><span class="nt">java-app</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">myapp</span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">./app</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">uopsdod/java-app-01</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="s2">&#34;8080:8080&#34;</span><span class="w">
+</span><span class="w">    </span><span class="c">#JAVA特有 指令./wait-for-it.sh mydb:3306，等待db啟動成功，mydb會在啟動成功之後自動替換成內部ip位置  </span><span class="w">
+</span><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">./wait-for-it.sh mydb:3306 -- java -jar target/accessing-data-mysql-0.0.1-SNAPSHOT.jar </span><span class="w">
+</span><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c">#只有在同一個客製bridge空間下，才可以使用internal domain name(mydb)</span><span class="w">
+</span><span class="w">      </span>- <span class="l">DB_HOST_IP=mydb</span><span class="w">
+</span><span class="w">    </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">my-bridge-001</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">react-web</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">myweb</span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">./web</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">uopsdod/react-web-01</span><span class="w">
+</span><span class="w">    </span><span class="c">#不用特別記</span><span class="w">
+</span><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">./wait-for-it.sh ${API_HOST_IP}:8080 -- npm start</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w"> 
+</span><span class="w">      </span>- <span class="s2">&#34;3000:3000&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span><span class="w">    	</span><span class="c">#REACT_APP_API_HOST_IP是Linux VM IP位置(API位置)</span><span class="w">
+</span><span class="w">      </span>- <span class="l">REACT_APP_API_HOST_IP=${API_HOST_IP}</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">my-bridge-001</span><span class="p">:</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">db-data</span><span class="p">:</span><span class="w">
+</span></code></pre></div><p>其他資料夾下面的dockerfile檔案，或是其他不用特別記得地方，都是因專案不同而改變的，希望接下來可以成功運行SpringBoot專案，詳細教材或是使用可以參考：https://hahow.in/courses/5df27f1fa5ee510022a08500/discussions?item=5e996c2ceaba8a841a496570&amp;unit=5df28221a5ee510022a08607</p>
+<h2 id="如何建立乾淨的測試環境">如何建立乾淨的測試環境</h2>
+<p>在docker-compose.yaml裡面，不要加入volume值，這樣執行完畢後就會清空了，相當於rolback</p>
+<h2 id="規模化部署docker-swarm">規模化部署Docker Swarm</h2>
+<p>觀念解說圖：</p>
+<p><figure style="flex-grow: 170; flex-basis: 408px">
+		<a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/swarmmode.png" data-size="2486x1460"><img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/swarmmode.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/swarmmode_hud7fb4d7fe82addc989453ccdc2188838_893070_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/swarmmode_hud7fb4d7fe82addc989453ccdc2188838_893070_1024x0_resize_box_3.png 1024w"
+				width="2486"
+				height="1460"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<p>重點在於，Manager Node只在乎能不能達成目標狀態，所以Container或是Worker Node也不重要，即時Container刪除了，某個Task不能運作，也會馬上向Worker Node再要一個新的Container，完成所有Task都執行的目標。</p>
+<h3 id="容器規模化部署方案比較">容器規模化部署方案比較</h3>
+<p><figure style="flex-grow: 256; flex-basis: 615px">
+		<a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83.png" data-size="1308x510"><img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83_hucbaab75da5866006e0ee71763e25b733_344874_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83_hucbaab75da5866006e0ee71763e25b733_344874_1024x0_resize_box_3.png 1024w"
+				width="1308"
+				height="510"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+<h2 id="未來加強路線">未來加強路線</h2>
+<p><figure style="flex-grow: 139; flex-basis: 335px">
+		<a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E6%9C%AA%E4%BE%86%E5%8A%A0%E5%BC%B7%E8%B7%AF%E7%B7%9A.png" data-size="534x382"><img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E6%9C%AA%E4%BE%86%E5%8A%A0%E5%BC%B7%E8%B7%AF%E7%B7%9A.png"
+				srcset="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E6%9C%AA%E4%BE%86%E5%8A%A0%E5%BC%B7%E8%B7%AF%E7%B7%9A_hu1e5268a41bf096c6ce77753f71300e7b_150204_480x0_resize_box_3.png 480w, /p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/%E6%9C%AA%E4%BE%86%E5%8A%A0%E5%BC%B7%E8%B7%AF%E7%B7%9A_hu1e5268a41bf096c6ce77753f71300e7b_150204_1024x0_resize_box_3.png 1024w"
+				width="534"
+				height="382"
+				loading="lazy"
+				>
+		</a>
+		
+	</figure></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/docker%E7%AD%86%E8%A8%98/">Docker筆記</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記(3)-Docker Network &amp; Docker Volume</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記(2)-Dockerfile語法使用</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記(1)-基本</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#docker-資源管理">Docker 資源管理</a>
+      <ol>
+        <li><a href="#何謂docker-compose">何謂Docker Compose</a></li>
+      </ol>
+    </li>
+    <li><a href="#docker-compose寫法">Docker Compose寫法</a>
+      <ol>
+        <li><a href="#service">Service</a></li>
+        <li><a href="#network">Network</a></li>
+        <li><a href="#volume">Volume</a></li>
+      </ol>
+    </li>
+    <li><a href="#語法整理">語法整理</a></li>
+    <li><a href="#簡化專案佈版流程">簡化專案佈版流程</a>
+      <ol>
+        <li><a href="#架構圖">架構圖</a></li>
+        <li><a href="#目錄架構">目錄架構</a></li>
+      </ol>
+    </li>
+    <li><a href="#如何建立乾淨的測試環境">如何建立乾淨的測試環境</a></li>
+    <li><a href="#規模化部署docker-swarm">規模化部署Docker Swarm</a>
+      <ol>
+        <li><a href="#容器規模化部署方案比較">容器規模化部署方案比較</a></li>
+      </ol>
+    </li>
+    <li><a href="#未來加強路線">未來加強路線</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

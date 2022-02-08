@@ -6,7 +6,31 @@
     <description>Recent content in Docker筆記 on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Mon, 07 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/categories/docker%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 08 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/categories/docker%E7%AD%86%E8%A8%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker筆記(4)-Docker Compose &amp; 規模化部署比較</title>
+      <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/</link>
+      <pubDate>Tue, 08 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/</guid>
+      <description>Docker 資源管理 何謂Docker Compose Compose 是用於定義和運行多容器 Docker 應用程序的工具，可以透過YAML語法把三大要素進行管理。
+￼￼ 
+Docker Compose寫法 Service Service就是Container：
+首先進入到Dockerfile資料夾目錄，並創建一個Docker-compose的設定檔
+touch docker-compose.yml 進入編輯器之後(推薦VScode)
+version:&amp;#39;3.7&amp;#39;#指定的Docker-compose版本services:#Container管理myweb:#新增的Container名稱build:context:. #代表當前目錄的Dockerfile的位置#args: 可以使用args參數#key: &amp;#34;value&amp;#34; 參數名稱：要改變的值image:asce55123/myweb:latest#要建立image的名稱ports:#設定連線資訊- &amp;#34;8080:80&amp;#34;回到終端機：
+運行Docker compose
+docker-compose build --no-cache --no-cache 是清除快取，避免有東西沒有更新到，結果如下圖：
+ 終端機輸出 
+有了images之後，透過docker compose運行container
+docker-compose up -d -d 是在背景執行
+終端機輸出：
+➜ dk練習 docker-compose up -d Creating network &amp;#34;dk_default&amp;#34; with the default driver Creating dk_myweb_1 ... done 執行之後，就可以看到container正在執行，如果要關閉container的話，透過
+docker-compose down ，所以往後可以在docker-compose底下一次起多動個container。
+範例：
+version:&amp;#39;3.7&amp;#39;services:myweb:build:context:. image:asce55123/myweb:latest ports:- &amp;#34;8080:80&amp;#34;myweb2:build:context:. image:asce55123/myweb2:latest ports:- &amp;#34;8081:80&amp;#34;##也可以用現有的images建立Containermyweb3:build:context:. image:asce55123/myweb2:latest ports:- &amp;#34;8082:80&amp;#34;Network 在執行Docker compose時，預設的情況下會建立一個新的birdge網路空間，可以在yaml檔案下使用networks參數做設定：</description>
+    </item>
+    
     <item>
       <title>Docker筆記(3)-Docker Network &amp; Docker Volume</title>
       <link>https://yen0304.github.io/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/</link>

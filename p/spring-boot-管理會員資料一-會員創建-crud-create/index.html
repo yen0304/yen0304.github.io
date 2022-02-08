@@ -145,7 +145,7 @@ if (!doNotTrack) {
 </header>
 
     <section class="article-content">
-    <h2 id="本文章涉及的知識">本文章涉及的知識</h2>
+    <h1 id="本文章涉及的知識">本文章涉及的知識</h1>
 <ol>
 <li>Springboot  、 Spring MVC</li>
 <li>HTTP method</li>
@@ -284,7 +284,7 @@ if (!doNotTrack) {
 </span><span class="w">    </span><span class="n">password</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w">
 </span><span class="w"></span><span class="p">)</span><span class="w">
 </span></code></pre></div><h2 id="進入spring-mvc環節">進入spring MVC環節</h2>
-<h4 id="物件member">物件member</h4>
+<h3 id="物件member">物件member</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Member</span> <span class="o">{</span>
 
     <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
@@ -294,7 +294,7 @@ if (!doNotTrack) {
     
     <span class="c1">//getter&amp;setter
 </span><span class="c1"></span><span class="o">}</span>
-</code></pre></div><h4 id="設計dao-負責與資料庫溝通">設計DAO-負責與資料庫溝通</h4>
+</code></pre></div><h3 id="設計dao-負責與資料庫溝通">設計DAO-負責與資料庫溝通</h3>
 <p>介面：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MemberDao</span> <span class="o">{</span>
     <span class="c1">//返回值 依據名稱對應資料庫動作（參數類型 參數名稱）
@@ -320,7 +320,7 @@ if (!doNotTrack) {
         <span class="n">namedParameterJdbcTemplate</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span><span class="n">map</span><span class="o">);</span>
         <span class="k">return</span> <span class="s">&#34;註冊成功&#34;</span><span class="o">;</span> <span class="c1">//return放將來要使用的html
 </span><span class="c1"></span>    <span class="o">}</span>
-</code></pre></div><h4 id="設計service-負責商業邏輯">設計Service-負責商業邏輯</h4>
+</code></pre></div><h3 id="設計service-負責商業邏輯">設計Service-負責商業邏輯</h3>
 <p>介面：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MemberService</span> <span class="o">{</span>
 
@@ -339,7 +339,7 @@ if (!doNotTrack) {
         <span class="k">return</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">CreatMember</span><span class="o">(</span><span class="n">member</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div><h4 id="設計controller">設計Controller</h4>
+</code></pre></div><h3 id="設計controller">設計Controller</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberController</span> <span class="o">{</span>
 
@@ -743,7 +743,6 @@ if (!doNotTrack) {
                 <div class="widget--toc">
                     <nav id="TableOfContents">
   <ol>
-    <li><a href="#本文章涉及的知識">本文章涉及的知識</a></li>
     <li><a href="#複習htpp-method-get-or-post-差別">複習HTPP method-GET or POST 差別</a></li>
     <li><a href="#練習設計restful-api">練習設計RESTful API</a>
       <ol>
@@ -768,14 +767,10 @@ if (!doNotTrack) {
     <li><a href="#資料庫設定">資料庫設定</a></li>
     <li><a href="#進入spring-mvc環節">進入spring MVC環節</a>
       <ol>
-        <li>
-          <ol>
-            <li><a href="#物件member">物件member</a></li>
-            <li><a href="#設計dao-負責與資料庫溝通">設計DAO-負責與資料庫溝通</a></li>
-            <li><a href="#設計service-負責商業邏輯">設計Service-負責商業邏輯</a></li>
-            <li><a href="#設計controller">設計Controller</a></li>
-          </ol>
-        </li>
+        <li><a href="#物件member">物件member</a></li>
+        <li><a href="#設計dao-負責與資料庫溝通">設計DAO-負責與資料庫溝通</a></li>
+        <li><a href="#設計service-負責商業邏輯">設計Service-負責商業邏輯</a></li>
+        <li><a href="#設計controller">設計Controller</a></li>
       </ol>
     </li>
     <li><a href="#html--javascript">HTML &amp; Javascript</a>
