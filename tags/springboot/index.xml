@@ -6,7 +6,30 @@
     <description>Recent content in Springboot on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Wed, 12 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/springboot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 14 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/springboot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Springboot &#43; SQL (MariaDB) &#43; docker  實作</title>
+      <link>https://yen0304.github.io/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/</link>
+      <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/</guid>
+      <description>Springboot + SQL (MariaDB) + docker 實作 本來是要做Mysql的，但因為本身使用M1，在沒有ARM架構的Mysql Image，所以就改用了MariaDB了
+Docker準備 要下載的主要有與springboot配置一樣版本的資料庫、Redis、JavaJDK
+Images下載 MySQL 如果不是用M1可以使用Mysql：
+https://hub.docker.com/_/mysql?tab=tags
+docker pull mysql:8.0.22 M1這時候會出現錯誤訊息：
+no matching manifest for linux/arm64/v8 in the manifest list entries 這時候猜考相關文獻之後：https://quietbo.com/2021/09/27/docker-mac-m1-no-matching-manifest-for-linux-arm64-v8-in-the-manifest-list-entries%E5%B7%B2%E8%A7%A3%E6%B1%BA/
+還是可以透過指令下載mysql
+docker pull --platform linux/amd64 mysql:8.0.22 docker pull --platform linux/amd64 mysql:5.7.33 然後還是會碰到
+[ERROR] InnoDB: Linux Native AIO interface is not supported on
+參考文獻：https://stackoverflow.com/questions/66456627/docker-image-run-in-m1-processor
+所以改用MariaDB
+MariaDB https://hub.docker.com/_/mariadb
+Redis https://hub.docker.com/_/redis
+docker pull redis:6.2.5 JDK JDK:https://hub.docker.com/_/openjdk
+docker pull openjdk:11.0.14-jdk-oracle SpringBoot 準備 Maven配置 除了原本資料庫或Springboot用到的專案，還需要加入maven-surefire-plugin這個插件，才可以把專案打包成jar檔案</description>
+    </item>
+    
     <item>
       <title>SpringBoot學習筆記-單元測試(4)-使用Mockito來減少單元測試中的Bean依賴</title>
       <link>https://yen0304.github.io/p/springboot%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A64-%E4%BD%BF%E7%94%A8mockito%E4%BE%86%E6%B8%9B%E5%B0%91%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E4%B8%AD%E7%9A%84bean%E4%BE%9D%E8%B3%B4/</link>

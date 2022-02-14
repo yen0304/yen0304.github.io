@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='如何在Docker上運行springboot專案'><title>Springboot &#43; SQL (MariaDB) &#43; docker  實作</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Springboot &#43; SQL (MariaDB) &#43; docker  實作'>
+<meta property='og:description' content='如何在Docker上運行springboot專案'>
+<meta property='og:url' content='https://yen0304.github.io/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Docker筆記' /><meta property='article:tag' content='SpringBoot' /><meta property='article:published_time' content='2022-02-14'/><meta property='article:modified_time' content='2022-02-14'/><meta property='og:image' content='https://yen0304.github.io/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/logo.png' />
+<meta name="twitter:title" content="Springboot &#43; SQL (MariaDB) &#43; docker  實作">
+<meta name="twitter:description" content="如何在Docker上運行springboot專案"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/logo.png' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/">
+                <img src="/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_800x0_resize_box_3.png"
+                        srcset="/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_800x0_resize_box_3.png 800w, /p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/logo_hua76cf9e0922ea38486ea565c9467eca7_3576_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post Springboot &#43; SQL (MariaDB) &#43; docker  實作" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/docker%E7%AD%86%E8%A8%98/" >
+                Docker筆記
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/springboot-sql-mariadb-docker-%E5%AF%A6%E4%BD%9C/">Springboot &#43; SQL (MariaDB) &#43; docker  實作</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        如何在Docker上運行springboot專案
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-02-14</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="springboot--sql-mariadb--docker--實作">Springboot + SQL (MariaDB) + docker  實作</h1>
+<p>本來是要做Mysql的，但因為本身使用M1，在沒有ARM架構的Mysql Image，所以就改用了MariaDB了</p>
+<h2 id="docker準備">Docker準備</h2>
+<p>要下載的主要有與springboot配置一樣版本的資料庫、Redis、JavaJDK</p>
+<h3 id="images下載">Images下載</h3>
+<h4 id="mysql">MySQL</h4>
+<p>如果不是用M1可以使用Mysql：</p>
+<p><a class="link" href="https://hub.docker.com/_/mysql?tab=tags"  target="_blank" rel="noopener"
+    >https://hub.docker.com/_/mysql?tab=tags</a></p>
+<pre><code>docker pull mysql:8.0.22
+</code></pre><p>M1這時候會出現錯誤訊息：</p>
+<pre><code>no matching manifest for linux/arm64/v8 in the manifest list entries
+</code></pre><p>這時候猜考相關文獻之後：https://quietbo.com/2021/09/27/docker-mac-m1-no-matching-manifest-for-linux-arm64-v8-in-the-manifest-list-entries%E5%B7%B2%E8%A7%A3%E6%B1%BA/</p>
+<p>還是可以透過指令下載mysql</p>
+<pre><code>docker pull --platform linux/amd64 mysql:8.0.22
+</code></pre><pre><code>docker pull --platform linux/amd64 mysql:5.7.33
+</code></pre><p>然後還是會碰到</p>
+<p>[ERROR] InnoDB: Linux Native AIO interface is not supported on</p>
+<p>參考文獻：https://stackoverflow.com/questions/66456627/docker-image-run-in-m1-processor</p>
+<p>所以改用MariaDB</p>
+<h4 id="mariadb">MariaDB</h4>
+<p><a class="link" href="https://hub.docker.com/_/mariadb"  target="_blank" rel="noopener"
+    >https://hub.docker.com/_/mariadb</a></p>
+<h4 id="redis">Redis</h4>
+<p><a class="link" href="https://hub.docker.com/_/redis"  target="_blank" rel="noopener"
+    >https://hub.docker.com/_/redis</a></p>
+<pre><code>docker pull redis:6.2.5
+</code></pre><h4 id="jdk">JDK</h4>
+<p>JDK:https://hub.docker.com/_/openjdk</p>
+<pre><code>docker pull openjdk:11.0.14-jdk-oracle
+</code></pre><h2 id="springboot-準備">SpringBoot 準備</h2>
+<h3 id="maven配置">Maven配置</h3>
+<p>除了原本資料庫或Springboot用到的專案，還需要加入<code>maven-surefire-plugin</code>這個插件，才可以把專案打包成jar檔案</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;parent&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>2.3.7.RELEASE<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;relativePath/&gt;</span> <span class="c">&lt;!-- lookup parent from repository --&gt;</span>
+    <span class="nt">&lt;/parent&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.example<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>demo<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>demo<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;java.version&gt;</span>11<span class="nt">&lt;/java.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.session<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-session-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.projectlombok<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>lombok<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;optional&gt;</span>true<span class="nt">&lt;/optional&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-freemarker<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-jdbc<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="c">&lt;!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client --&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.mariadb.jdbc<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>mariadb-java-client<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>2.5.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>commons-codec<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>commons-codec<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.11<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;excludes&gt;</span>
+                        <span class="nt">&lt;exclude&gt;</span>
+                            <span class="nt">&lt;groupId&gt;</span>org.projectlombok<span class="nt">&lt;/groupId&gt;</span>
+                            <span class="nt">&lt;artifactId&gt;</span>lombok<span class="nt">&lt;/artifactId&gt;</span>
+                        <span class="nt">&lt;/exclude&gt;</span>
+                    <span class="nt">&lt;/excludes&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>maven-surefire-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;version&gt;</span>2.19.1<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+
+<span class="nt">&lt;/project&gt;</span>
+
+</code></pre></div><h3 id="applicationproperties">Application.properties</h3>
+<p>這邊有使用環境變數（推薦），因為之後從Docker compose一起配置會比較方便而且彈性，不會造成調整了又要重新打包jar的狀況。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c">#DB Configuration</span><span class="w">
+</span><span class="w"></span><span class="l">spring.datasource.driver-class-name=org.mariadb.jdbc.Driver</span><span class="w">
+</span><span class="w"></span><span class="l">spring.datasource.url=jdbc:mariadb://host.docker.internal:3306/db_store?serverTimezone=Asia/Taipei&amp;characterEncoding=utf-8&amp;useSSL=false</span><span class="w">
+</span><span class="w"></span><span class="l">spring.datasource.username=${DATABASE_USER}</span><span class="w">
+</span><span class="w"></span><span class="l">spring.datasource.password=${DATABASE_PASSWORD}</span><span class="w">
+</span><span class="w"></span><span class="c">#Spring Session</span><span class="w">
+</span><span class="w"></span><span class="c">## Session 存儲方式</span><span class="w">
+</span><span class="w"></span><span class="l">spring.session.store-type=redis</span><span class="w">
+</span><span class="w"></span><span class="c">## Session 過期時間，默認單位為 s</span><span class="w">
+</span><span class="w"></span><span class="l">server.servlet.session.timeout=600</span><span class="w">
+</span><span class="w"></span><span class="c">## Session 存儲到 Redis 鍵的前綴</span><span class="w">
+</span><span class="w"></span><span class="l">spring.session.redis.namespace=test:spring:session</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c">#Redis 設定</span><span class="w">
+</span><span class="w"></span><span class="c">##埠號</span><span class="w">
+</span><span class="w"></span><span class="c">#server.port=8080</span><span class="w">
+</span><span class="w"></span><span class="c"># Redis資料庫索引（預設為0）</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.database=0 </span><span class="w">
+</span><span class="w"></span><span class="c"># Redis伺服器地址</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.host=localhost</span><span class="w">
+</span><span class="w"></span><span class="c"># Redis伺服器連線埠</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.port=6379 </span><span class="w">
+</span><span class="w"></span><span class="c"># Redis伺服器連線密碼（預設為空）</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.password=</span><span class="w">
+</span><span class="w"></span><span class="c">#連線池最大連線數（使用負值表示沒有限制）</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.pool.max-active=8 </span><span class="w">
+</span><span class="w"></span><span class="c"># 連線池最大阻塞等待時間（使用負值表示沒有限制）</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.pool.max-wait=-1 </span><span class="w">
+</span><span class="w"></span><span class="c"># 連線池中的最大空閒連線</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.pool.max-idle=8 </span><span class="w">
+</span><span class="w"></span><span class="c"># 連線池中的最小空閒連線</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.pool.min-idle=0 </span><span class="w">
+</span><span class="w"></span><span class="c"># 連線超時時間（毫秒）</span><span class="w">
+</span><span class="w"></span><span class="l">spring.redis.timeout=5000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c">#Freemaker設定</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.cache=false</span><span class="w">
+</span><span class="w"></span><span class="c"># 模版後綴名 默認為ftl</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.suffix=.ftl</span><span class="w">
+</span><span class="w"></span><span class="c"># 文件編碼</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.charset=UTF-8</span><span class="w">
+</span><span class="w"></span><span class="c"># 模版加載的目錄</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.template-loader-path=classpath:/templates/</span><span class="w">
+</span><span class="w"></span><span class="c"># 靜態資源訪問路徑</span><span class="w">
+</span><span class="w"></span><span class="l">spring.mvc.static-path-pattern=/static/**</span><span class="w">
+</span><span class="w"></span><span class="c"># 獲取根目錄路徑</span><span class="w">
+</span><span class="w"></span><span class="l">spring.freemarker.request-context-attribute=request</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><h3 id="打包成jar檔案">打包成jar檔案</h3>
+<p>將此Spring Boot打包為jar檔，本範例直接使用IntelliJ IDEA的Maven視窗工具，點兩下[install]即可。</p>
+<p>![](截圖 2022-02-08 下午10.16.04.png)</p>
+<p>打包好之後target資料夾會產生jar檔案</p>
+<p>![](截圖 2022-02-08 下午10.21.01.png)</p>
+<h2 id="docker-compose--dockerfile">Docker-Compose &amp; Dockerfile</h2>
+<h3 id="docker-compose">Docker-Compose</h3>
+<p>這邊在實作時經歷了自我google摧殘之後得出了下面幾點</p>
+<ol>
+<li>不用配置網路空間(Bridge)</li>
+<li><strong>存取SQL的帳號密碼不可以用ROOT，但是還是要給一組Root的密碼</strong>（下面是隨機給）</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.7&#39;</span><span class="w">
+</span><span class="w"></span><span class="c"># Service</span><span class="w">
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># Redis</span><span class="w">
+</span><span class="w">  </span><span class="nt">Redis-server</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">redis:6.2.5</span><span class="w">
+</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">app-redis</span><span class="w">
+</span><span class="w">  </span><span class="c"># Database MySQL</span><span class="w">
+</span><span class="w">  </span><span class="nt">mariadb-db</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/mariadb</span><span class="w">
+</span><span class="w">    </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">app-db</span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> 
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">./db</span><span class="w">
+</span><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">MYSQL_DATABASE</span><span class="p">:</span><span class="w"> </span><span class="l">db_store</span><span class="w">
+</span><span class="w">      </span><span class="nt">MARIADB_USER</span><span class="p">:</span><span class="w"> </span><span class="l">userspring</span><span class="w">
+</span><span class="w">      </span><span class="nt">MARIADB_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l">springboot</span><span class="w">
+</span><span class="w">      </span><span class="nt">MARIADB_RANDOM_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="kc">yes</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="s2">&#34;3306:3306&#34;</span><span class="w">
+</span><span class="w">  </span><span class="c"># APP Server</span><span class="w">
+</span><span class="w">  </span><span class="nt">app-server</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">asce55123/openjdk</span><span class="w">
+</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">app-java</span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">./java</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="s2">&#34;8080:8080&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">spring.redis.host</span><span class="p">:</span><span class="w"> </span><span class="l">Redis-Server</span><span class="w">
+</span><span class="w">      </span><span class="nt">DATABASE_USER</span><span class="p">:</span><span class="w"> </span><span class="l">userspring</span><span class="w">
+</span><span class="w">      </span><span class="nt">DATABASE_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l">springboot</span><span class="w">
+</span><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">app-db</span><span class="w">
+</span><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">./wait-for-it.sh app-db:3306</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><h3 id="檔案目錄結構">檔案目錄結構</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">.
+├── db
+│   ├── Dockerfile
+│   └── sqls
+│       ├── init.sql
+│       └── my.cnf
+├── docker-compose.yaml
+└── java
+    ├── Dockerfile
+    └── target
+        └── demo-0.0.1-SNAPSHOT.jar
+
+</code></pre></div><p>會依照目錄結構做介紹：</p>
+<h3 id="資料庫設定">資料庫設定</h3>
+<h4 id="初始化sql">初始化SQL</h4>
+<p>首先在db目錄下的sql資料夾新增一個.cnf檔案（這邊叫做my.cnf）</p>
+<pre><code class="language-cnf" data-lang="cnf">[mysql]
+default-character-set=utf8
+
+[mysqld]
+port=3306
+skip-host-cache
+skip-name-resolve
+character-set-server=utf8
+init_connect='SET NAMES utf8'
+
+[client]
+port=3306
+default-character-set=utf8
+</code></pre><p>主要是避免中文亂碼</p>
+<p>再來新增init.sql的sql初始化檔案，內容不用去creat database，使用Creat 來新增table或是使用insert語法來初始化自己想要加入的數據。</p>
+<p>參考文獻，https://www.tpisoftware.com/tpu/articleDetails/1826</p>
+<h4 id="dockerfile">Dockerfile</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> mariadb:10.7</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> ./sqls/init.sql /docker-entrypoint-initdb.d/init.sql<span class="err">
+</span><span class="err"></span><span class="k">COPY</span> ./sqls/my.cnf /etc/mysql/my.cnf<span class="err">
+</span></code></pre></div><p>這邊就是把init檔案以及設定中文編碼的檔案丟到Docker的容器裡面</p>
+<h3 id="java設定">Java設定</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> openjdk:11.0.14-jdk-oracle </span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> ./target/*.jar demo.jar<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;java&#34;</span><span class="p">,</span><span class="s2">&#34;-jar&#34;</span><span class="p">,</span><span class="s2">&#34;demo.jar&#34;</span><span class="p">]</span><span class="err">
+</span></code></pre></div><p><a class="link" href="https://matthung0807.blogspot.com/2020/11/docker-what-is-dockerfile.html"  target="_blank" rel="noopener"
+    >Dockerfile</a>指令簡單說明：</p>
+<ol>
+<li><code>FROM openjdk:11.0.14-jdk-oracle</code>：使用的base image。</li>
+<li><code>COPY ./target/*.jar /Documents/mydocker/demo.jar</code>：將build context，即所在目錄的<code>target/*.jar</code>複製到container檔案目錄的/Documents/mydocker/demo.jar。</li>
+<li><code>ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;demo.jar&quot;]</code>：在container剛指定的<code>WORKDIR</code>目錄執行<code>java -jar demo.jar</code>。</li>
+</ol>
+<p>設定完之後，在運行docker-compose就可以成功運行了</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/docker%E7%AD%86%E8%A8%98/">Docker筆記</a>
+        
+            <a href="/tags/springboot/">Springboot</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%984-docker-compose-%E8%A6%8F%E6%A8%A1%E5%8C%96%E9%83%A8%E7%BD%B2%E6%AF%94%E8%BC%83/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記(4)-Docker Compose &amp; 規模化部署比較</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%983-docker-network-docker-volume/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記(3)-Docker Network &amp; Docker Volume</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%982-dockerfile%E8%AA%9E%E6%B3%95%E4%BD%BF%E7%94%A8/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記(2)-Dockerfile語法使用</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/">
+        
+        
+            <div class="article-image">
+                <img src="/p/docker%E7%AD%86%E8%A8%981-%E5%9F%BA%E6%9C%AC/logo.e4c6cf2b06bcf8b5d858d88322c0e708_hua76cf9e0922ea38486ea565c9467eca7_3576_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-5MbPKwa8&#43;LXYWNiDIsDnCA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker筆記(1)-基本</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#docker準備">Docker準備</a>
+      <ol>
+        <li><a href="#images下載">Images下載</a>
+          <ol>
+            <li><a href="#mysql">MySQL</a></li>
+            <li><a href="#mariadb">MariaDB</a></li>
+            <li><a href="#redis">Redis</a></li>
+            <li><a href="#jdk">JDK</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#springboot-準備">SpringBoot 準備</a>
+      <ol>
+        <li><a href="#maven配置">Maven配置</a></li>
+        <li><a href="#applicationproperties">Application.properties</a></li>
+        <li><a href="#打包成jar檔案">打包成jar檔案</a></li>
+      </ol>
+    </li>
+    <li><a href="#docker-compose--dockerfile">Docker-Compose &amp; Dockerfile</a>
+      <ol>
+        <li><a href="#docker-compose">Docker-Compose</a></li>
+        <li><a href="#檔案目錄結構">檔案目錄結構</a></li>
+        <li><a href="#資料庫設定">資料庫設定</a>
+          <ol>
+            <li><a href="#初始化sql">初始化SQL</a></li>
+            <li><a href="#dockerfile">Dockerfile</a></li>
+          </ol>
+        </li>
+        <li><a href="#java設定">Java設定</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
