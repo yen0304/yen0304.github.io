@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>生活 on Yen&#39;s部落格</title>
+    <link>https://yen0304.github.io/tags/%E7%94%9F%E6%B4%BB/</link>
+    <description>Recent content in 生活 on Yen&#39;s部落格</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-tw</language>
+    <lastBuildDate>Sat, 02 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/tags/%E7%94%9F%E6%B4%BB/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Backend Engineer面試心得分享</title>
+      <link>https://yen0304.github.io/p/backend-engineer%E9%9D%A2%E8%A9%A6%E5%BF%83%E5%BE%97%E5%88%86%E4%BA%AB/</link>
+      <pubDate>Sat, 02 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://yen0304.github.io/p/backend-engineer%E9%9D%A2%E8%A9%A6%E5%BF%83%E5%BE%97%E5%88%86%E4%BA%AB/</guid>
+      <description>Backend Engineer面試心得分享 前言-成長歷程 個人條件（剛畢業未學習時） 在去年2021年即將要畢業時，已經想要走Code相關的工作了，
+這時候我的條件是
+學歷：國立科大畢業
+兵役：未役
+工作經驗：6個月實習（電腦中盤商，跟軟體產業以及半導體產業毫無無關）
+學習過程 其實在畢業的前後我一直有在看104、Hahow有沒有可以學習的課程，這時候我看到了古老師的SpringBoot課程，開始學習與後端有關的知識，在2021年9月這時候服役，個人服的是一般替代役，所以有很多空閒的時間可以學習，在學到了古老師的課程之後基本上已經瞭解了MVC，以及可以寫出基本功能的CURD的API，再加上個人在大二有另外買前端相關課程，所以就想說單單的測試API挺沒感覺的，所以就自己寫了前端，到今天2022年1月，因為自己想準備一個小型的電商網站，所以就又學習了AWS 以及Docker，這些都是Hahow上擁有的課程資源。
+所以其實我在這段過程中，我在網路上總共學習了：
+1.SpringBoot
+2.前端基本（無框架，會Call API）
+3.MySQL
+4.AWS
+5.Docker
+退役後個人條件 學歷：國立科大畢業
+兵役：服役完畢
+這邊直接打上我自己覺得在這段面試過程中重要的程度，但在整體上後端跟資料庫真的很重要，在文章的後面會在說明我在做作品時的一些心得。
+1.SpringBoot	★ ★ ★ ★ ★
+2.前端基本（無框架，會Call API） ★ ★ ★ ☆ ☆
+3.MySQL	★ ★ ★ ★ ★
+4.AWS	★ ☆ ☆ ☆ ☆
+5.Docker	★ ★ ★ ☆ ☆
+6.擁有作品	★ ★ ★ ★ ★
+學習作品的歷程我覺得蠻重要的！文章最後會有一個小總結
+面試 我剛退伍隔天就開始面試了，這其實應該會讓人覺得加分吧，像有的主管會覺得這樣比較積極向上之類的ＸＤ
+那這邊也直接附上懶人整理，也會附上整個過程
+回答過最多的問題： 首先一定要準備自我介紹，
+1.在做作品時遇到覺得最有印象的地方？
+2.這些技能在哪裡學的？
+3.還有哪裡有問題嗎？
+4.希望的薪資待遇？</description>
+    </item>
+    
+  </channel>
+</rss>
