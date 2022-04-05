@@ -6,11 +6,11 @@
     <description>Recent content in SpringBoot實戰 on Yen&#39;s部落格</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Sun, 09 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/categories/springboot%E5%AF%A6%E6%88%B0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 09 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/categories/springboot%E5%AF%A6%E6%88%B0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SpringBoot電商平台實戰(2)，商品詳情、熱門商品排序</title>
       <link>https://yen0304.github.io/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B02%E5%95%86%E5%93%81%E8%A9%B3%E6%83%85%E7%86%B1%E9%96%80%E5%95%86%E5%93%81%E6%8E%92%E5%BA%8F/</link>
-      <pubDate>Sun, 09 Jan 2022 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 09 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://yen0304.github.io/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B02%E5%95%86%E5%93%81%E8%A9%B3%E6%83%85%E7%86%B1%E9%96%80%E5%95%86%E5%93%81%E6%8E%92%E5%BA%8F/</guid>
       <description>SpringBoot電商平台實戰(2) 前言 本章承SpringBoot電商平台實戰(1)的專案，所以配置、工具等等都一樣。
@@ -27,7 +27,7 @@ CREATETABLEt_product(idINTAUTO_INCREMENTPRIMARYKEY,categoryIdINT(20)DEFAULTNULLC
     <item>
       <title>SpringBoot電商平台實戰(1)，用戶註冊、用戶登入、修改資料</title>
       <link>https://yen0304.github.io/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/</link>
-      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 08 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://yen0304.github.io/p/springboot%E9%9B%BB%E5%95%86%E5%B9%B3%E5%8F%B0%E5%AF%A6%E6%88%B01%E7%94%A8%E6%88%B6%E8%A8%BB%E5%86%8A%E7%94%A8%E6%88%B6%E7%99%BB%E5%85%A5%E4%BF%AE%E6%94%B9%E8%B3%87%E6%96%99/</guid>
       <description>SpringBoot電商平台實戰(1) 前言 在練習的差不多之後，決定實作一個完整的電商平台「SpringBoot電商平台實戰」，也參考了不少網路上的資源，主要是參考CSDN上的雨醉東風（由於不知能不能引用所以有興趣可以自行查詢）來撰寫api，參考架構，差別最大的是該教學是使用MyBatis做資料庫操作，而我是使用JDBC，預計將來會再嘗試Redis、SpringSecurity、再加上前端完成一個完整的網站。
