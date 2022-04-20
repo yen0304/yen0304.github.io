@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='SQL職場實戰-nvarchar型態轉換學習之不要相信ISNUMERIC'><title>SQL職場實戰(1)-nvarchar型態轉換學習之不要相信ISNUMERIC</title>
+
+<link rel='canonical' href='https://yen0304.github.io/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SQL職場實戰(1)-nvarchar型態轉換學習之不要相信ISNUMERIC'>
+<meta property='og:description' content='SQL職場實戰-nvarchar型態轉換學習之不要相信ISNUMERIC'>
+<meta property='og:url' content='https://yen0304.github.io/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/'>
+<meta property='og:site_name' content='Yen&#39;s部落格'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL職場實戰' /><meta property='article:tag' content='SQL' /><meta property='article:published_time' content='2022-04-20'/><meta property='article:modified_time' content='2022-04-20'/><meta property='og:image' content='https://yen0304.github.io/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/logo.jpeg' />
+<meta name="twitter:title" content="SQL職場實戰(1)-nvarchar型態轉換學習之不要相信ISNUMERIC">
+<meta name="twitter:description" content="SQL職場實戰-nvarchar型態轉換學習之不要相信ISNUMERIC"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://yen0304.github.io/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/logo.jpeg' />
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-204387403-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://yen0304.github.io" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span></span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/">
+                <img src="/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_800x0_resize_q75_box.jpeg"
+                        srcset="/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_800x0_resize_q75_box.jpeg 800w, /p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/logo_hue91c0a6a1fc261792a7714a8d89d8466_163197_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="535" 
+                        loading="lazy"
+                        alt="Featured image of post SQL職場實戰(1)-nvarchar型態轉換學習之不要相信ISNUMERIC" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B0/" >
+                SQL職場實戰
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/">SQL職場實戰(1)-nvarchar型態轉換學習之不要相信ISNUMERIC</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        SQL職場實戰-nvarchar型態轉換學習之不要相信ISNUMERIC
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2022-04-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="sql職場實戰-nvarchar型態轉換學習之不要相信isnumeric">SQL職場實戰-nvarchar型態轉換學習之不要相信ISNUMERIC</h1>
+<p>進入公司的第三個星期，碰到了一個題目，內容就是需要將好幾萬筆資料的table取值並比大小，因為資料數量龐大，資料欄位的型態是nvarchar，所以在過程中學到了不少需要轉換的方式。</p>
+<h2 id="第一步驟-了解nvarchar欄位內容">第一步驟 了解nvarchar欄位內容</h2>
+<p>其中最有印象的就是其中有一個欄位的最後面需要判斷值是否大於12，如果是就保留，不是就為0，</p>
+<p>還有特殊格式需做處理，所以在不斷Error出現之後，學到了<strong>使用DISTINCT（早就知道有這個方法，但是沒想到那麼好用）</strong>，因為資料都是客戶輸入的，所以需先了解資料有哪些樣子，對欄位的數值去做對應的處理。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="p">[</span><span class="k">column</span><span class="p">]</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">[</span><span class="k">table</span><span class="p">]</span><span class="w">
+</span></code></pre></div><p>那印出來之後，主要資料分這幾種型態： （實際上爆幹多&hellip;這邊列出幾個重點）</p>
+<table>
+<thead>
+<tr>
+<th>column 欄位名稱以下都是A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1,000.00</td>
+</tr>
+<tr>
+<td>Bcolumn欄位值的8倍</td>
+</tr>
+<tr>
+<td>80/1000</td>
+</tr>
+<tr>
+<td>10</td>
+</tr>
+<tr>
+<td>12.00</td>
+</tr>
+<tr>
+<td>1000[全形空白鍵]</td>
+</tr>
+<tr>
+<td>1000/12/20</td>
+</tr>
+</tbody>
+</table>
+<p>在規格需求時，也有特別說明，80/1000這類的格式要選擇小的（要求真的很多），但像是1000/12/20就要為0，不符合格式，簡單說除了上面提到的特殊格式，還有大於12的數字，其他都要為0。</p>
+<p>那在最後進行比較數值是否大於12時，可能會這樣寫：</p>
+<pre><code class="language-mssql" data-lang="mssql">SELECT [item] --（item可能是商品名稱之類的，不是重點）
+	,[A] =CASE WHEN [A] &gt;12 THEN [A]  ELSE  0 END
+FROM 
+</code></pre><h2 id="nvarchar-轉換方向">nvarchar 轉換方向</h2>
+<p>我們一般會很直覺的想要用CONVERT、CAST，但是由於我們上面的資料太多種類，甚至出現了中文、還有小數點甚至出現了全形空白符號等等，在轉換的時候一定會出現Error navrchar 不能轉換int之類的訊息，所以我分成了兩個表之後在使用union垂直合併。</p>
+<h2 id="開始轉換">開始轉換</h2>
+<p>所以轉換分成兩種：</p>
+<h3 id="使用replac--trim-對所有欄位進行過濾去除不必要的符號">使用REPLAC + TRIM 對所有欄位進行過濾，去除不必要的符號</h3>
+<p>在最終，我們的型態是int，所以我們要設定的值會是數字，所以要確保下面在轉換的過程中順利，先去除有可能在欄位中，全行與半形符號，至於我怎麼找到有全形空白鍵，那又是另一則故事了&hellip;（總之我也是DISTINCT慢慢點擊欄位看出來的），只能說工作上學到的東西真的蠻多的&hellip;吧</p>
+<p>所以用WITH AS的方式讓下面的table使用REPLAC + TRIM 對所有欄位進行過濾，去除不必要的符號，再讓其他人使用：</p>
+<pre><code class="language-mssql" data-lang="mssql">WITH real_table AS (
+SELECT [item]
+	,[A] =REPLACE(TRIM(' 　' FROM [A]),',','')
+	,[Date]
+	FROM [table]
+)
+</code></pre><h3 id="在sql中小數轉整數">在SQL中小數轉整數</h3>
+<p>在數字轉換的部分，我們要在SQL小數轉整數，所以我們的邏輯流程如下</p>
+<p>1.選出是數字的欄位</p>
+<p>2.使用CAST + ROUND小數點四捨五入/無條件捨去，轉整數</p>
+<p>在選出是數字的時候，本來最初是用ISNUMERIC作處理，但是使用WHERE +ISNUMERIC / DISTINCT 的時候發現1,000以及1000[全形被掃出來]，所以查了之後使用PATINDEX(搜尋關鍵字)去判斷小數以及數字才是我們要的欄位（我就是這邊卡超久！！）</p>
+<pre><code class="language-mssql" data-lang="mssql">SELECT [item]
+	,[A] =CASE WHEN  PATINDEX('%[^0-9|.]%', [A])=0  THEN CAST(ROUND([A],0)AS int) ELSE 0 END 
+	,[Date]
+	FROM real_table
+	WHERE  PATINDEX('%[^0-9|.]%', [A])=0 
+)
+</code></pre><h3 id="非數字轉換">非數字轉換</h3>
+<p>相對的不是數字的就為0</p>
+<pre><code class="language-mssql" data-lang="mssql">SELECT [item]
+	,[MP_MOQ] =ISNULL(CASE WHEN  PATINDEX('%[^0-9|.]%', [A])=1  THEN 0 END,0)
+	,[Date]
+	FROM real_table
+	WHERE  NOT(PATINDEX('%[^0-9|.]%', [A])=0)
+</code></pre><h3 id="特殊格式轉換">特殊格式轉換</h3>
+<p>就是練習各種搜尋之類的字串處理</p>
+<pre><code class="language-mssql" data-lang="mssql">	SELECT [item]
+		,[MP_MOQ] = CASE WHEN CONVERT (int,SUBSTRING ([A] ,1 , CHARINDEX('/', [A])-1 ))
+								&lt; CONVERT (int,SUBSTRING ([A ,CHARINDEX('/', [A])+1, LEN([A]))) THEN ISNULL(CONVERT (int,SUBSTRING ([A] ,1 , CHARINDEX('/', [A])-1 )) ,0)
+		ELSE ISNULL(CONVERT (int,SUBSTRING ([A] ,CHARINDEX('/', [A])+1, LEN([A]))),0) END
+		,[Date]
+		FROM  real_table
+	WHERE ( [A] LIKE  '[0-9]%/[0-9]%' ) AND  ([A]  NOT LIKE  '%/%/%')
+</code></pre><p>之後再把他們全部UNION ALL就可以了</p>
+<h2 id="總結">總結</h2>
+<p>乍看之下程式碼都很簡單，但在實際上第一個不會想到欄位值有那麼多的狀況、或是ISNUMBERIC不準確的時候，這次最寶貴的經驗就是知道了要用DISTINCT觀察資料型態，也可以用於驗證（畢竟都有顯示出來就沒問題了），更知道了很多好用的函式可以用！</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B0/">SQL職場實戰</a>
+        
+            <a href="/tags/sql/">SQL</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title"></h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/">
+        
+        
+            <div class="article-image">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%983-%E6%B0%B4%E5%B9%B3%E5%90%88%E4%BD%B5join-on%E8%88%87%E5%9E%82%E7%9B%B4%E5%90%88%E4%BD%B5union/logo.16b089f4da300c95ef33e058383663c8_hue91c0a6a1fc261792a7714a8d89d8466_163197_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-FrCJ9NowDJXvM&#43;BYODZjyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL學習筆記(3)-水平合併(JOIN ON)與垂直合併(UNION)</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/">
+        
+        
+            <div class="article-image">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%982-%E5%88%86%E7%B5%84group-by%E8%88%87%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B8%E7%B5%90%E6%9E%9C%E7%AF%A9%E9%81%B8%E5%AD%90%E6%9F%A5%E8%A9%A2/logo.16b089f4da300c95ef33e058383663c8_hue91c0a6a1fc261792a7714a8d89d8466_163197_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-FrCJ9NowDJXvM&#43;BYODZjyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL學習筆記(2)-分組(GROUP BY)與聚合函數結果篩選、子查詢</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/sql%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%981-%E8%B3%87%E6%96%99%E6%9F%A5%E8%A9%A2%E7%8D%A8%E9%A1%AF%E4%B8%80%E5%80%BC%E9%81%8B%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B8/logo.16b089f4da300c95ef33e058383663c8_hue91c0a6a1fc261792a7714a8d89d8466_163197_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-FrCJ9NowDJXvM&#43;BYODZjyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL學習筆記(1)-資料查詢、獨顯一值、運算符、函數</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yen0304" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 Yen&#39;s部落格
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title"></h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#第一步驟-了解nvarchar欄位內容">第一步驟 了解nvarchar欄位內容</a></li>
+    <li><a href="#nvarchar-轉換方向">nvarchar 轉換方向</a></li>
+    <li><a href="#開始轉換">開始轉換</a>
+      <ol>
+        <li><a href="#使用replac--trim-對所有欄位進行過濾去除不必要的符號">使用REPLAC + TRIM 對所有欄位進行過濾，去除不必要的符號</a></li>
+        <li><a href="#在sql中小數轉整數">在SQL中小數轉整數</a></li>
+        <li><a href="#非數字轉換">非數字轉換</a></li>
+        <li><a href="#特殊格式轉換">特殊格式轉換</a></li>
+      </ol>
+    </li>
+    <li><a href="#總結">總結</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

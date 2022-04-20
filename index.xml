@@ -6,7 +6,100 @@
         <description>Recent content on Yen&#39;s部落格</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-tw</language>
-        <lastBuildDate>Sat, 02 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 20 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://yen0304.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>SQL職場實戰(1)-nvarchar型態轉換學習之不要相信ISNUMERIC</title>
+        <link>https://yen0304.github.io/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/</link>
+        <pubDate>Wed, 20 Apr 2022 00:00:00 +0000</pubDate>
+        
+        <guid>https://yen0304.github.io/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/</guid>
+        <description>&lt;img src="https://yen0304.github.io/p/sql%E8%81%B7%E5%A0%B4%E5%AF%A6%E6%88%B01-nvarchar%E5%9E%8B%E6%85%8B%E8%BD%89%E6%8F%9B%E5%AD%B8%E7%BF%92%E4%B9%8B%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1isnumeric/logo.jpeg" alt="Featured image of post SQL職場實戰(1)-nvarchar型態轉換學習之不要相信ISNUMERIC" /&gt;&lt;h1 id=&#34;sql職場實戰-nvarchar型態轉換學習之不要相信isnumeric&#34;&gt;SQL職場實戰-nvarchar型態轉換學習之不要相信ISNUMERIC&lt;/h1&gt;
+&lt;p&gt;進入公司的第三個星期，碰到了一個題目，內容就是需要將好幾萬筆資料的table取值並比大小，因為資料數量龐大，資料欄位的型態是nvarchar，所以在過程中學到了不少需要轉換的方式。&lt;/p&gt;
+&lt;h2 id=&#34;第一步驟-了解nvarchar欄位內容&#34;&gt;第一步驟 了解nvarchar欄位內容&lt;/h2&gt;
+&lt;p&gt;其中最有印象的就是其中有一個欄位的最後面需要判斷值是否大於12，如果是就保留，不是就為0，&lt;/p&gt;
+&lt;p&gt;還有特殊格式需做處理，所以在不斷Error出現之後，學到了&lt;strong&gt;使用DISTINCT（早就知道有這個方法，但是沒想到那麼好用）&lt;/strong&gt;，因為資料都是客戶輸入的，所以需先了解資料有哪些樣子，對欄位的數值去做對應的處理。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DISTINCT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;column&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;那印出來之後，主要資料分這幾種型態： （實際上爆幹多&amp;hellip;這邊列出幾個重點）&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;column 欄位名稱以下都是A&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1,000.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Bcolumn欄位值的8倍&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;80/1000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;12.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1000[全形空白鍵]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1000/12/20&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;在規格需求時，也有特別說明，80/1000這類的格式要選擇小的（要求真的很多），但像是1000/12/20就要為0，不符合格式，簡單說除了上面提到的特殊格式，還有大於12的數字，其他都要為0。&lt;/p&gt;
+&lt;p&gt;那在最後進行比較數值是否大於12時，可能會這樣寫：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mssql&#34; data-lang=&#34;mssql&#34;&gt;SELECT [item] --（item可能是商品名稱之類的，不是重點）
+	,[A] =CASE WHEN [A] &amp;gt;12 THEN [A]  ELSE  0 END
+FROM 
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;nvarchar-轉換方向&#34;&gt;nvarchar 轉換方向&lt;/h2&gt;
+&lt;p&gt;我們一般會很直覺的想要用CONVERT、CAST，但是由於我們上面的資料太多種類，甚至出現了中文、還有小數點甚至出現了全形空白符號等等，在轉換的時候一定會出現Error navrchar 不能轉換int之類的訊息，所以我分成了兩個表之後在使用union垂直合併。&lt;/p&gt;
+&lt;h2 id=&#34;開始轉換&#34;&gt;開始轉換&lt;/h2&gt;
+&lt;p&gt;所以轉換分成兩種：&lt;/p&gt;
+&lt;h3 id=&#34;使用replac--trim-對所有欄位進行過濾去除不必要的符號&#34;&gt;使用REPLAC + TRIM 對所有欄位進行過濾，去除不必要的符號&lt;/h3&gt;
+&lt;p&gt;在最終，我們的型態是int，所以我們要設定的值會是數字，所以要確保下面在轉換的過程中順利，先去除有可能在欄位中，全行與半形符號，至於我怎麼找到有全形空白鍵，那又是另一則故事了&amp;hellip;（總之我也是DISTINCT慢慢點擊欄位看出來的），只能說工作上學到的東西真的蠻多的&amp;hellip;吧&lt;/p&gt;
+&lt;p&gt;所以用WITH AS的方式讓下面的table使用REPLAC + TRIM 對所有欄位進行過濾，去除不必要的符號，再讓其他人使用：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mssql&#34; data-lang=&#34;mssql&#34;&gt;WITH real_table AS (
+SELECT [item]
+	,[A] =REPLACE(TRIM(&#39; 　&#39; FROM [A]),&#39;,&#39;,&#39;&#39;)
+	,[Date]
+	FROM [table]
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;在sql中小數轉整數&#34;&gt;在SQL中小數轉整數&lt;/h3&gt;
+&lt;p&gt;在數字轉換的部分，我們要在SQL小數轉整數，所以我們的邏輯流程如下&lt;/p&gt;
+&lt;p&gt;1.選出是數字的欄位&lt;/p&gt;
+&lt;p&gt;2.使用CAST + ROUND小數點四捨五入/無條件捨去，轉整數&lt;/p&gt;
+&lt;p&gt;在選出是數字的時候，本來最初是用ISNUMERIC作處理，但是使用WHERE +ISNUMERIC / DISTINCT 的時候發現1,000以及1000[全形被掃出來]，所以查了之後使用PATINDEX(搜尋關鍵字)去判斷小數以及數字才是我們要的欄位（我就是這邊卡超久！！）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mssql&#34; data-lang=&#34;mssql&#34;&gt;SELECT [item]
+	,[A] =CASE WHEN  PATINDEX(&#39;%[^0-9|.]%&#39;, [A])=0  THEN CAST(ROUND([A],0)AS int) ELSE 0 END 
+	,[Date]
+	FROM real_table
+	WHERE  PATINDEX(&#39;%[^0-9|.]%&#39;, [A])=0 
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;非數字轉換&#34;&gt;非數字轉換&lt;/h3&gt;
+&lt;p&gt;相對的不是數字的就為0&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mssql&#34; data-lang=&#34;mssql&#34;&gt;SELECT [item]
+	,[MP_MOQ] =ISNULL(CASE WHEN  PATINDEX(&#39;%[^0-9|.]%&#39;, [A])=1  THEN 0 END,0)
+	,[Date]
+	FROM real_table
+	WHERE  NOT(PATINDEX(&#39;%[^0-9|.]%&#39;, [A])=0)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;特殊格式轉換&#34;&gt;特殊格式轉換&lt;/h3&gt;
+&lt;p&gt;就是練習各種搜尋之類的字串處理&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mssql&#34; data-lang=&#34;mssql&#34;&gt;	SELECT [item]
+		,[MP_MOQ] = CASE WHEN CONVERT (int,SUBSTRING ([A] ,1 , CHARINDEX(&#39;/&#39;, [A])-1 ))
+								&amp;lt; CONVERT (int,SUBSTRING ([A ,CHARINDEX(&#39;/&#39;, [A])+1, LEN([A]))) THEN ISNULL(CONVERT (int,SUBSTRING ([A] ,1 , CHARINDEX(&#39;/&#39;, [A])-1 )) ,0)
+		ELSE ISNULL(CONVERT (int,SUBSTRING ([A] ,CHARINDEX(&#39;/&#39;, [A])+1, LEN([A]))),0) END
+		,[Date]
+		FROM  real_table
+	WHERE ( [A] LIKE  &#39;[0-9]%/[0-9]%&#39; ) AND  ([A]  NOT LIKE  &#39;%/%/%&#39;)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;之後再把他們全部UNION ALL就可以了&lt;/p&gt;
+&lt;h2 id=&#34;總結&#34;&gt;總結&lt;/h2&gt;
+&lt;p&gt;乍看之下程式碼都很簡單，但在實際上第一個不會想到欄位值有那麼多的狀況、或是ISNUMBERIC不準確的時候，這次最寶貴的經驗就是知道了要用DISTINCT觀察資料型態，也可以用於驗證（畢竟都有顯示出來就沒問題了），更知道了很多好用的函式可以用！&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Backend Engineer面試心得分享</title>
         <link>https://yen0304.github.io/p/backend-engineer%E9%9D%A2%E8%A9%A6%E5%BF%83%E5%BE%97%E5%88%86%E4%BA%AB/</link>
         <pubDate>Sat, 02 Apr 2022 00:00:00 +0000</pubDate>
